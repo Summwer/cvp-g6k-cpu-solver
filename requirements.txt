@@ -1,0 +1,11 @@
+Cython
+cysignals
+flake8
+ipython
+numpy
+begins
+pytest
+requests
+scipy
+multiprocessing-logging
+matplotlib

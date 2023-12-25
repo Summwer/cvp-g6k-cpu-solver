@@ -1,0 +1,18 @@
+Git status: 
+commit 72a5c04998f52885700fbe551f3f11dce2b0c7ef
+Author: Martin R. Albrecht <martinralbrecht@googlemail.com>
+
+    we need more to sdist
+
+	modified:   configure.ac
+	modified:   g6k/algorithms/pump.py
+	modified:   g6k/decl.pxd
+	modified:   g6k/siever.pxd
+	modified:   g6k/siever.pyx
+	modified:   g6k/utils/lwe_estimation.py
+	modified:   kernel/Makefile.am
+	modified:   kernel/siever.h
+	modified:   lwe_challenge.py
+=================
+rebuild.sh 
+=================
