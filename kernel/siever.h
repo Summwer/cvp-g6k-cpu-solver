@@ -1200,7 +1200,7 @@ public:
     Entry sample_t_(Entry target_vector);
     
     // void progressive_sieve(fplll::MatGSO<SZT, SFT> M, unsigned int l = 0);
-    void extend_left_to_full_dim(Entry &e, unsigned int lp = 0);
+    void cvp_extend_left(Entry &e, unsigned int lp = 0);
     // void extend_left(Entry &e, unsigned int lp);
     // void compute_projected_vector(Siever::Vec<LFT> pt,  fplll::MatGSO<SZT, SFT> M, unsigned int l);
     void initialize_projected_target_vector();
@@ -1208,7 +1208,7 @@ public:
     // Vec<LFT> randomized_iterative_slicer( Vec<LFT> target_vector, fplll::MatGSO<SZT, SFT> M, FT norm_bound, int max_sample_times, unsigned int l = 0, bool verbose = true); //unsigned int q, 
 
     // void initialize_local(fplll::MatGSO<SZT, SFT> M); //Initialize parameter for class siever.
-    void randomized_iterative_slicer(double* y, FT len_bound, int max_sample_times); //len_bound: norm_bound/gh(L[l:])
+    void randomized_iterative_slicer(double* y, long* x, FT len_bound, int max_sample_times); //len_bound: norm_bound/gh(L[l:])
     // Entry randomized_iterative_slicer( Entry target_vector, FT len_bound, int max_sample_times); 
     void run_randslicer(long* target_vector, FT len_bound, int max_sample_times,  long* &w, long* &ee);
 
@@ -1216,7 +1216,8 @@ public:
     void construct_projected_entry(vector<SFT> yl, Entry &pt);
     // void recover_vector_from_yr(vector<VEC_ZT> &w, Entry pt, Entry pe, vector<SFT> yl);
 
-    void recover_vector_from_yr(double* y, Entry pe);
+    void recover_vector_from_yr(double* y, long* x, Entry pe);
+    // void left_recompute_yr(Entry &e, unsigned int lp);
 
     // void progressive_slicer_with_d4f(vector<VEC_ZT> target_vector, FT len_bound, int max_sample_times, unsigned int f, vector<VEC_ZT> &w, vector<VEC_ZT> &ee);
 

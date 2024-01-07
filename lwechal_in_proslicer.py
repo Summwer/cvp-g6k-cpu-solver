@@ -209,8 +209,8 @@ def lwe_kernel(arg0, params=None, seed=None):
 
             if verbose:
                 slope = basis_quality(g6k.M)["/"]
-                fmt = "slope: %.5f, walltime: %.3f sec"
-                print(fmt % (slope, time.time() - T0))
+                fmt = "slope: %.5f, walltime: %.3f sec, bkz cost: %.3f sec"
+                print(fmt % (slope, time.time() - T0, T_BKZ))
 
             g6k.lll(0, g6k.full_n)
             T0_BKZ = time.time()

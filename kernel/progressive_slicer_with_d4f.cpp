@@ -10,46 +10,95 @@
 using namespace alglib;
 
 //recover vector from projected vector to find a close vector to t
-void Siever::extend_left_to_full_dim(Entry &e, unsigned int lp){
+//cvp extend left
+void Siever::cvp_extend_left(Entry &e, unsigned int lp){
   // SFT mu,tmp;
   // initialize_local(ll, l - lp, r);
-  std::copy_backward(e.x.begin(), e.x.begin()+full_n-lp, e.x.begin()+full_n);
+  CPUCOUNT(202);
+
+  assert(lp <= l);
+  if(lp==0) return;
+  initialize_local(ll, l - lp, r);
+  
+  std::copy_backward(e.x.begin(), e.x.begin()+n-lp, e.x.begin()+n);
   std::fill(e.x.begin(), e.x.begin()+lp, 0);
-  std::fill(e.x.begin()+full_n,e.x.end(),0);
+  std::fill(e.x.begin()+n,e.x.end(),0);
   for (int i = lp - 1 ; i >= 0; --i){
-    e.yr[i] = std::inner_product(e.x.cbegin()+i+1, e.x.cbegin()+full_n, full_muT[i].cbegin()+i+1, static_cast<FT>(0.));
-    e.x[i] = - (ZT)std::round(e.yr[i] - yl[i]);
+    e.yr[i] = std::inner_product(e.x.cbegin()+i+1, e.x.cbegin()+n, muT[i].cbegin()+i+1, static_cast<FT>(0.));
+    e.x[i] = - (ZT)std::round(e.yr[i] - yl[i+ll]);
     e.yr[i] += e.x[i];
     // e.yr[i] *= sqrt_rr[i];
   }
-  for (unsigned int i = lp ; i < full_n; i++){
-    e.yr[i] = std::inner_product(e.x.cbegin()+i, e.x.cbegin()+full_n, full_muT[i].cbegin()+i,  static_cast<FT>(0.)); //* sqrt_rr[i];
+  for (unsigned int i = 0 ; i < n; i++){
+    e.yr[i] = std::inner_product(e.x.cbegin()+i, e.x.cbegin()+n, muT[i].cbegin()+i,  static_cast<FT>(0.)); //* sqrt_rr[i];
   }
 }
 
 
-void Siever::recover_vector_from_yr(double* y, Entry pe){
+// //extend yr from projected lattice [l:r] to lattice [0:r], the coeffiencts on full GS-basis
+// void Siever::left_recompute_yr(Entry &e, unsigned int lp){
+//   CPUCOUNT(202);
+
+//   assert(lp == ll);
+//   if(lp==0) return;
+//   initialize_local(0, 0, r);
+//   std::copy_backward(e.x.begin(), e.x.begin()+n-lp, e.x.begin()+n);
+//   std::fill(e.x.begin(), e.x.begin()+lp, 0);
+//   std::fill(e.x.begin()+n,e.x.end(),0);
+//   cout<<"e.yr: ";
+//   for (unsigned int i = 0; i < n; ++i){
+//     e.yr[i] = std::inner_product(e.x.cbegin(), e.x.cbegin()+n, muT[i].cbegin(),  static_cast<FT>(0.)) ; //* sqrt_rr[i]
+//     cout<<"("<<e.yr[i]<<", "<<e.x[i]<<", ";
+//   }
+//   cout<<endl;
+// }
+
+//y: coefficients of projected close vector on projected gs 
+//x: coefficients of projected close vector on lattice basis
+void Siever::recover_vector_from_yr(double* y, long* x, Entry pe){
   //Recover the closest vector to a full-dimensional form.
   // vector<SFT> y = vector<SFT>(full_n,0.), z = vector<SFT>(full_n,0.);
   std::fill(y, &y[full_n], 0.);
+  std::fill(x, &x[full_n], 0); 
   //cv: the full-dimensional closest vector in lattice to t.
   Entry cv;
-  cout<<"cv.yr:";
+  // cout<<"cv.yr:";
+  // cout<<"pcv.x: [";
   for(unsigned int i = 0; i < n; i++){
     cv.yr[i] = pt.yr[i] - pe.yr[i];
     cv.x[i] = pe.x[i];
-    cout<<cv.yr[i]<<" ";
+    // cout<<cv.x[i]<<", ";
+    // cout<<cv.yr[i]<<" ";
+    // cout<<pe.yr[i]<<" ";
   }
-  cout<<endl;
-  extend_left_to_full_dim(cv, full_n - n);
-  cout<<"full(cv.yr):";
-  for(unsigned int i = 0; i < full_n; i++)
-    cout<<cv.yr[i]<<" ";
-  cout<<endl;
+  cout<<"]"<<endl;
+
+  // cout<<endl;
+
+  // cout<<"l:"<<l<<", ll: "<<ll<<endl;
+  cvp_extend_left(cv, l-ll); //actual dim - sieve dim
+
+  
+  // left_recompute_yr(cv, ll); //extend left to ll.
+  
   //Recover cv from coordinates on gso/gh.
-  for(unsigned int i = 0; i < full_n; i++){
-    y[i] = cv.yr[i];//sqrt_rr[i]; 
+  for(unsigned int i = 0; i < n; i++){
+    y[i+ll] = cv.yr[i] / sqrt_rr[i]; 
   }
+
+  // cout<<"y:";
+  // for(unsigned int i = 0; i < full_n; i++)
+  //   cout<<y[i]<<" ";
+  // cout<<endl;
+
+  for(unsigned int i = 0; i < n; i++){
+    x[i+ll] = (int) cv.x[i];//sqrt_rr[i]; 
+  }
+
+  // cout<<"x:";
+  // for(unsigned int i = 0; i < full_n; i++)
+  //   cout<<x[i]<<" ";
+  // cout<<endl;
 }
 
 
@@ -77,9 +126,15 @@ void Siever::recover_vector_from_yr(double* y, Entry pe){
 //pt: projected target vector
 void Siever::initialize_projected_target_vector(){ 
   // Entry pt; 
+  // for(unsigned int i = 0; i < n; i++){
+    // pt.x[i] = 0;
+    // pt.yr[i] = yl[i+full_n-n] * sqrt_rr[i];
+  // }
+ 
   for(unsigned int i = 0; i < n; i++){
     pt.x[i] = 0;
-    pt.yr[i] = yl[i+full_n-n] * sqrt_rr[i];
+    pt.yr[i] = yl[i+l] * sqrt_rr[i];  
+    //cout<<l<<","<<pt.yr[i] <<"," <<yl[i+l] <<","<< sqrt_rr[i]<<endl;
   }
   update_entry(pt);
 }

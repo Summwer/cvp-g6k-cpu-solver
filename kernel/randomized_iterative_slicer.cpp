@@ -32,8 +32,6 @@ void Siever::update_entry(Entry &e){
   
   e.len = std::inner_product(e.yr.begin(), e.yr.begin()+n, e.yr.begin(),  static_cast<FT>(0.0)); //normalization
 
-
-
   // double rho;
   // int min_prec = gso_min_prec(rho, n, LLL_DEF_DELTA, LLL_DEF_ETA);
   int prec     = 53;
@@ -194,6 +192,7 @@ Entry Siever::sample_t_(Entry pt){ // int q,s
   for(unsigned int i = 0; i < n; i++){
     t_.yr[i] = pt.yr[i] - t_.yr[i];
   }
+
   //recompute t_ in simhash and its norm. represent t as an Entry & CompressedEntry
   update_entry(t_);
  
@@ -285,8 +284,9 @@ Entry Siever::sample_t_(Entry pt){ // int q,s
 // }
 
 
-void Siever::randomized_iterative_slicer(double* y, FT len_bound, int max_sample_times){ 
+void Siever::randomized_iterative_slicer(double* y, long* x, FT len_bound, int max_sample_times){ 
   update_entry(pt);
+  
   if(max_sample_times == 0)
     max_sample_times = 1000;
   Entry t_new1, t_new2, t_ = pt, mint_ = pt;
@@ -300,13 +300,13 @@ void Siever::randomized_iterative_slicer(double* y, FT len_bound, int max_sample
   //   gs[i] = tmp.get_d();
   // }
   // gh = gaussian_heuristic(gs);
-  cout<<"gh = "<<gh<<endl;
+  // cout<<"gh = "<<gh<<endl;
 
 
-  cout<<"initial(mint_.yr) =";
-  for(int i = 0; i< n; i++)
-    cout<<mint_.yr[i]<<" ";
-  cout<<endl;
+  // cout<<"initial(mint_.yr) =";
+  // for(int i = 0; i< n; i++)
+  //   cout<<mint_.yr[i]<<" ";
+  // cout<<endl;
 
   int sample_times = 1;
 start_sample_t_:
@@ -316,9 +316,8 @@ start_sample_t_:
   //4. sort db in order from nearby with pt to farway with pt. 
   //reduce the sample_vector by slicer algorithm, and get a short enough vector.
 start_over:
-  //std::cout<<t_.len<<std::endl;
+  // std::cout<<t_.len<<std::endl;
   for(unsigned int i = 0; i < db.size(); i++){
-
     if( t_.len <= len_bound){
         break;
     }
@@ -335,8 +334,14 @@ start_over:
       }
       update_entry(t_new2);
 
-      cout<<"t_new1.len:"<< (t_new1.len < t_.len) << "t_new2.len_prec:"<<(t_new2.len < t_.len) <<", t_.len:" << t_.len<<endl; 
-      cout<<"t_new1.len_prec:"<< (t_new1.len_prec < t_.len_prec) << "t_new2.len_prec:"<<(t_new2.len_prec < t_.len_prec) <<", t_.len_prec:" << t_.len_prec<<endl; 
+
+      // cout<<"t_.x:";
+      // for(unsigned int j = 0; j < n; j++)
+      //   cout<<t_.x[j]<<" ";
+      // cout<<endl;
+
+      // cout<<"t_new1.len:"<< (t_new1.len < t_.len) << "t_new2.len_prec:"<<(t_new2.len < t_.len) <<", t_.len:" << t_.len<<endl; 
+      // cout<<"t_new1.len_prec:"<< (t_new1.len_prec < t_.len_prec) << "t_new2.len_prec:"<<(t_new2.len_prec < t_.len_prec) <<", t_.len_prec:" << t_.len_prec<<endl; 
       // cout<<t_new1.len - t_.len<<endl;
       if(t_new1.len < t_.len){
         t_ = t_new1;
@@ -359,15 +364,15 @@ start_over:
 
   // if(sample_times > 1 and verbose and sample_times < max_sample_times)
   //   std::cout<<"\n Sample Times = "<<sample_times<<std::endl;
-  cout<<"mint_.yr =";
-  for(int i = 0; i< n; i++)
-    cout<<mint_.yr[i]<<" ";
-  cout<<endl;
-  recover_vector_from_yr(y, mint_);
-  cout<<"y = ";
-  for(int i = 0; i< full_n; i++)
-    cout<<y[i]<<", ";
-  cout<<endl;
+  // cout<<"mint_.yr =";
+  // for(int i = 0; i< n; i++)
+  //   cout<<mint_.yr[i]<<" ";
+  // cout<<endl;
+  recover_vector_from_yr(y, x, mint_);
+  // cout<<"y = ";
+  // for(int i = 0; i< full_n; i++)
+  //   cout<<y[i]<<", ";
+  // cout<<endl;
 }
 
 

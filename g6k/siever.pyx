@@ -81,7 +81,7 @@ cdef class Siever(object):
             elif M.nrows >= 160:
                 float_type = "long double"
             else:
-                float_type = "mpfr"#"double" #"double"
+                float_type = "mpfr" #"double" #"double"
 
             M = self.MatGSO(M, float_type=float_type)
 
@@ -1745,7 +1745,14 @@ cdef class Siever(object):
         yl = self.M.from_canonical(target_vector)
         for i in range(self._core.full_n):
             self._core.yl[i] = yl[i]
+
+        pt_yl = [0]*self._core.full_n
+        for i in range(self._core.ll, self._core.r):
+            pt_yl[i] = yl[i]
+        pt = self.M.to_canonical(tuple(pt_yl))
         self.t_initialized = True
+
+        return pt
 
     #function about randomized iterative slicer
     def randslicer(self, len_bound = 1, max_sample_times = 1000):
@@ -1773,14 +1780,27 @@ cdef class Siever(object):
         """
         assert(self.initialized)
         assert(self.t_initialized)
-        cdef np.ndarray reduced_t = zeros((self.full_n), dtype=float64);
+        cdef np.ndarray cv = zeros((self.full_n), dtype=float64); #approx closest vector to projected t.
+        cdef np.ndarray x = zeros((self.full_n), dtype=int64);
         
         sig_on()
         self._core.initialize_projected_target_vector()
-        self._core.randomized_iterative_slicer(<double*>reduced_t.data, len_bound, max_sample_times)
+        self._core.randomized_iterative_slicer(<double*>cv.data, <long*>x.data, len_bound, max_sample_times)
         sig_off()
-        print(reduced_t)
-        return [round(_) for _ in self.M.to_canonical(reduced_t)]
+        #print(reduced_t)
+
+        #compute the approximate vector on full-dim with coefficients x on lattice basis.
+        mat_x = IntegerMatrix(1,self.full_n)
+        for i in range(self.full_n):
+            mat_x[0,i] = int(x[i])
+
+        res =  mat_x * self.M.B
+        w = []
+        for i in range(self.full_n):
+            w.append(int(res[0,i]))
+
+        return [_ for _ in self.M.to_canonical(cv)],  w, [int(x[i]) for i in range(self.full_n)]
+        #return [round(_) for _ in self.M.to_canonical(reduced_t)]
 
 # For backward compatibility with old pickles
 from siever_params import unpickle_params

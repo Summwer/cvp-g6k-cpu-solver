@@ -115,6 +115,10 @@ def pro_randslicer(g6k, c, tracer, dim4free,        # Main parameters
     :param goal_r0: an extra hook to always insert at position kappa if this goal length can be met
         by a lift.  Quit when this is reached.
     :param verbose: print pro_randslicer steps on the standard output.
+    
+    return:
+       Approximate close vector w to t.
+       Differ vector e = t - w.
 
     """
     pro_randslicer.l = dim4free  # noqa
@@ -123,6 +127,8 @@ def pro_randslicer(g6k, c, tracer, dim4free,        # Main parameters
     g6k.lll(0, g6k.full_n)
     g6k.initialize_local(0, max(g6k.full_n-start_up_n, pro_randslicer.l+1), g6k.full_n)
     g6k.initialize_target_vector(c)
+    
+    
     
     pro_randslicer.minl = g6k.l
     pro_randslicer.sat_factor = 1.
@@ -154,4 +160,5 @@ def pro_randslicer(g6k, c, tracer, dim4free,        # Main parameters
 
             if goal_r0 is not None and pro_randslicer.norm_ee <= goal_r0:
                 return pro_randslicer.w, pro_randslicer.ee
+            
     return pro_randslicer.w, pro_randslicer.ee
