@@ -356,10 +356,19 @@ start_over:
 
   if ( t_.len < mint_.len)
     mint_ = t_;
-  
+
+
+
   if( t_.len > len_bound and sample_times < max_sample_times){
     sample_times += 1;
     goto start_sample_t_;
+  }
+
+
+
+  
+  if( mint_.len > pt.len and sample_times >= max_sample_times){
+    mint_ = pt;
   }
 
   // if(sample_times > 1 and verbose and sample_times < max_sample_times)

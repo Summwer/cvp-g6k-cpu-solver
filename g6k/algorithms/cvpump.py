@@ -148,7 +148,13 @@ def cvpump(g6k, c, tracer, kappa, blocksize,  dim4free,      # Main parameters
                 if not wrapped_sieve(cvpump):
                     break
             # print(list(g6k.itervalues()))
-            cvpump.pw, cvpump.w, cvpump.x = cvpump.g6k.randslicer(len_bound = len_bound) #pw: projected approximate closest vector; w: approiximate closest vector on full-dim
+            
+            
+            cvpump.pw, cvpump.w, cvpump.x = cvpump.g6k.randslicer(len_bound = len_bound) 
+            
+            
+            
+            #pw: projected approximate closest vector; w: approiximate closest vector on full-dim
             # print(cvpump.w)
             # cvpump.ee = [cvpump.c[i] - cvpump.w[i] for i in range(g6k.full_n)]
             # cvpump.norm_ee = norm(cvpump.ee)

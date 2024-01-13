@@ -1,20 +1,19 @@
 Git status: 
-commit 2984b863b2dc920db2f0f89138a0235bf55d7cfb
+commit d19629eacf7fb077c9c697e2e0cea0d23a3a240c
 Author: summwer <15091002@buaa.edu.cn>
 
-    backup for the pro-slicer with dimension-for-free, still haven't implemented the colattice algorithm in g6k-cpu version.
+    finish cvpump and colattice partial implement
 
 	modified:   .last_build
-	modified:   Makefile.local
-	modified:   README.md
-	modified:   g6k/algorithms/pro_randslicer.py
-	modified:   g6k/decl.pxd
+	modified:   g6k/algorithms/cvpump.py
+	modified:   g6k/algorithms/workout.py
 	modified:   g6k/siever.pyx
+	modified:   kernel/control.cpp
 	modified:   kernel/progressive_slicer_with_d4f.cpp
 	modified:   kernel/randomized_iterative_slicer.cpp
-	modified:   kernel/siever.h
-	modified:   lwechal_in_proslicer.py
-	modified:   lwechallenge/040-005-solution.txt
+	modified:   lwe_challenge.py
+	modified:   lwechal_cvpump_test.py
+	modified:   svp_challenge.py
 =================
 rebuild.sh 
 =================

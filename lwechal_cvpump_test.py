@@ -219,9 +219,9 @@ def lwe_kernel(arg0, params=None, seed=None):
     
     print("t: ", c)
     
-    # llb, blocksize, f = d-59, 59, 0
+    llb, blocksize, f = d-59, 59, 0
     
-    llb, blocksize, f = 0, d, d-67
+    # llb, blocksize, f = , d, d-67
     
     # llb, blocksize, f = d-65, 65, 0
     

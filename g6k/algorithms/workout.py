@@ -75,7 +75,7 @@ def workout(g6k, tracer, kappa, blocksize, dim4free_min=0,              # Main p
 
             sys.stdout.flush()
             pump(g6k, tracer, kappa, blocksize, f, goal_r0=goal_r0, **pump_params)
-
+            print("rr[0]:",g6k.M.get_r(0,0))
             if verbose:
                 gh2 = gaussian_heuristic([g6k.M.get_r(i, i) for i in range(kappa+f, kappa+blocksize)])
                 quality = (gh * (blocksize - f)) / (gh2 * blocksize)

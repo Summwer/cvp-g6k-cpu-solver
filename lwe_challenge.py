@@ -239,8 +239,8 @@ def lwe_kernel(arg0, params=None, seed=None):
 
             if verbose:
                 print("Starting svp pump_{%d, %d, %d}, n_max = %d, Tmax= %.2f sec" % (llb, d-llb, f, n_max, svp_Tmax)) # noqa
-            # pump(g6k, tracer, llb, d-llb, f, verbose=verbose,
-                #  goal_r0=target_norm * (d - llb)/(1.*d))
+            pump(g6k, tracer, llb, d-llb, f, verbose=verbose,
+                 goal_r0=target_norm * (d - llb)/(1.*d))
 
             if verbose:
                 slope = basis_quality(g6k.M)["/"]

@@ -1,0 +1,5 @@
+ INFO:        root:2024/01/10 13:54:42 CST: Did not find 'svpchallenge/svpchallenge-dim-100-seed-00.txt', downloading ...
+DEBUG:urllib3.connectionpool:2024/01/10 13:54:42 CST: Starting new HTTPS connection (1): www.latticechallenge.org:443
+DEBUG:urllib3.connectionpool:2024/01/10 13:54:43 CST: https://www.latticechallenge.org:443 "POST /svp-challenge/generator.php HTTP/1.1" 200 None
+ INFO:        root:2024/01/10 13:54:43 CST: 200 OK
+DEBUG:        root:2024/01/10 13:54:50 CST: None

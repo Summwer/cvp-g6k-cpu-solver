@@ -76,12 +76,13 @@ cdef class Siever(object):
                 raise ValueError("Siever requires UinvT enabled")
 
         elif isinstance(M, IntegerMatrix):
-            if M.nrows >= 200:
-                float_type = "dd"
-            elif M.nrows >= 160:
-                float_type = "long double"
-            else:
-                float_type = "mpfr" #"double" #"double"
+            #if M.nrows >= 200:
+            #    float_type = "dd"
+            #elif M.nrows >= 160:
+            #    float_type = "dd" #"long double"
+            #else:
+            #    float_type = "dd"#"long double" #"double" #mpfr
+            float_type = "mpfr"
 
             M = self.MatGSO(M, float_type=float_type)
 
@@ -1502,7 +1503,7 @@ cdef class Siever(object):
 
         self.M.UinvT.gen_identity()
         self.M.U.gen_identity()
-
+    
         if not self.params.dual_mode:
             with self.M.row_ops(kappa, self.r):
                 for i in range(kappa, self.r):
@@ -1521,6 +1522,72 @@ cdef class Siever(object):
         new_l = self.l + 1
         new_n = self.n - 1
 
+       
+        self.split_lll(self.ll, new_l, self.r)
+
+        cdef np.ndarray T = zeros((new_n, self.n), dtype=int64, order='C')
+
+        if not self.params.dual_mode:
+            for i in range(new_n):
+                for j in range(self.n):
+                    T[i][j] = self.M.UinvT[new_l + i][self.l + j]
+        else:
+            for i in range(new_n):
+                for j in range(self.n):
+                    T[i][j] = self.M.U[m-1-(new_l + i)][m-1-(self.l + j)]
+
+        # update the basis (GSO or integral) of the lattice after insert
+        sig_on()
+        self._core.gso_update_postprocessing(new_l, self._core.r, <long*>T.data)
+        sig_off()
+
+
+    
+    def insert_cvp(self, kappa, v):
+        """
+        Insert a vector in the GSO basis, and update the siever accordingly (l++, n--, r fixed, db is updated)
+
+        :param kappa: position at which to insert improved vector
+        :param v: Improved vector expressed in base B[0 … r-1]
+        """
+        assert(self.initialized)
+        assert(len(v) == self.r)
+        m = self.full_n
+
+        full_j = where(abs(v) == 1)[0][-1]
+
+        if full_j < self.l:
+            print full_j, self.l
+            print v
+            raise NotImplementedError('Can only handle vectors with +/- 1 in sieving context (have you deactivated param.unitary_only ?)')
+
+        assert kappa <= self.l
+
+        if v[full_j] == -1:
+            v *= -1
+
+        self.M.UinvT.gen_identity()
+        self.M.U.gen_identity()
+        
+        if not self.params.dual_mode:
+            with self.M.row_ops(0, self.r):
+                for i in range(0, self.r):
+                    if i != full_j:
+                        self.M.row_addmul(full_j, i, v[i])
+                self.M.move_row(full_j, kappa)
+        else:
+            with self.M.row_ops(m-self.r, m-kappa):
+                # perform the dual operations to insert in the dual
+                for i in range(kappa, self.r):
+                    if i != full_j:
+                        self.M.row_addmul(m-1-i, m-1-full_j, -v[i])
+                self.M.move_row(m-1-full_j, m-1-kappa)
+
+
+        new_l = self.l + 1
+        new_n = self.n - 1
+
+       
         self.split_lll(self.ll, new_l, self.r)
 
         cdef np.ndarray T = zeros((new_n, self.n), dtype=int64, order='C')
@@ -1713,6 +1780,8 @@ cdef class Siever(object):
         self.insert(-best_i, best_v)
         return -best_i
 
+    
+
 
     def show_cpu_stats(self):
         # TODO this uses C++'s cout, which we shouldn't use. For example, this won't show up in a
@@ -1789,15 +1858,34 @@ cdef class Siever(object):
         sig_off()
         #print(reduced_t)
 
+        #for i in range(self.full_n):
+        #    if(x[i]!=int(x[i])):
+        #        print("wrong: x[i]=", x[i],", int(x[i])=",int(x[i]))
+        #print("(long)x:")
+        #print(x)
+
         #compute the approximate vector on full-dim with coefficients x on lattice basis.
         mat_x = IntegerMatrix(1,self.full_n)
         for i in range(self.full_n):
             mat_x[0,i] = int(x[i])
 
+        #print(mat_x)
+
         res =  mat_x * self.M.B
+
+        #print("B[0]:")
+        #print(self.M.B[0])
+      
         w = []
         for i in range(self.full_n):
             w.append(int(res[0,i]))
+   
+
+        x_w = [_ for _ in list(npp.linalg.solve((npp.array(list(self.M.B))).T,npp.array(w)))] 
+
+        #print("x_w:", x_w)
+
+        #assert(x_w == x)
 
         return [_ for _ in self.M.to_canonical(cv)],  w, [int(x[i]) for i in range(self.full_n)]
         #return [round(_) for _ in self.M.to_canonical(reduced_t)]
