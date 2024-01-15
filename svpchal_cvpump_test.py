@@ -39,7 +39,7 @@ from fpylll.algorithms.bkz2 import BKZReduction
 from fpylll.tools.quality import basis_quality
 from fpylll.util import gaussian_heuristic
 
-from g6k.algorithms.bkz import pump_n_jump_bkz_tour
+from g6k.algorithms.bkz import pump_n_jump_bkz_tour, default_dim4free_fun, dim4free_wrapper
 from g6k.algorithms.cvpump import cvpump
 from g6k.algorithms.pump import pump
 from g6k.siever import Siever
@@ -59,6 +59,16 @@ from g6k.algorithms.workout import workout
 from g6k.utils.util import sanitize_params_names
 import six
 from g6k.algorithms.pumpcvp import pumpcvp
+
+
+def theo_dim4free2_in_B(rr):
+    gh = gaussian_heuristic(rr)
+    d = len(rr)
+    for f in range(d-1,-1,-1):
+        ghf = gaussian_heuristic(rr[f:])
+        if(ghf * 4/3. >=  ( (d-f)/d) * gh):
+            return f
+    return 0
 
 def load_svp_midmat(d):
     """
@@ -106,13 +116,16 @@ def asvp_kernel(arg0, params=None, seed=None):
     # misc
     verbose = params.pop("verbose")
     workout_params = pop_prefixed_params("workout", params)
+    
+    challenge_seed = params.pop("challenge_seed")
 
 
     A = load_svp_midmat(n)
     if(A is None):
-        A, _ = load_svpchallenge_and_randomize(n, s=0, seed=0)
+        A, _ = load_svpchallenge_and_randomize(n, s=challenge_seed, seed=0)
     if verbose:
         print(("Loaded challenge dim %d" % n))
+        
 
     
     g6k = Siever(A, params)
@@ -125,20 +138,84 @@ def asvp_kernel(arg0, params=None, seed=None):
     print("GSO precision: ", g6k.M.float_type)
 
     g6k.lll(0, g6k.full_n)
+   
     slope = basis_quality(g6k.M)["/"]
     print("Intial Slope = %.5f\n" % slope)
     
     
+    pump_params = {"down_sieve": True}
+
+    T0 = time.time()
+    
+    tours =1 
+    blocksizes = list(range(74,75))
+    
+    
+    
+    T0_BKZ = time.time()
+    for blocksize in blocksizes:
+        for tt in range(tours):
+            # BKZ tours
+            if(True):
+                # if verbose:
+                #     print("Starting a fpylll BKZ-%d tour. " % (blocksize), end=' ')
+                #     sys.stdout.flush()
+                # bkz = BKZReduction(g6k.M)
+                # par = fplll_bkz.Param(blocksize,
+                #                       strategies=fplll_bkz.DEFAULT_STRATEGY,
+                #                       max_loops=1)
+                # bkz(par)
+                
+                if verbose:
+                    print("Starting a pnjBKZ-%d tour. " % (blocksize))
+                pump_n_jump_bkz_tour(g6k, dummy_tracer, blocksize, jump=5,
+                                     verbose=verbose,
+                                     extra_dim4free=12,
+                                     dim4free_fun="default_dim4free_fun",
+                                     goal_r0=goal_r0,
+                                     pump_params=pump_params)
+                
+                T_BKZ = time.time() - T0_BKZ
+
+                if verbose:
+                    slope = basis_quality(g6k.M)["/"]
+                    fmt = "slope: %.5f, walltime: %.3f sec, bkz cost: %.3f sec"
+                    print(fmt % (slope, time.time() - T0, T_BKZ))
+            g6k.lll(0, g6k.full_n)
+            T0_BKZ = time.time()
+    
+    rr = [g6k.M.get_r(i,i) for i in range(n)]
+    gh = gaussian_heuristic(rr)
+    min_sieve_dim = n
+    mindim = 0
+    minf = 0
+    print(rr[0])
+    for dim in range(n//2,n+1):
+        pgh = gaussian_heuristic(rr[:dim])
+        for f in range(dim-1,-1,-1):
+            ghf = gaussian_heuristic(rr[f:dim])
+            # print(d, ghf * (4/3.),  (dim-f)/d * pgh)
+            if( 1.05**2 * ghf * (4/3.) >=  (dim-f)/dim * pgh):
+                break
+        # print(dim,f,rr[0], pgh,1.05**2 * (gh))
+        if(pgh < 1.05**2 * (gh) and  dim -f < min_sieve_dim ):
+            min_sieve_dim = dim-f
+            mindim = dim
+            minf = f
+    
+    print(theo_dim4free2_in_B(rr))
+    print("Pump-{0,%d,%d}, sieve_dim = %d" %(mindim, minf, mindim-minf))
     # pump_params = {"down_sieve": True}
     # workout(
     #     g6k, dummy_tracer, 0, n, dim4free_min= 40, pump_params=pump_params, **workout_params, verbose=True)
     
     
-    T0 = time.time()
+    # T0 = time.time()
     # pumpcvp(g6k,dummy_tracer, 0, n, 30, verbose=True,  goal_r0 = goal_r0, down_sieve = True, min_cvp_dim = 60)
     
+    
     cworkout(
-        g6k, dummy_tracer, 0, n, 70, goal_r0=goal_r0, pump_params={"down_sieve":True}, verbose=True, start_n= 73,**workout_params
+        g6k, dummy_tracer, 0, n, cvp_start_dim = 30, min_cvp_dim = 60, goal_r0=goal_r0, pump_params={"down_sieve":True},start_n = 73, verbose=True,**workout_params
     )
     
     g6k.lll(0,g6k.full_n)
