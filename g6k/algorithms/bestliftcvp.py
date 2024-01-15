@@ -94,15 +94,31 @@ def wrapped_sieve(bestliftcvp):
 
 
 
+def to_canonical(g6k,yr,kappa):
+    d = len(yr)
+    # dim = d - start
+    # 1. triangular system solving
+    for i in range(d-1,kappa-1,-1):
+        for j in range(i+1,d):    
+            yr[i] -= g6k.M.get_mu(j, i) * yr[j]
+            # if(i==5):
+            #     print(g6k.M.get_mu(j, i),end=",")
+            # print("mu:", g6k.M.get_mu(start + j, start + i),g6k.M.get_mu(start + i, start + j))
+    # print("v_yr:",yr)
+    # 2. multiply by B
+    return g6k.M.B.multiply_left(tuple(yr))
 
-def bestliftcvp(g6k, L, Ll,Lr, tracer, kappa, blocksize,  dim4free,      # Main parameters
+
+
+def bestliftcvp(g6k, g6k2, insert_left_bound, tracer, kappa, blocksize,  dim4free,      # Main parameters
          goal_r0=None, start_up_n=30,        
          verbose=False, len_bound = 1                                                          
          ):
     """
     Run the bestliftcvp algorithm.
 
-    :param g6k: The g6k object to work with
+    :param g6k: The g6k object to work with for slicer
+    :param g6k2: The g6k2 object to work with for storing sieve information
     :param L:  best lift List, contains multiple target vectors under same lattice basis.
     :param tracer: A tracer for g6k
     :param kappa: beginning of the block
@@ -124,6 +140,7 @@ def bestliftcvp(g6k, L, Ll,Lr, tracer, kappa, blocksize,  dim4free,      # Main 
     # g6k.lll(0, bestliftcvp.r)
     # g6k.initialize_local(0, max(g6k.r-start_up_n, bestliftcvp.l+1), l+blocksize)
     g6k.initialize_local(kappa, max(bestliftcvp.r-start_up_n, bestliftcvp.l+1), bestliftcvp.r)
+    
 
     # print("pt:",pc)
     
@@ -155,33 +172,42 @@ def bestliftcvp(g6k, L, Ll,Lr, tracer, kappa, blocksize,  dim4free,      # Main 
             
             minnorm = None
             ii = None
+            best_v = None
+            minee = None
             # j = 0
-            for (index, nlen, v) in L:
-                # print(j,"/",len(L))
-                # j+=1
-                
-                Ba = np.array(list(g6k.M.B))
-                v = np.array([0]*Ll + list(v)[Ll:Lr])
-                w = tuple(np.dot(v,Ba))
-                
-                
-                pw_yl = [0]*Ll + list(g6k.M.from_canonical(tuple(w),start=Ll))#[Ll:Lr]
-                
-                pw = g6k.M.to_canonical(tuple(pw_yl))     
-                  
+            
+            L = [ (index, nlen, v, yr) for (index, nlen, v, yr) in g6k2.best_lifts() if index >=insert_left_bound]
+            Ll = g6k2.l
+            Lr = g6k2.r
+            
+            #db = list(g6k.itervalues())
+            for (index, nlen, v , yr) in L:
+
+                w  = g6k.M.B.multiply_left(tuple([0]*Ll + list(v)[Ll:Lr]))
+                yr = [0]*Ll + list(yr)[Ll:Lr]
+                pw = g6k.M.to_canonical(yr)          
                 t= tuple([pw[i] - w[i] for i in range(Lr)])
+
+                # print([round(_,2) for _ in g6k.M.from_canonical(tuple(t))])
                 
                 g6k.initialize_target_vector(t)
                 
-            
+                print(t)
+                # print(w)
+
                 bestliftcvp.pw, bestliftcvp.w, bestliftcvp.x = bestliftcvp.g6k.randslicer(len_bound = len_bound) 
-              
-                
                 
                 ee = tuple([w[i] + bestliftcvp.w[i] for i in range(Lr)])
                 
-
+                
+                # print([_ for _ in list(np.linalg.solve((np.array(list(g6k.M.B))).T,np.array(ee)))] )
+            
                 norm_ee = sum([_**2 for _ in ee]) 
+                
+                
+                #if(index == 0):
+                print(index,nlen,norm_ee)
+                
                 if((minnorm is None or minnorm > norm_ee) and norm_ee > 0):
                     minnorm = norm_ee
                     minee = ee
@@ -191,9 +217,7 @@ def bestliftcvp(g6k, L, Ll,Lr, tracer, kappa, blocksize,  dim4free,      # Main 
                             best_v[i] = bestliftcvp.x[i]
                         else:
                             best_v[i] = (bestliftcvp.x[i]+v[i])
-                                        
                         best_v = np.array(best_v)
-                    
                     ii = index
                     # for i in range(index):
                     #     if(norm_ee<g6k.M.get_r(i,i)):
