@@ -94,7 +94,7 @@ def scoring_down(i, nlen, olen, aux):
 def pumpcvp(g6k, tracer, kappa, blocksize, dim4free, down_sieve=False,                                 # Main parameters
          goal_r0=None, max_up_time=None, down_stop=None, start_up_n=30, saturation_error="weaken",  # Flow control of the pumpcvp
          increasing_insert_index=True, prefer_left_insert=1.04,                                     # Insertion policy
-         verbose=False, min_cvp_dim = 70                                                                         # Misc
+         verbose=False, min_cvp_dim = 50                                                                         # Misc
          ):
     """
     Run the pumpcvp algorithm.
@@ -122,8 +122,9 @@ def pumpcvp(g6k, tracer, kappa, blocksize, dim4free, down_sieve=False,          
     """
     pumpcvp.r = kappa+blocksize
     pumpcvp.l = kappa+dim4free  # noqa
-
-    max_cvp_dim = max(kappa+blocksize,blocksize - dim4free)
+    pumpcvp.min_cvp_dim = min_cvp_dim
+    pumpcvp.max_cvp_dim = max(kappa+blocksize,blocksize - dim4free)
+    
 
     g6k.shrink_db(0)
     g6k.lll(kappa, pumpcvp.r)
@@ -141,6 +142,8 @@ def pumpcvp(g6k, tracer, kappa, blocksize, dim4free, down_sieve=False,          
     if down_stop is None:
         down_stop = dim4free
 
+
+    pumpcvp.tmpg6k = Siever(deepcopy(g6k.M.B),None)
     with tracer.context(("pumpcvp", "beta:%d f:%d" % (blocksize, dim4free))):
         with g6k.temp_params(reserved_n=pumpcvp.r-pumpcvp.l):
             pumpcvp.phase = "init"
@@ -166,37 +169,37 @@ def pumpcvp(g6k, tracer, kappa, blocksize, dim4free, down_sieve=False,          
 
 
 
-            tmpg6k = Siever(g6k.M.B,None)
+            
             while (g6k.n > 3 and pumpcvp.insert_left_bound <= kappa+down_stop):
                 # (try to) Insert      
                 ii = None
                 # if(g6k.l < max_cvp_dim):
-                if(g6k.l == pumpcvp.l):
-                # if(True):
-                    L = [ (index, nlen, v) for (index, nlen, v) in g6k.best_lifts() if index >=pumpcvp.insert_left_bound]
+                # if(g6k.l == pumpcvp.l):
+                if(True):
+                    L = [ (index, nlen, v, yr) for (index, nlen, v, yr) in pumpcvp.g6k.best_lifts() if index >=pumpcvp.insert_left_bound]
                     print("best lift list size: ", len(L))
                     if(len(L)!=0):
-                        ii,best_v,minnorm,minee = bestliftcvp(tmpg6k,L,g6k.l,g6k.r,dummy_tracer,0, max(g6k.l,min_cvp_dim), 0,goal_r0=goal_r0,verbose=verbose)#, len_bound = 0.5)            
-
-                        print(ii,pumpcvp.insert_left_bound)
+                        ii,best_v,minnorm,minee = bestliftcvp(pumpcvp.tmpg6k,pumpcvp.g6k,pumpcvp.insert_left_bound,dummy_tracer,0, max(g6k.l,min_cvp_dim), 0,goal_r0=goal_r0,verbose=verbose)#, len_bound = 0.5)            
                         
                         if(ii is not None):
-                            g6k.insert_cvp(ii, best_v)
-                            # g6k.insert(ii, best_v)
-                            # break
+                            pumpcvp.g6k.insert_cvp(ii, best_v)
+                            pumpcvp.tmpg6k.initialize_local(g6k.ll,g6k.l-1, g6k.r)
+                            pumpcvp.tmpg6k.insert_cvp(ii, best_v)
                         if(minnorm<goal_r0):
                             print("solution:",minee)
                             return 
-                else:
-                    ii = g6k.insert_best_lift(scoring_down, aux=pumpcvp)
+                # else:
+                # ii = g6k.insert_best_lift(scoring_down, aux=pumpcvp)
+        
                 
-                print("rr[0]:",g6k.M.get_r(0,0))
+                print("rr[0]:",pumpcvp.g6k.M.get_r(0,0))
 
                 if ii is not None and increasing_insert_index:
                     pumpcvp.insert_left_bound = ii + 1
                 else:
                     g6k.shrink_left(1)
-                
+                    
+            
                 # print(g6k.M.get_r(kappa, kappa))
                 if goal_r0 is not None and (g6k.M.get_r(kappa, kappa) <= goal_r0):
                     break
