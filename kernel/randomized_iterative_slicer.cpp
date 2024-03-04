@@ -35,8 +35,8 @@ void Siever::update_entry(Entry &e){
   // double rho;
   // int min_prec = gso_min_prec(rho, n, LLL_DEF_DELTA, LLL_DEF_ETA);
   int prec     = 53;
-  int old_prec = FP_NR<mpfr_t>::set_prec(prec);
-  e.len_prec = std::inner_product(e.yr.begin(), e.yr.begin()+n, e.yr.begin(),  static_cast<FP_NR<mpfr_t>>(0.0));
+  // int old_prec = FP_NR<mpfr_t>::set_prec(prec);
+  e.len_prec = std::inner_product(e.yr.begin(), e.yr.begin()+n, e.yr.begin(),  static_cast<FT>(0.0));//static_cast<FP_NR<mpfr_t>>(0.0));
   
   if(e.len < 0) {
     std::cout<<e.len;

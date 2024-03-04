@@ -5,4 +5,16 @@ I implement the slicer algorithm in g6k kernel in cpp, and it allows to call it 
 
 
 
-compile command:
+first compile command:
+```
+PYTHON=python2 ./bootstrap.sh
+#or
+PYTHON=python3 ./bootstrap.sh
+```
+
+
+recompile command:
+```
+python setup.py clean
+python setup.py build_ext --inplace 
+```

@@ -54,7 +54,7 @@ ln -s g6k-env/bin/activate ./
 source ./activate
 
 $PIP install -U pip
-$PIP install Cython
+$PIP install Cython==0.29.36 
 $PIP install cysignals
 
 
@@ -106,12 +106,12 @@ cd ..
 
 git clone https://github.com/fplll/fpylll g6k-fpylll
 cd g6k-fpylll || exit
-$PIP install Cython
+$PIP install Cython==0.29.36 
 $PIP install -r requirements.txt
 $PIP install -r suggestions.txt
 $PYTHON setup.py clean
 $PYTHON setup.py build_ext $jobs || $PYTHON setup.py build_ext
-$PYTHON setup.py install
+$PYTHON -m pip install .
 cd ..
 
 # Build G6K

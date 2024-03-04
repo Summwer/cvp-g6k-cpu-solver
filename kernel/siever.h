@@ -91,11 +91,11 @@ void show_cpu_stats();
 
 
 #ifndef SZT
-#define SZT  fplll::Z_NR<mpz_t>  //inegral vecs's precision.
+#define SZT  int//fplll::Z_NR<mpz_t>  //inegral vecs's precision.
 #endif
 
 #ifndef SFT
-#define SFT  fplll::FP_NR<mpfr_t>  //vecs's precision. can change to double
+#define SFT  double//fplll::FP_NR<mpfr_t>  //vecs's precision. can change to double
 #endif
     
 
@@ -301,7 +301,7 @@ struct Entry
     CompressedVector c;                     // Compressed vector (i.e. a simhash)
     UidType uid;                            // Unique identifier for collision detection (essentially a hash)
     FT len = 0.;                            // (squared) length of the vector, renormalized by the local gaussian heuristic
-    FP_NR<mpfr_t> len_prec = 0.;
+    FP_NR<SFT> len_prec = 0.;
     std::array<LFT,OTF_LIFT_HELPER_DIM> otf_helper; // auxiliary information to accelerate otf lifting of pairs
 };
 

@@ -78,11 +78,11 @@ cdef class Siever(object):
         elif isinstance(M, IntegerMatrix):
             #if M.nrows >= 200:
             #    float_type = "dd"
-            #elif M.nrows >= 160:
-            #    float_type = "dd" #"long double"
-            #else:
-            #    float_type = "dd"#"long double" #"double" #mpfr
-            float_type = "mpfr"
+            if M.nrows >= 160:
+                float_type = "dd" #"long double"
+            else:
+                float_type = "dd"#"long double" #"double" #mpfr
+            #float_type = "mpfr"
 
             M = self.MatGSO(M, float_type=float_type)
 
