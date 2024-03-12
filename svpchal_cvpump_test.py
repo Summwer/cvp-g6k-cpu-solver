@@ -148,7 +148,7 @@ def asvp_kernel(arg0, params=None, seed=None):
     T0 = time.time()
     
     tours =1 
-    blocksizes = list(range(74,75))
+    blocksizes = []#list(range(74,75))
     
     
     
@@ -215,7 +215,7 @@ def asvp_kernel(arg0, params=None, seed=None):
     
     
     cworkout(
-        g6k, dummy_tracer, 0, n, cvp_start_dim = 30, min_cvp_dim = 60, goal_r0=goal_r0, pump_params={"down_sieve":True},start_n = 73, verbose=True,**workout_params
+        g6k, dummy_tracer, 0, n, cvp_start_dim = 30, goal_r0=goal_r0, pump_params={"down_sieve":True},start_n = 50, verbose=True,**workout_params
     )
     
     g6k.lll(0,g6k.full_n)

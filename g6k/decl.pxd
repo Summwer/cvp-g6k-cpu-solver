@@ -241,7 +241,7 @@ cdef extern from "../kernel/siever.h" nogil:
 
         void hk3_sieve(double alpha)
 
-        void best_lifts(long* vecs, double* lens)
+        void best_lifts(long* vecs, double* lens, double* yrs)
         void db_stats(long* cumul_histo)
 
         # statistics and histo:

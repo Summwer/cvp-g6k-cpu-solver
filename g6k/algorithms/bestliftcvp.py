@@ -192,7 +192,7 @@ def bestliftcvp(g6k, g6k2, insert_left_bound, tracer, kappa, blocksize,  dim4fre
                 
                 g6k.initialize_target_vector(t)
                 
-                print(t)
+                #print(t)
                 # print(w)
 
                 bestliftcvp.pw, bestliftcvp.w, bestliftcvp.x = bestliftcvp.g6k.randslicer(len_bound = len_bound) 
@@ -206,7 +206,7 @@ def bestliftcvp(g6k, g6k2, insert_left_bound, tracer, kappa, blocksize,  dim4fre
                 
                 
                 #if(index == 0):
-                print(index,nlen,norm_ee)
+                print(index,nlen,norm_ee,goal_r0)
                 
                 if((minnorm is None or minnorm > norm_ee) and norm_ee > 0):
                     minnorm = norm_ee

@@ -570,7 +570,7 @@ public:
     // - Otherwise apply lift_and_compare to each vector
     // - Then, just convert best_lifts_so_far and return them
     // - TODO : TREAT THIS TASK for the otf_lift=False case
-    void best_lifts(long* vecs, double* lens); // in control.cpp
+    void best_lifts(long* vecs, double* lens, double* yrs);// in control.cpp
 
     void db_stats(long* cumul_histo); // in control.cpp
 

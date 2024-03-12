@@ -1721,11 +1721,13 @@ cdef class Siever(object):
 
         cdef np.ndarray vecs = zeros((self.l+1, self.r), dtype=int64)
         cdef np.ndarray lens = zeros((self.l+1), dtype=float64)
-        self._core.best_lifts(<long *>vecs.data, <double*>lens.data)  # // , unitary_only)
+        cdef np.ndarray yrs = zeros((self.l+1, self.r), dtype=float64)
+
+        self._core.best_lifts(<long *>vecs.data, <double*>lens.data, <double*> yrs.data)  # // , unitary_only)
         L = []
         for i in range(self.l+1):
             if lens[i] > 0.:
-                L.append((i, lens[i], vecs[i]))
+                L.append((i, lens[i], vecs[i], yrs[i]))
         return L
 
 
@@ -1764,7 +1766,7 @@ cdef class Siever(object):
         if len(L) == 0:
             return None
 
-        score_list = [(scoring(index, nlen, self.M.get_r(index, index), aux), -index, v) for (index, nlen, v) in L]
+        score_list = [(scoring(index, nlen, self.M.get_r(index, index), aux), -index, v) for (index, nlen, v, yr) in L]
         score_list = [(a, b, c) for (a,b,c) in score_list if a]
 
         # print [("%.3f"%a, b) for (a,b,c) in score_list]

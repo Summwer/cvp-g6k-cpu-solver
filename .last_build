@@ -1,19 +1,16 @@
 Git status: 
-commit d19629eacf7fb077c9c697e2e0cea0d23a3a240c
-Author: summwer <15091002@buaa.edu.cn>
+commit 67237e69d9aabfc0df8210bca9f1c4a4d508b213
+Author: summwer <summwer@github.com>
 
-    finish cvpump and colattice partial implement
+    fix-undefined-mpfr-init(don't use mpfr in cpp)
 
 	modified:   .last_build
-	modified:   g6k/algorithms/cvpump.py
-	modified:   g6k/algorithms/workout.py
+	modified:   config.log
+	modified:   g6k/decl.pxd
 	modified:   g6k/siever.pyx
 	modified:   kernel/control.cpp
-	modified:   kernel/progressive_slicer_with_d4f.cpp
-	modified:   kernel/randomized_iterative_slicer.cpp
-	modified:   lwe_challenge.py
-	modified:   lwechal_cvpump_test.py
-	modified:   svp_challenge.py
+	modified:   kernel/siever.h
+	modified:   svpchal_cvpump_test.py
 =================
 rebuild.sh 
 =================
