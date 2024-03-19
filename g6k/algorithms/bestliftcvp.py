@@ -30,6 +30,13 @@ import logging
 import numpy as np
 
 
+#the gs-lengths of vector on L[ii:]
+def projected_len(ii,vector,M):
+    coeffs = list(M.from_canonical(vector))
+    coeffs = [0]*ii+coeffs[ii:]
+    vec = M.to_canonical(tuple(coeffs))
+    return sum([_**2 for _ in vec])
+
 def norm(vec):
     return sum([_**2 for _ in vec])
 
@@ -199,16 +206,17 @@ def bestliftcvp(g6k, g6k2, insert_left_bound, tracer, kappa, blocksize,  dim4fre
                 
                 ee = tuple([w[i] + bestliftcvp.w[i] for i in range(Lr)])
                 
-                
-                # print([_ for _ in list(np.linalg.solve((np.array(list(g6k.M.B))).T,np.array(ee)))] )
+                # print("inserted vector:", ee)
+                # print("inserted vector coeff:",[round(_,2) for _ in list(np.linalg.solve((np.array(list(g6k.M.B))).T,np.array(ee)))] )
             
                 norm_ee = sum([_**2 for _ in ee]) 
                 
                 
                 #if(index == 0):
-                print(index,nlen,norm_ee,goal_r0)
+                
                 
                 if((minnorm is None or minnorm > norm_ee) and norm_ee > 0):
+                    # print(index,nlen,norm_ee,goal_r0)
                     minnorm = norm_ee
                     minee = ee
                     best_v = [0]*Lr
@@ -218,10 +226,12 @@ def bestliftcvp(g6k, g6k2, insert_left_bound, tracer, kappa, blocksize,  dim4fre
                         else:
                             best_v[i] = (bestliftcvp.x[i]+v[i])
                         best_v = np.array(best_v)
+                    # print(best_v)
                     ii = index
-                    # for i in range(index):
-                    #     if(norm_ee<g6k.M.get_r(i,i)):
-                    #         ii = i
+                    for i in range(index):
+                        if(projected_len(ii,ee,g6k.M)<g6k.M.get_r(i,i)):
+                            ii = i
+                            break
                     if(goal_r0 is not None and norm_ee<=goal_r0):
                         break
                 # break

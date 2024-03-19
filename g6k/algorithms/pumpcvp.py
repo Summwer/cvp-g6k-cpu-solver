@@ -167,8 +167,6 @@ def pumpcvp(g6k, tracer, kappa, blocksize, dim4free, down_sieve=False,          
             # pumpcvp Down
             pumpcvp.phase = "down"
 
-
-
             
             while (g6k.n > 3 and pumpcvp.insert_left_bound <= kappa+down_stop):
                 # (try to) Insert      
@@ -179,20 +177,21 @@ def pumpcvp(g6k, tracer, kappa, blocksize, dim4free, down_sieve=False,          
                     L = [ (index, nlen, v, yr) for (index, nlen, v, yr) in pumpcvp.g6k.best_lifts() if index >=pumpcvp.insert_left_bound]
                     print("best lift list size: ", len(L))
                     if(len(L)!=0):
-                        ii,best_v,minnorm,minee = bestliftcvp(pumpcvp.tmpg6k,pumpcvp.g6k,pumpcvp.insert_left_bound,dummy_tracer,0, max(g6k.l,min_cvp_dim), 0,goal_r0=goal_r0,verbose=verbose)#, len_bound = 0.5)            
-                        
+                        ii,best_v,minnorm,minee = bestliftcvp(pumpcvp.tmpg6k,pumpcvp.g6k,pumpcvp.insert_left_bound,dummy_tracer,0, min(g6k.l,min_cvp_dim), 0,goal_r0=goal_r0,verbose=verbose)#, len_bound = 0.5)            
                         if(ii is not None):
-                            pumpcvp.g6k.insert_cvp(ii, best_v)
+                            g6k.insert_cvp(ii, best_v)
                             pumpcvp.tmpg6k.initialize_local(g6k.ll,g6k.l-1, g6k.r)
                             pumpcvp.tmpg6k.insert_cvp(ii, best_v)
-                        if(minnorm<goal_r0):
+                        if(goal_r0 is not None and minnorm<goal_r0):
                             print("solution:",minee)
                             return 
+                    else:
+                        return
                 # else:
                 # ii = g6k.insert_best_lift(scoring_down, aux=pumpcvp)
         
                 
-                print("rr[0]:",pumpcvp.g6k.M.get_r(0,0))
+                        print("rr[0]:",pumpcvp.g6k.M.get_r(0,0))
 
                 if ii is not None and increasing_insert_index:
                     pumpcvp.insert_left_bound = ii + 1
