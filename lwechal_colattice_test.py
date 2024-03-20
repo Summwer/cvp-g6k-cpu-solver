@@ -40,7 +40,7 @@ from fpylll.tools.quality import basis_quality
 from fpylll.util import gaussian_heuristic
 
 from g6k.algorithms.bkz import pump_n_jump_bkz_tour
-from g6k.algorithms.cvpump import cvpump
+from g6k.algorithms.colattice import colattice
 from g6k.siever import Siever
 from g6k.utils.cli import parse_args, run_all, pop_prefixed_params
 from g6k.utils.stats import SieveTreeTracer, dummy_tracer
@@ -173,7 +173,7 @@ def lwe_kernel(arg0, params=None, seed=None):
     d = g6k.full_n
     # blocksizes = [blocksize for blocksize in blocksizes if blocksize <= d]
     # blocksizes = [blocksize for blocksize in blocksizes if blocksize <= 25]
-    blocksizes = list(range(10, 20))
+    blocksizes = list(range(10, 30))
     g6k.lll(0, g6k.full_n)
     slope = basis_quality(g6k.M)["/"]
     print("Intial Slope = %.5f\n" % slope)
@@ -219,33 +219,20 @@ def lwe_kernel(arg0, params=None, seed=None):
     
     print("t: ", c)
     
-    # llb, blocksize, f = d-59, 59, 0
-    
-    # llb, blocksize, f = , d, d-67
-    blocksize = 60
-    f = 0
-    llb = d- blocksize# d - blocksize
+    b = d//2+20
+    coblocksizes = [b]*(d//b) # [d-60]+[60]
+    if(d%b>0):
+        coblocksizes = [d%b]+coblocksizes 
     
     if verbose:
-        print("Starting cvpump-{%d, %d, %d}" % (llb, blocksize,  f)) # noqa
+        print("Starting colattice with blocksize strategy:", coblocksizes) # noqa
     
-    
-    t = deepcopy(c)
-    full_x = [0]*d
-    pt, pw, w, x = cvpump(g6k,t,tracer,llb,blocksize, f,goal_r0=target_norm,verbose=verbose)
-    
-    g6k.cvp_extend_left(llb)
-    pw, w, x = g6k.get_cv()
-    print(len(x))
 
-    t= tuple([t[i] - pt[i] + pw[i] - w[i] for i in range(d)])
-    
-    ee = tuple([c[i] - w[i] for i in range(d)])
-    print("x:",x)
+    ee = colattice(g6k, c, coblocksizes, target_norm=target_norm)
     print(ee)
     
     norm_ee = sum([_**2 for _ in ee]) 
-    print("norm(ee) = %d" %norm_ee)
+    print("norm(ee) = %d, target_norm = %d" %(norm_ee,target_norm))
     if  ee is not None and norm_ee < target_norm:
         print("Finished! TT=%.2f sec" % (time.time() - T0))
         print(ee)
@@ -256,36 +243,6 @@ def lwe_kernel(arg0, params=None, seed=None):
         fn.close()
         return
     
-    # raise ""
-    
-    llb, blocksize, f = 0, max(llb,50), 0
-
-    if verbose:
-        print("Starting cvpump-{%d, %d, %d}" % (llb, blocksize, f)) # noqa
-
-    pt, pw, w, x = cvpump(g6k,t,tracer,llb,blocksize, f,goal_r0=target_norm,verbose=verbose, len_bound = 0.5)
-    
-    ee = tuple([ee[i] - w[i] for i in range(d)])
-    print("x:",x)
-    print("ee:",ee)
-
-    if verbose:
-        slope = basis_quality(g6k.M)["/"]
-        fmt = "\n slope: %.5f, walltime: %.3f sec"
-        print(fmt % (slope, time.time() - T0))
-        print()
-
-    norm_ee = sum([_**2 for _ in ee]) 
-    print("norm(ee) = %d" %norm_ee)
-    if  ee is not None and norm_ee < target_norm:
-        print("Finished! TT=%.2f sec" % (time.time() - T0))
-        print(ee)
-        alpha_ = int(alpha*1000)
-        filename = 'lwechallenge/%03d-%03d-solution.txt' % (n, alpha_)
-        fn = open(filename, "w")
-        fn.write(str(ee))
-        fn.close()
-        return
 
     raise ValueError("No solution found.")
 

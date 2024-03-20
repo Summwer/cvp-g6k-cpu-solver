@@ -223,6 +223,7 @@ cdef extern from "../kernel/siever.h" nogil:
         # Local setup methods:
         void initialize_local(unsigned int ll_, unsigned int l_, unsigned int r_)
         void extend_left(unsigned int lp)
+        void cvp_extend_left(unsigned int lp)
         void shrink_left(unsigned int lp)
         void extend_right(unsigned int rp)
         void grow_db(unsigned long N, unsigned int large)
@@ -268,6 +269,7 @@ cdef extern from "../kernel/siever.h" nogil:
         LFT* yl
         void initialize_projected_target_vector()
         void randomized_iterative_slicer(double* y, long* x, FT len_bound, int max_sample_times);
+        void get_cv(double* y, long* x);
         #Entry randomized_iterative_slicer(Entry target_vector, FT len_bound, int max_sample_times)
 
 

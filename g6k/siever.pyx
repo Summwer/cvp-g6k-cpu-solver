@@ -1825,6 +1825,56 @@ cdef class Siever(object):
 
         return pt
 
+
+    def cvp_extend_left(self, offset=1):
+        """
+        Extend the projected vector to the left:
+
+            - change the context
+
+            - refresh the close vector with parameters ``babai_index=l_index=offset``
+
+        This function, changes the context, i.e. the left index is reduced::
+
+            >>> g6k.l, g6k.r
+            (1, 5)
+
+            >>> g6k.cvp_extend_left(); g6k.l, g6k.r
+            (0, 5)
+
+        """
+        # TODO the documentation needs fixing
+        assert(self.initialized)
+        assert(self.t_initialized)
+        assert(self.l-offset>=0)
+        if(self.l - self.ll < offset):
+            self.initialize_local(self.l-offset, self.l, self.r)
+        sig_on()
+        self._core.cvp_extend_left(offset)
+        sig_off()
+
+    def get_cv(self):
+        #obtain the close vector to t.
+        cdef np.ndarray cv = zeros((self.full_n), dtype=float64); #approx closest vector to projected t.
+        cdef np.ndarray x = zeros((self.full_n), dtype=int64);
+
+        self._core.get_cv(<double*>cv.data,<long*>x.data)
+        print(x)
+        mat_x = IntegerMatrix(1,self.full_n)
+        for i in range(self.full_n):
+            mat_x[0,i] = int(x[i])
+
+        res =  mat_x * self.M.B
+
+        #print("B[0]:")
+        #print(self.M.B[0])
+      
+        w = []
+        for i in range(self.full_n):
+            w.append(int(res[0,i]))
+        print(w)
+        return [_ for _ in self.M.to_canonical(cv)],  w, [int(x[i]) for i in range(self.full_n)]
+
     #function about randomized iterative slicer
     def randslicer(self, len_bound = 1, max_sample_times = 1000):
         """
@@ -1871,8 +1921,6 @@ cdef class Siever(object):
         for i in range(self.full_n):
             mat_x[0,i] = int(x[i])
 
-        #print(mat_x)
-
         res =  mat_x * self.M.B
 
         #print("B[0]:")
@@ -1883,7 +1931,7 @@ cdef class Siever(object):
             w.append(int(res[0,i]))
    
 
-        x_w = [_ for _ in list(npp.linalg.solve((npp.array(list(self.M.B))).T,npp.array(w)))] 
+        #x_w = [_ for _ in list(npp.linalg.solve((npp.array(list(self.M.B))).T,npp.array(w)))] 
 
         #print("x_w:", x_w)
 

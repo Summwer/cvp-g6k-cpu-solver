@@ -1182,6 +1182,8 @@ public:
     // };
     // std::vector<Vec<LFT>> vecs; 
     Entry pt; //projected target_vector
+    //cv: the full-dimensional closest vector in lattice to t.
+    Entry cv;
     std::array<LFT,MAX_SIEVING_DIM> yl;
 
     LFT gamma;
@@ -1200,10 +1202,12 @@ public:
     Entry sample_t_(Entry target_vector);
     
     // void progressive_sieve(fplll::MatGSO<SZT, SFT> M, unsigned int l = 0);
-    void cvp_extend_left(Entry &e, unsigned int lp = 0);
+    void cvp_extend_left(unsigned int lp = 0);
     // void extend_left(Entry &e, unsigned int lp);
     // void compute_projected_vector(Siever::Vec<LFT> pt,  fplll::MatGSO<SZT, SFT> M, unsigned int l);
     void initialize_projected_target_vector();
+
+    void get_cv(double* y, long* x);
 
     // Vec<LFT> randomized_iterative_slicer( Vec<LFT> target_vector, fplll::MatGSO<SZT, SFT> M, FT norm_bound, int max_sample_times, unsigned int l = 0, bool verbose = true); //unsigned int q, 
 

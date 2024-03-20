@@ -1,16 +1,16 @@
 Git status: 
-commit 67237e69d9aabfc0df8210bca9f1c4a4d508b213
+commit 7cb808df8d4609fc478431042575227bf1f39739
 Author: summwer <summwer@github.com>
 
-    fix-undefined-mpfr-init(don't use mpfr in cpp)
+    update
 
 	modified:   .last_build
-	modified:   config.log
 	modified:   g6k/decl.pxd
 	modified:   g6k/siever.pyx
-	modified:   kernel/control.cpp
+	modified:   kernel/progressive_slicer_with_d4f.cpp
 	modified:   kernel/siever.h
-	modified:   svpchal_cvpump_test.py
+	modified:   lwechal_cvpump_test.py
+	modified:   lwechallenge/040-005-solution.txt
 =================
 rebuild.sh 
 =================

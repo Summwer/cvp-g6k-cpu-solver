@@ -9,9 +9,9 @@
 
 using namespace alglib;
 
-//recover vector from projected vector to find a close vector to t
-//cvp extend left
-void Siever::cvp_extend_left(Entry &e, unsigned int lp){
+//recover close vector cv from projected vector to find a close vector to t
+//cvp extend left 
+void Siever::cvp_extend_left( unsigned int lp){
   // SFT mu,tmp;
   // initialize_local(ll, l - lp, r);
   CPUCOUNT(202);
@@ -20,17 +20,17 @@ void Siever::cvp_extend_left(Entry &e, unsigned int lp){
   if(lp==0) return;
   initialize_local(ll, l - lp, r);
   
-  std::copy_backward(e.x.begin(), e.x.begin()+n-lp, e.x.begin()+n);
-  std::fill(e.x.begin(), e.x.begin()+lp, 0);
-  std::fill(e.x.begin()+n,e.x.end(),0);
+  std::copy_backward(cv.x.begin(), cv.x.begin()+n-lp, cv.x.begin()+n);
+  std::fill(cv.x.begin(), cv.x.begin()+lp, 0);
+  std::fill(cv.x.begin()+n,cv.x.end(),0);
   for (int i = lp - 1 ; i >= 0; --i){
-    e.yr[i] = std::inner_product(e.x.cbegin()+i+1, e.x.cbegin()+n, muT[i].cbegin()+i+1, static_cast<FT>(0.));
-    e.x[i] = - (ZT)std::round(e.yr[i] - yl[i+ll]);
-    e.yr[i] += e.x[i];
-    // e.yr[i] *= sqrt_rr[i];
+    cv.yr[i] = std::inner_product(cv.x.cbegin()+i+1, cv.x.cbegin()+n, muT[i].cbegin()+i+1, static_cast<FT>(0.));
+    cv.x[i] = - (ZT)std::round(cv.yr[i] - yl[i+ll]);
+    cv.yr[i] += cv.x[i];
+    // cv.yr[i] *= sqrt_rr[i];
   }
   for (unsigned int i = 0 ; i < n; i++){
-    e.yr[i] = std::inner_product(e.x.cbegin()+i, e.x.cbegin()+n, muT[i].cbegin()+i,  static_cast<FT>(0.)); //* sqrt_rr[i];
+    cv.yr[i] = std::inner_product(cv.x.cbegin()+i, cv.x.cbegin()+n, muT[i].cbegin()+i,  static_cast<FT>(0.)); //* sqrt_rr[i];
   }
 }
 
@@ -60,8 +60,7 @@ void Siever::recover_vector_from_yr(double* y, long* x, Entry pe){
   // vector<SFT> y = vector<SFT>(full_n,0.), z = vector<SFT>(full_n,0.);
   std::fill(y, &y[full_n], 0.);
   std::fill(x, &x[full_n], 0); 
-  //cv: the full-dimensional closest vector in lattice to t.
-  Entry cv;
+  
   // cout<<"cv.yr:";
   // cout<<"pcv.x: [";
   for(unsigned int i = 0; i < n; i++){
@@ -76,7 +75,7 @@ void Siever::recover_vector_from_yr(double* y, long* x, Entry pe){
   // cout<<endl;
 
   // cout<<"l:"<<l<<", ll: "<<ll<<endl;
-  cvp_extend_left(cv, l-ll); //actual dim - sieve dim
+  cvp_extend_left(l-ll); //actual dim - sieve dim
 
   
   // left_recompute_yr(cv, ll); //extend left to ll.
@@ -227,3 +226,18 @@ void Siever::initialize_projected_target_vector(){
 //     cout<<"n/(full_n-f) = "<<n<<"/"<<full_n-f<<endl;
 //     cout<<"Fail to find the solution"<<endl;
 // }
+
+
+
+void Siever::get_cv(double* y, long* x){
+  std::fill(y, &y[full_n], 0.);
+  std::fill(x, &x[full_n], 0); 
+   //Recover cv from coordinates on gso/gh.
+  for(unsigned int i = 0; i < n; i++){
+    y[i+ll] = cv.yr[i] / sqrt_rr[i]; 
+  }
+
+  for(unsigned int i = 0; i < n; i++){
+    x[i+ll] = (int) cv.x[i];//sqrt_rr[i]; 
+  }
+}
