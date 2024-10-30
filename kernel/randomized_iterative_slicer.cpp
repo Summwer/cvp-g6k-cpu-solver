@@ -34,9 +34,9 @@ void Siever::update_entry(Entry &e){
 
   // double rho;
   // int min_prec = gso_min_prec(rho, n, LLL_DEF_DELTA, LLL_DEF_ETA);
-  int prec     = 53;
+  // int prec     = 53;
   // int old_prec = FP_NR<mpfr_t>::set_prec(prec);
-  e.len_prec = std::inner_product(e.yr.begin(), e.yr.begin()+n, e.yr.begin(),  static_cast<FT>(0.0));//static_cast<FP_NR<mpfr_t>>(0.0));
+  // e.len_prec = std::inner_product(e.yr.begin(), e.yr.begin()+n, e.yr.begin(),  static_cast<FT>(0.0));//static_cast<FP_NR<mpfr_t>>(0.0));
   
   if(e.len < 0) {
     std::cout<<e.len;
@@ -284,11 +284,11 @@ Entry Siever::sample_t_(Entry pt){ // int q,s
 // }
 
 
-void Siever::randomized_iterative_slicer(double* y, long* x, FT len_bound, int max_sample_times){ 
+void Siever::randomized_iterative_slicer(double* y, long* x, FT len_bound, int max_sample_times, int* sample_times){ 
   update_entry(pt);
   
   if(max_sample_times == 0)
-    max_sample_times = 1000;
+    max_sample_times = 100;
   Entry t_new1, t_new2, t_ = pt, mint_ = pt;
 
 
@@ -308,7 +308,8 @@ void Siever::randomized_iterative_slicer(double* y, long* x, FT len_bound, int m
   //   cout<<mint_.yr[i]<<" ";
   // cout<<endl;
 
-  int sample_times = 1;
+  // int sample_times = 1;
+  sample_times[0] = 1;
 start_sample_t_:
   //3. sample  a vector t' in L(A+t), just sample a vector in L(A), and plus it to t. 
   if(max_sample_times > 0)
@@ -359,20 +360,20 @@ start_over:
 
 
 
-  if( t_.len > len_bound and sample_times < max_sample_times){
-    sample_times += 1;
+  if( t_.len > len_bound and *sample_times < max_sample_times){
+    *sample_times += 1;
     goto start_sample_t_;
   }
 
 
 
   
-  if( mint_.len > pt.len and sample_times >= max_sample_times){
+  if( mint_.len > pt.len and *sample_times >= max_sample_times){
     mint_ = pt;
   }
 
-  // if(sample_times > 1 and verbose and sample_times < max_sample_times)
-  //   std::cout<<"\n Sample Times = "<<sample_times<<std::endl;
+  // if(sample_times > 1 and sample_times < max_sample_times)
+    // std::cout<<"\n Sample Times = "<<sample_times<<std::endl;
   // cout<<"mint_.yr =";
   // for(int i = 0; i< n; i++)
   //   cout<<mint_.yr[i]<<" ";

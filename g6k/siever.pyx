@@ -1769,6 +1769,7 @@ cdef class Siever(object):
         score_list = [(scoring(index, nlen, self.M.get_r(index, index), aux), -index, v) for (index, nlen, v, yr) in L]
         score_list = [(a, b, c) for (a,b,c) in score_list if a]
 
+
         # print [("%.3f"%a, b) for (a,b,c) in score_list]
         # print
         if not score_list:
@@ -1903,10 +1904,11 @@ cdef class Siever(object):
         assert(self.t_initialized)
         cdef np.ndarray cv = zeros((self.full_n), dtype=float64); #approx closest vector to projected t.
         cdef np.ndarray x = zeros((self.full_n), dtype=int64);
+        cdef np.ndarray sample_times = zeros(1, dtype=int64);
         
         sig_on()
         self._core.initialize_projected_target_vector()
-        self._core.randomized_iterative_slicer(<double*>cv.data, <long*>x.data, len_bound, max_sample_times)
+        self._core.randomized_iterative_slicer(<double*>cv.data, <long*>x.data, len_bound, max_sample_times, <int*> sample_times.data)
         sig_off()
         #print(reduced_t)
 
@@ -1926,9 +1928,7 @@ cdef class Siever(object):
         #print("B[0]:")
         #print(self.M.B[0])
       
-        w = []
-        for i in range(self.full_n):
-            w.append(int(res[0,i]))
+        w = [int(res[0,i]) for i in range(res.ncols)]
    
 
         #x_w = [_ for _ in list(npp.linalg.solve((npp.array(list(self.M.B))).T,npp.array(w)))] 
@@ -1937,7 +1937,7 @@ cdef class Siever(object):
 
         #assert(x_w == x)
 
-        return [_ for _ in self.M.to_canonical(cv)],  w, [int(x[i]) for i in range(self.full_n)]
+        return [_ for _ in self.M.to_canonical(cv)],  w, [int(x[i]) for i in range(self.full_n)], sample_times[0]
         #return [round(_) for _ in self.M.to_canonical(reduced_t)]
 
 # For backward compatibility with old pickles

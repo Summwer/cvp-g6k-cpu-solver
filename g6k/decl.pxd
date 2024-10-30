@@ -268,7 +268,7 @@ cdef extern from "../kernel/siever.h" nogil:
 
         LFT* yl
         void initialize_projected_target_vector()
-        void randomized_iterative_slicer(double* y, long* x, FT len_bound, int max_sample_times);
+        void randomized_iterative_slicer(double* y, long* x, FT len_bound, int max_sample_times, int* sample_times);
         void get_cv(double* y, long* x);
         #Entry randomized_iterative_slicer(Entry target_vector, FT len_bound, int max_sample_times)
 

@@ -24,9 +24,10 @@ from __future__ import absolute_import
 from __future__ import print_function
 import sys
 import time
-from math import log
+from math import log, ceil
 from g6k.siever import SaturationError
 import logging
+
 
 
 # def initialize_target_vector(long* target_vector, fplll::MatGSO<SZT, SFT> M, vector<SFT> &yl){
@@ -57,7 +58,6 @@ def wrapped_sieve(pro_randslicer):
         alg = "gauss"
     else:
         alg = None
-
     cont = True
     try:
         with pro_randslicer.g6k.temp_params(saturation_ratio=pro_randslicer.g6k.params.saturation_ratio * pro_randslicer.sat_factor):
@@ -138,27 +138,40 @@ def pro_randslicer(g6k, c, tracer, dim4free,        # Main parameters
 
     with tracer.context(("pro_randslicer", "d:%d f:%d" % (g6k.full_n, dim4free))):
         with g6k.temp_params(reserved_n=g6k.full_n-pro_randslicer.l):
-            pro_randslicer.phase = "init"
+            if g6k.params.default_sieve == "gpu":
+                pro_randslicer.phase = "up"
+            else:
+                pro_randslicer.phase = "init"
             wrapped_sieve(pro_randslicer)  # The first initializing Sieve should always be Gauss to avoid rank-loss, sieve process
 
             pro_randslicer.phase = "up"
             # pro_randslicer Up
+            T0_pump = time.time()
+            db_size = 0
             while (g6k.l > pro_randslicer.l):
-                if(g6k.n + 1 > g6k.max_sieving_dim):
-                    raise RuntimeError("The current sieving context is bigger than maximum supported dimension.")
+                # if(g6k.n + 1 > g6k.max_sieving_dim):
+                #     raise RuntimeError("The current sieving context is bigger than maximum supported dimension.")
                 g6k.extend_left(1)
 
                 if verbose:
                     print_pro_randslicer_state(pro_randslicer)
                 if not wrapped_sieve(pro_randslicer):
                     break
+                db_size = max(db_size, g6k.db_size())
+            T_pump = time.time()- T0_pump
             # print(list(g6k.itervalues()))
-            pro_randslicer.w = pro_randslicer.g6k.randslicer()
-            pro_randslicer.ee = [pro_randslicer.c[i] - pro_randslicer.w[i] for i in range(pro_randslicer.g6k.full_n)]
+            max_sample_times = ceil((16/13.)**(pro_randslicer.g6k.M.B.ncols))
+            
+            
+            T0 = time.time()
+            _,pro_randslicer.w,_,sample_times  = pro_randslicer.g6k.randslicer(max_sample_times = max_sample_times)
+            
+            
+            pro_randslicer.ee = [pro_randslicer.c[i] - pro_randslicer.w[i] for i in range(pro_randslicer.g6k.M.B.ncols)]
             pro_randslicer.norm_ee = norm(pro_randslicer.ee)
             # print(pro_randslicer.ee)
 
             if goal_r0 is not None and pro_randslicer.norm_ee <= goal_r0:
                 return pro_randslicer.w, pro_randslicer.ee
             
-    return pro_randslicer.w, pro_randslicer.ee
+    return pro_randslicer.w, pro_randslicer.ee, sample_times,T_pump, time.time() -T0, db_size

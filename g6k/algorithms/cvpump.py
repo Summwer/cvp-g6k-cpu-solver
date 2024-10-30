@@ -94,8 +94,8 @@ def scoring_down(i, nlen, olen, aux):
 
 
 def cvpump(g6k, c, tracer, kappa, blocksize,  dim4free,      # Main parameters
-         goal_r0=None, start_up_n=30,        
-         verbose=False, len_bound = 1                                                          
+         goal_r0=None, start_up_n=50,        
+         verbose=False, len_bound = 1 ,saturation_error="weaken"                                                        
          ):
     """
     Run the cvpump algorithm.
@@ -122,25 +122,27 @@ def cvpump(g6k, c, tracer, kappa, blocksize,  dim4free,      # Main parameters
     g6k.lll(0, cvpump.r)
     # g6k.initialize_local(0, max(g6k.r-start_up_n, cvpump.l+1), l+blocksize)
     g6k.initialize_local(kappa, max(cvpump.r-start_up_n, cvpump.l+1), cvpump.r)
-    cvpump.pt = g6k.initialize_target_vector(c)
+    
     # print("pt:",pc)
     
     cvpump.minl = g6k.l
     cvpump.sat_factor = 1.
 
-    for key in ('goal_r0', 'g6k', 'tracer', 'verbose'):
+    for key in ('goal_r0', 'g6k', 'tracer', 'verbose','saturation_error'):
         setattr(cvpump, key, locals()[key])
 
     with tracer.context(("cvpump", "beta:%d f:%d" % (blocksize, dim4free))):
         with g6k.temp_params(reserved_n=cvpump.r-cvpump.l):
-            cvpump.phase = "init"
+            if g6k.params.default_sieve == "gpu":
+                cvpump.phase = "up"
+            else:
+                cvpump.phase = "init"
             wrapped_sieve(cvpump)  # The first initializing Sieve should always be Gauss to avoid rank-loss, sieve process
 
             cvpump.phase = "up"
             # cvpump Up
             while (g6k.l > cvpump.l):
-                if(g6k.n + 1 > g6k.max_sieving_dim):
-                    raise RuntimeError("The current sieving context is bigger than maximum supported dimension.")
+                
                 g6k.extend_left(1)
 
                 if verbose:
@@ -149,7 +151,7 @@ def cvpump(g6k, c, tracer, kappa, blocksize,  dim4free,      # Main parameters
                     break
             # print(list(g6k.itervalues()))
             
-            
+            cvpump.pt = g6k.initialize_target_vector(c)
             cvpump.pw, cvpump.w, cvpump.x = cvpump.g6k.randslicer(len_bound = len_bound) 
             
             
@@ -163,4 +165,6 @@ def cvpump(g6k, c, tracer, kappa, blocksize,  dim4free,      # Main parameters
             # if goal_r0 is not None and cvpump.norm_ee <= goal_r0:
             #     return cvpump.w #, cvpump.ee
             
+    # return cvpump.pt, cvpump.pw, cvpump.w, cvpump.x #, cvpump.ee
+    
     return cvpump.pt, cvpump.pw, cvpump.w, cvpump.x #, cvpump.ee

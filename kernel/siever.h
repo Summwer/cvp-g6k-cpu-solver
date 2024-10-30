@@ -1212,7 +1212,7 @@ public:
     // Vec<LFT> randomized_iterative_slicer( Vec<LFT> target_vector, fplll::MatGSO<SZT, SFT> M, FT norm_bound, int max_sample_times, unsigned int l = 0, bool verbose = true); //unsigned int q, 
 
     // void initialize_local(fplll::MatGSO<SZT, SFT> M); //Initialize parameter for class siever.
-    void randomized_iterative_slicer(double* y, long* x, FT len_bound, int max_sample_times); //len_bound: norm_bound/gh(L[l:])
+    void randomized_iterative_slicer(double* y, long* x, FT len_bound, int max_sample_times,int* sample_times); //len_bound: norm_bound/gh(L[l:])
     // Entry randomized_iterative_slicer( Entry target_vector, FT len_bound, int max_sample_times); 
     void run_randslicer(long* target_vector, FT len_bound, int max_sample_times,  long* &w, long* &ee);
 

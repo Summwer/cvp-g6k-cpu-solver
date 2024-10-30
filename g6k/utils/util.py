@@ -38,7 +38,7 @@ from fpylll import Enumeration, EnumerationError
 from fpylll.util import gaussian_heuristic, set_random_seed
 from g6k.utils.stats import SieveTreeTracer
 from six.moves import range
-
+from random import randint
 
 def load_matrix_file(filepath, randomize=False, seed=None, float_type="double"):
     """
@@ -389,3 +389,12 @@ def output_profiles(what, profiles):
             plt.show()
         else:
             plt.savefig(what)
+
+
+
+def load_cvp_instance(n):
+    A, _ = load_svpchallenge_and_randomize(n)
+    target_vector = [randint(-2**8,2**8) for _ in range(n)]
+    # print(target_vector)
+    
+    return A, target_vector
