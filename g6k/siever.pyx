@@ -1923,6 +1923,7 @@ cdef class Siever(object):
         for i in range(self.full_n):
             mat_x[0,i] = int(x[i])
 
+
         res =  mat_x * self.M.B
 
         #print("B[0]:")

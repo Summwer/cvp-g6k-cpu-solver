@@ -103,7 +103,7 @@ def scoring_down(i, nlen, olen, aux):
 
 def pro_randslicer(g6k, c, tracer, dim4free,        # Main parameters
          goal_r0=None, start_up_n=30,        
-         verbose=False,                                                               
+         verbose=False,       saturation_error = "ignore"                                                         
          ):
     """
     Run the pro_randslicer algorithm.
@@ -128,6 +128,7 @@ def pro_randslicer(g6k, c, tracer, dim4free,        # Main parameters
     g6k.initialize_local(0, max(g6k.full_n-start_up_n, pro_randslicer.l+1), g6k.full_n)
     g6k.initialize_target_vector(c)
     
+    pro_randslicer.saturation_error = saturation_error
     
     
     pro_randslicer.minl = g6k.l
@@ -169,7 +170,7 @@ def pro_randslicer(g6k, c, tracer, dim4free,        # Main parameters
             
             pro_randslicer.ee = [pro_randslicer.c[i] - pro_randslicer.w[i] for i in range(pro_randslicer.g6k.M.B.ncols)]
             pro_randslicer.norm_ee = norm(pro_randslicer.ee)
-            # print(pro_randslicer.ee)
+            
 
             if goal_r0 is not None and pro_randslicer.norm_ee <= goal_r0:
                 return pro_randslicer.w, pro_randslicer.ee

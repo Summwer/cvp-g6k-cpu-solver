@@ -394,7 +394,7 @@ def output_profiles(what, profiles):
 
 def load_cvp_instance(n):
     A, _ = load_svpchallenge_and_randomize(n)
-    target_vector = [randint(-2**8,2**8) for _ in range(n)]
+    target_vector = [randint(-2**10,2**10) for _ in range(n)]
     # print(target_vector)
     
     return A, target_vector

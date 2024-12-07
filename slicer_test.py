@@ -25,7 +25,7 @@ def draw_cvp_bound_simulation():
     return
 
 
-def cvp_test(A,t):
+def cvp_test(A,t, params):
     close_vector = tuple([0]*A.ncols) 
     sample_times = 1
     T_sieve = 0
@@ -44,46 +44,45 @@ def cvp_test(A,t):
         T_slicer = time.time() - T0
     else:
         #randomlized slicer
-        params = SieverParams(threads = 1)
+        # params = SieverParams(threads = 1,saturation_ratio = 1.)
+        
         g6k = Siever(A,params)
         f = 0
         # print(g6k.M.B.nrows,g6k.M.B.ncols)
-        close_vector,_,sample_times, T_sieve, T_slicer, db_size = pro_randslicer(g6k,t,dummy_tracer,f,verbose=False)
+        close_vector,_,sample_times, T_sieve, T_slicer, db_size = pro_randslicer(g6k,t,dummy_tracer,f,verbose=False, )
     return close_vector, sample_times, T_sieve, T_slicer, db_size
 
 
 
 
-print("{0: <10} | {1: <10} | {2: <15} | {3: <30} | {4: <15} | {5: <15} | {6: <15} | {7: <15} | {8: <15}".format("dim", "index", "sample times", "estimated sample times", "T_pump (sec)", "T_slicer (sec)", "dt", "gh", "db_size"))
+print("{0: <10} | {1: <10} | {2: <15} | {3: <30} | {4: <15} | {5: <15} | {6: <15} | {7: <15} | {8: <15} | {9: <15}".format("dim", "index", "sample times", "estimated sample times", "T_pump (sec)", "T_slicer (sec)", "dt", "gh", "db_size", "satisfied vectors"))
 tours = 10
-for n in range(50, 100, 2):
+params = SieverParams(threads = 1 ,  saturation_ratio = 1. )#, saturation_ratio = 0.75)#, saturation_ratio = 1.,  db_size_factor = 5, default_sieve = "bgj1" )#, db_size_factor = 1.5 )
+for n in range(60, 100, 2):
     for index in range(1,tours+1):
         A, t = load_cvp_instance(n)
         A = LLL.reduction(A)
         
         
         g6k = Siever(A,None)
-        for blocksize in range(10, 30):
-            bkz = BKZReduction(g6k.M)
-            par = fplll_bkz.Param(blocksize,
-                                        strategies=fplll_bkz.DEFAULT_STRATEGY,
-                                        max_loops=1)
-            bkz(par)
+        # for blocksize in range(10, 30):
+        #     bkz = BKZReduction(g6k.M)
+        #     par = fplll_bkz.Param(blocksize,
+        #                                 strategies=fplll_bkz.DEFAULT_STRATEGY,
+        #                                 max_loops=1)
+        #     bkz(par)
         
         
         rr = [g6k.M.get_r(i, i) for i in range(n)]
 
 
-        t_yl = g6k.M.from_canonical(t)
-        pt = g6k.M.to_canonical(tuple(list(t_yl)))
-        
-        w, sample_times,T_pump, T_slicer, db_size = cvp_test(A,t)
+        w, sample_times,T_pump, T_slicer, db_size = cvp_test(A,t, params)
         max_sample_times = ceil((16/13.)**(n//2.))
         
         
         gh = sqrt(gaussian_heuristic(rr))
-        dt = sqrt(sum([(w[i] - pt[i])**2 for i in range(len(t))]))
+        dt = sqrt(sum([(w[i] - t[i])**2 for i in range(len(t))]))
         # simDist = DistEstDistEstColattice([log(_)/2. for _ in rr[:n]], [n])
     
-        print("{0: <10} | {1:<10} | {2: <15} | {3: <30} | {4: <15} | {5: <15} | {6: <15} | {7: <15} | {8: <15}".format(n,index, sample_times, max_sample_times, round(T_pump,4), round(T_slicer,4), round(dt,3), round(gh,3), db_size))
+        print("{0: <10} | {1:<10} | {2: <15} | {3: <30} | {4: <15} | {5: <15} | {6: <15} | {7: <15} | {8: <15} | {9: <15}".format(n,index, sample_times, max_sample_times, round(T_pump,4), round(T_slicer,4), round(dt,3), round(gh,3), db_size, int(.5 * params.saturation_ratio * params.db_size_base ** n )))
 

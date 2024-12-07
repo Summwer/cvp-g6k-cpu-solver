@@ -1,20 +1,15 @@
 Git status: 
-commit 429ccd398c79f2ba461e6175bee3e9a58f203d8b
-Author: summwer <summwer@github.com>
+commit 0e7aecb94bea48e86594d831029937f3dbad4cd4
+Author: summwer <15091002@buaa.edu.cn>
 
-    implement colattice
+    add cvp-cost-test
 
 	modified:   .last_build
-	modified:   Makefile.local
-	modified:   config.log
-	modified:   g6k/algorithms/colattice.py
-	modified:   g6k/algorithms/cvpump.py
 	modified:   g6k/algorithms/pro_randslicer.py
-	modified:   g6k/decl.pxd
 	modified:   g6k/siever.pyx
 	modified:   g6k/utils/util.py
-	modified:   kernel/randomized_iterative_slicer.cpp
-	modified:   kernel/siever.h
+	modified:   slicer-test.log
+	modified:   slicer_test.py
 =================
 rebuild.sh 
 =================
