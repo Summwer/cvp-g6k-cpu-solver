@@ -218,7 +218,7 @@ def lwe_kernel(arg0, params=None, seed=None):
     # overdoing n_max would allocate too much memory, so we are careful
     f = d - 80
     if verbose:
-        print("Starting pro_randslicer_{%d, %d}" % (d,  f)) # noqa
+        print("Starting pro_randslicer_{0, %d, %d}" % (f, d)) # noqa
     _, ee = pro_randslicer(g6k,c,tracer,f,goal_r0=target_norm,verbose=verbose)
             
 

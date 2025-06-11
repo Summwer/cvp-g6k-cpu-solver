@@ -1,15 +1,11 @@
 Git status: 
-commit 0e7aecb94bea48e86594d831029937f3dbad4cd4
+commit 442ae4030ce827c30a8f8da1f5284122787abca0
 Author: summwer <15091002@buaa.edu.cn>
 
-    add cvp-cost-test
+    update the latest version
 
 	modified:   .last_build
-	modified:   g6k/algorithms/pro_randslicer.py
-	modified:   g6k/siever.pyx
-	modified:   g6k/utils/util.py
-	modified:   slicer-test.log
-	modified:   slicer_test.py
+	modified:   README.md
 =================
 rebuild.sh 
 =================

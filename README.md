@@ -18,3 +18,5 @@ recompile command:
 python setup.py clean
 python setup.py build_ext --inplace 
 ```
+
+Run `slicer_test.py` can test the time cost for each slice. The time cost for one slicer exceeds the regular time cost because its

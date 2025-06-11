@@ -57,7 +57,7 @@ def cvp_test(A,t, params):
 
 print("{0: <10} | {1: <10} | {2: <15} | {3: <30} | {4: <15} | {5: <15} | {6: <15} | {7: <15} | {8: <15} | {9: <15}".format("dim", "index", "sample times", "estimated sample times", "T_pump (sec)", "T_slicer (sec)", "dt", "gh", "db_size", "satisfied vectors"))
 tours = 10
-params = SieverParams(threads = 1 ,  saturation_ratio = 1. )#, saturation_ratio = 0.75)#, saturation_ratio = 1.,  db_size_factor = 5, default_sieve = "bgj1" )#, db_size_factor = 1.5 )
+params = SieverParams(threads = 10 , default_sieve = "bdgl2" )#, saturation_ratio = 0.75)#, saturation_ratio = 1.,  db_size_factor = 5, default_sieve = "bgj1" )#, db_size_factor = 1.5 )
 for n in range(60, 100, 2):
     for index in range(1,tours+1):
         A, t = load_cvp_instance(n)
