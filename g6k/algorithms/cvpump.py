@@ -152,7 +152,7 @@ def cvpump(g6k, c, tracer, kappa, blocksize,  dim4free,      # Main parameters
             # print(list(g6k.itervalues()))
             
             cvpump.pt = g6k.initialize_target_vector(c)
-            cvpump.pw, cvpump.w, cvpump.x = cvpump.g6k.randslicer(len_bound = len_bound) 
+            cvpump.pw, cvpump.w, cvpump.x, _ = cvpump.g6k.randslicer(len_bound = len_bound) 
             
             
             

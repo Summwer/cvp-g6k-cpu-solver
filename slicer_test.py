@@ -6,12 +6,11 @@ from g6k.siever_params import SieverParams
 from g6k.algorithms.pro_randslicer import pro_randslicer
 from math import sqrt
 from g6k.utils.util import load_cvp_instance
-from copy import deepcopy
-from DistEstColattice import DistEstDistEstColattice
-from math import log, ceil
+from math import ceil, exp
+import time
 from fpylll import BKZ as fplll_bkz
 from fpylll.algorithms.bkz2 import BKZReduction
-import time
+
 
 def dot_product(a,b):
     return sum([a[i]*b[i] for i in range(len(a))])
@@ -55,34 +54,40 @@ def cvp_test(A,t, params):
 
 
 
+
+#set alpha = sqrt(4/3), the success probability is: exp(-0.149780140929454 * beta)
+
+
 print("{0: <10} | {1: <10} | {2: <15} | {3: <30} | {4: <15} | {5: <15} | {6: <15} | {7: <15} | {8: <15} | {9: <15}".format("dim", "index", "sample times", "estimated sample times", "T_pump (sec)", "T_slicer (sec)", "dt", "gh", "db_size", "satisfied vectors"))
 tours = 10
-params = SieverParams(threads = 1 ,  saturation_ratio = 1. )#, saturation_ratio = 0.75)#, saturation_ratio = 1.,  db_size_factor = 5, default_sieve = "bgj1" )#, db_size_factor = 1.5 )
+params = SieverParams(threads = 5,  saturation_ratio = 0.5,   db_size_factor = 3.2)#, saturation_ratio = 0.75)#, saturation_ratio = 1.,  db_size_factor = 5, default_sieve = "bgj1" )#, db_size_factor = 1.5 )
 for n in range(60, 100, 2):
     for index in range(1,tours+1):
         A, t = load_cvp_instance(n)
         A = LLL.reduction(A)
         
         
+        
         g6k = Siever(A,None)
-        # for blocksize in range(10, 30):
+        
+        
+        # for blocksize in range(10, 30, 2):
         #     bkz = BKZReduction(g6k.M)
-        #     par = fplll_bkz.Param(blocksize,
-        #                                 strategies=fplll_bkz.DEFAULT_STRATEGY,
-        #                                 max_loops=1)
+        #     par = fplll_bkz.Param(blocksize, strategies=fplll_bkz.DEFAULT_STRATEGY,
+        #                               max_loops=1)
         #     bkz(par)
         
         
         rr = [g6k.M.get_r(i, i) for i in range(n)]
 
 
-        w, sample_times,T_pump, T_slicer, db_size = cvp_test(A,t, params)
-        max_sample_times = ceil((16/13.)**(n//2.))
-        
+        w, sample_times,T_pump, T_slicer, db_size = cvp_test(g6k.M.B,t, params)
+        # max_sample_times = ceil((16/13.)**(n//2.))
+        max_sample_times = ceil(exp(0.149780140929454 * n))
         
         gh = sqrt(gaussian_heuristic(rr))
         dt = sqrt(sum([(w[i] - t[i])**2 for i in range(len(t))]))
-        # simDist = DistEstDistEstColattice([log(_)/2. for _ in rr[:n]], [n])
+        # simDist = DistEstColattice([log(_)/2. for _ in rr[:n]], [n])
     
         print("{0: <10} | {1:<10} | {2: <15} | {3: <30} | {4: <15} | {5: <15} | {6: <15} | {7: <15} | {8: <15} | {9: <15}".format(n,index, sample_times, max_sample_times, round(T_pump,4), round(T_slicer,4), round(dt,3), round(gh,3), db_size, int(.5 * params.saturation_ratio * params.db_size_base ** n )))
 

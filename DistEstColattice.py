@@ -139,7 +139,7 @@ cd = [rk[-i] - sum(rk[-i:]) / i for i in range(1, 46)]
 cd += [(lgamma(beta_ / 2.0 + 1) * (1.0 / beta_) - log(sqrt(pi))) / log(2.0) for beta_ in range(46, 2000)]
 
 
-def DistEstDistEstColattice(rr, bs):
+def DistEstColattice(rr, bs):
     """
     Input: rr -- ln(||bi^*||), i = 0, ..., d- 1
            bs -- blocksize strategy βi, sum(βi) = d. 
@@ -171,17 +171,3 @@ def DistEstDistEstColattice(rr, bs):
     
     
 
-# #for lattice challenge: n = q
-# dim = 142
-# q = 63
-# dvol = q*log(q)
-# print("Generate gs-lengths by GSA assumption.")
-# delta = compute_delta(2)
-# rr = [log(bkzgsa_gso_len(dvol, i, dim, delta=delta))  for i in range(dim)]
-# gh = gaussian_heuristic([2*_ for _ in rr])
-# blocksizes = [71,71]
-# Dist = DistEst(rr, blocksizes)
-# gcp = sqrt(Dist/gh)
-# print(Dist,gh,gcp)
-# print("approxiamte factor in colattice with ",blocksizes, end="")
-# print(" is %.3f" %gcp)
