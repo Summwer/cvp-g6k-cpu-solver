@@ -5,7 +5,11 @@ Author: summwer <15091002@buaa.edu.cn>
     update the latest version
 
 	modified:   .last_build
-	modified:   README.md
+	modified:   slicer-test-pre-bkz.log
+	modified:   slicer-test-st=0.75.log
+	modified:   slicer-test-st=1-LLL.log
+	modified:   slicer-test-st=1.log
+	modified:   slicer-test.log
 =================
 rebuild.sh 
 =================

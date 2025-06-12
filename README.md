@@ -19,4 +19,6 @@ python setup.py clean
 python setup.py build_ext --inplace 
 ```
 
-Run `slicer_test.py` can test the time cost for each slice. The time cost for one slicer exceeds the regular time cost because its
+In `slicer_test.py`, update the parameter setting of `max_sample_times` and `len_bound` in this file to help other developers adjust them. 
+
+Besides, we update the test result of slicer while setting `max_sample_times = 140` and use the cvp instance generation method from https://github.com/RandomizedSlicer/RandomizedSlicerG6K. Under the same benchmark, our running time is shorter than it.  

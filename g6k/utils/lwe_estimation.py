@@ -311,7 +311,7 @@ def primal_lattice_basis_1(A, c, q, m=None):
 
 
 
-def lattice_basis(A, c, q, m=None):
+def lattice_basis(A, q, m=None):
     """
     Construct primal lattice basis for LWE challenge
     ``(A,c)`` defined modulo ``q``.

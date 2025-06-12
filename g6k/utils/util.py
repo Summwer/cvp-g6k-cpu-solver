@@ -39,6 +39,7 @@ from fpylll.util import gaussian_heuristic, set_random_seed
 from g6k.utils.stats import SieveTreeTracer
 from six.moves import range
 from random import randint
+import numpy as np
 
 def load_matrix_file(filepath, randomize=False, seed=None, float_type="double"):
     """
@@ -392,9 +393,56 @@ def output_profiles(what, profiles):
 
 
 
-def load_cvp_instance(n):
-    A, _ = load_svpchallenge_and_randomize(n)
-    target_vector = [randint(-2**10,2**10) for _ in range(n)]
-    # print(target_vector)
+
+# https://math.stackexchange.com/questions/4705204/uniformly-sampling-from-a-high-dimensional-unit-sphere
+def random_on_sphere(d,r):
+    """
+    d - dimension of vector
+    r - radius of the sphere
+    """
+    u = np.random.normal(0,1,d)  # an array of d normally distributed random variables
+    d=np.sum(u**2) **(0.5)
+    return r*u/d
+
+def load_cvp_instance(n, betamax=55, approx_factor = 1.):
+    '''
+    Use the same cvp instance generation method as https://github.com/RandomizedSlicer/RandomizedSlicerG6K
+    '''
+    #A, _ = load_svpchallenge_and_randomize(n)
     
-    return A, target_vector
+    
+    A = IntegerMatrix(n,n)
+    A.randomize("qary", k=n//2, bits=11.705)
+    
+    M = GSO.Mat(A, float_type='ld')
+    M.update_gso()
+    lll = LLL.Reduction(M)
+    lll()
+
+    bkz = BKZReduction(M)
+    for beta in range(5,betamax+1):
+        par = fplll_bkz.Param(beta,
+                                      strategies=fplll_bkz.DEFAULT_STRATEGY,
+                                      max_loops=1)
+        bkz(par)
+    
+    M.update_gso()
+    lll = LLL.Reduction( M )
+    lll()
+    
+    
+    
+    gh = min( [M.r()[0], gaussian_heuristic(M.r())] )
+    
+    while(True):
+        e = np.array( random_on_sphere(n,approx_factor*gh**0.5) )
+        e = np.round(e)
+        if((e@e) <= min(gh, M.get_r(0,0))):
+            break
+    c = [randint(-33,34) for _ in range(n)]
+    b = M.B.multiply_left( c )
+    #b_ = np.array(b)
+    t_ = [e[i]+b[i] for i in range(n)]
+    t = [ int(tt) for tt in t_ ]
+        
+    return M.B, t, 1.01*(e@e/gh)

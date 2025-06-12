@@ -27,22 +27,19 @@ uname -v = #148~20.04.1-Ubuntu SMP Fri Mar 28 14:32:35 UTC 2025
 /usr/bin/oslevel       = unknown
 /bin/universe          = unknown
 
-PATH: /home/cryptothesis/miniconda3/condabin/
-PATH: /home/cryptothesis/.cargo/bin/
-PATH: /home/cryptothesis/.vscode-server/cli/servers/Stable-19e0f9e681ecb8e5c09d8784acaa601316ca4571/server/bin/remote-cli/
-PATH: /usr/local/sbin/
-PATH: /usr/local/bin/
-PATH: /usr/sbin/
-PATH: /usr/bin/
-PATH: /sbin/
-PATH: /bin/
-PATH: /usr/games/
-PATH: /usr/local/games/
-PATH: /snap/bin/
-PATH: /home/cryptothesis/.vscode-server/extensions/ms-python.debugpy-2025.8.0-linux-x64/bundled/scripts/noConfigScripts/
-PATH: /home/cryptothesis/.vscode-server/data/User/globalStorage/github.copilot-chat/debugCommand/
-PATH: /usr/local/cuda-11.4/bin/
-PATH: /usr/local/cuda/bin/
+PATH: /home/cryptothesis/miniconda3/condabin
+PATH: /home/cryptothesis/.cargo/bin
+PATH: /home/cryptothesis/.vscode-server/cli/servers/Stable-e8653663e8840adaf45af01eab5c627a5af81807/server/bin/remote-cli
+PATH: /usr/local/sbin
+PATH: /usr/local/bin
+PATH: /usr/sbin
+PATH: /usr/bin
+PATH: /sbin
+PATH: /bin
+PATH: /usr/games
+PATH: /usr/local/games
+PATH: /snap/bin
+PATH: /usr/local/cuda-11.4/bin
 
 
 ## ----------- ##
@@ -730,244 +727,244 @@ configure: failed program was:
 |   ;
 |   return 0;
 | }
-configure:18582: result: unknown
-configure:18806: checking for x86 cpuid 0x00000000 output
-configure:18840: gcc -o conftest -g -O2   conftest.c  >&5
-configure:18840: $? = 0
-configure:18840: ./conftest
-configure:18840: $? = 0
-configure:18854: result: 16:756e6547:6c65746e:49656e69
-configure:18877: checking for x86 cpuid 0x80000000 output
-configure:18911: gcc -o conftest -g -O2   conftest.c  >&5
-configure:18911: $? = 0
-configure:18911: ./conftest
-configure:18911: $? = 0
-configure:18925: result: 80000008:0:0:0
-configure:18950: checking for x86 cpuid 0x00000001 output
-configure:18984: gcc -o conftest -g -O2   conftest.c  >&5
-configure:18984: $? = 0
-configure:18984: ./conftest
-configure:18984: $? = 0
-configure:18998: result: 50657:c200800:7ffefbff:bfebfbff
-configure:19025: checking for x86 cpuid 0x00000007 output
-configure:19059: gcc -o conftest -g -O2   conftest.c  >&5
-configure:19059: $? = 0
-configure:19059: ./conftest
-configure:19059: $? = 0
-configure:19073: result: 0:d39ff7eb:818:bc000400
-configure:19099: checking for x86 cpuid 0x80000001 output
-configure:19133: gcc -o conftest -g -O2   conftest.c  >&5
-configure:19133: $? = 0
-configure:19133: ./conftest
-configure:19133: $? = 0
-configure:19147: result: 0:0:121:2c100800
-configure:19210: gcc -o conftest -g -O2   conftest.c  >&5
-configure:19210: $? = 0
-configure:19210: ./conftest
-configure:19210: $? = 0
-configure:19243: checking for x86-AVX xgetbv 0x00000000 output
-configure:19275: gcc -o conftest -g -O2   conftest.c  >&5
-configure:19275: $? = 0
-configure:19275: ./conftest
-configure:19275: $? = 0
-configure:19289: result: 2ff:0
-configure:19347: checking whether RDRND is supported by the processor
-configure:19362: result: yes
-configure:19366: checking whether RDRND is supported by the processor and OS
-configure:19381: result: yes
-configure:19386: checking whether C++ compiler accepts -mrdrnd
-configure:19406: g++ -std=c++11 -c -Ofast -ftree-vectorize -funroll-loops -Wall -Wextra  -mrdrnd  conftest.cpp >&5
-configure:19406: $? = 0
-configure:19418: result: yes
-configure:19347: checking whether BMI1 is supported by the processor
-configure:19362: result: yes
-configure:19366: checking whether BMI1 is supported by the processor and OS
-configure:19381: result: yes
-configure:19386: checking whether C++ compiler accepts -mbmi
-configure:19406: g++ -std=c++11 -c -Ofast -ftree-vectorize -funroll-loops -Wall -Wextra  -mbmi  conftest.cpp >&5
-configure:19406: $? = 0
-configure:19418: result: yes
-configure:19347: checking whether BMI2 is supported by the processor
-configure:19362: result: yes
-configure:19366: checking whether BMI2 is supported by the processor and OS
-configure:19381: result: yes
-configure:19386: checking whether C++ compiler accepts -mbmi2
-configure:19406: g++ -std=c++11 -c -Ofast -ftree-vectorize -funroll-loops -Wall -Wextra  -mbmi2  conftest.cpp >&5
-configure:19406: $? = 0
-configure:19418: result: yes
-configure:19347: checking whether ADX is supported by the processor
-configure:19362: result: yes
-configure:19366: checking whether ADX is supported by the processor and OS
-configure:19381: result: yes
-configure:19386: checking whether C++ compiler accepts -madx
-configure:19406: g++ -std=c++11 -c -Ofast -ftree-vectorize -funroll-loops -Wall -Wextra  -madx  conftest.cpp >&5
-configure:19406: $? = 0
-configure:19418: result: yes
-configure:19347: checking whether MPX is supported by the processor
-configure:19362: result: yes
-configure:19366: checking whether MPX is supported by the processor and OS
-configure:19381: result: yes
-configure:19386: checking whether C++ compiler accepts -mmpx
-configure:19406: g++ -std=c++11 -c -Ofast -ftree-vectorize -funroll-loops -Wall -Wextra  -mmpx  conftest.cpp >&5
-configure:19406: $? = 0
-configure:19418: result: yes
-configure:19347: checking whether PREFETCHWT1 is supported by the processor
-configure:19362: result: no
-configure:19347: checking whether ABM is supported by the processor
-configure:19362: result: yes
-configure:19366: checking whether ABM is supported by the processor and OS
-configure:19381: result: yes
-configure:19386: checking whether C++ compiler accepts -mabm
-configure:19406: g++ -std=c++11 -c -Ofast -ftree-vectorize -funroll-loops -Wall -Wextra  -mabm  conftest.cpp >&5
-configure:19406: $? = 0
-configure:19418: result: yes
-configure:19347: checking whether MMX is supported by the processor
-configure:19362: result: yes
-configure:19366: checking whether MMX is supported by the processor and OS
-configure:19381: result: yes
-configure:19386: checking whether C++ compiler accepts -mmmx
-configure:19406: g++ -std=c++11 -c -Ofast -ftree-vectorize -funroll-loops -Wall -Wextra  -mmmx  conftest.cpp >&5
-configure:19406: $? = 0
-configure:19418: result: yes
-configure:19347: checking whether SSE is supported by the processor
-configure:19362: result: yes
-configure:19366: checking whether SSE is supported by the processor and OS
-configure:19381: result: yes
-configure:19386: checking whether C++ compiler accepts -msse
-configure:19406: g++ -std=c++11 -c -Ofast -ftree-vectorize -funroll-loops -Wall -Wextra  -msse  conftest.cpp >&5
-configure:19406: $? = 0
-configure:19418: result: yes
-configure:19347: checking whether SSE2 is supported by the processor
-configure:19362: result: yes
-configure:19366: checking whether SSE2 is supported by the processor and OS
-configure:19381: result: yes
-configure:19386: checking whether C++ compiler accepts -msse2
-configure:19406: g++ -std=c++11 -c -Ofast -ftree-vectorize -funroll-loops -Wall -Wextra  -msse2  conftest.cpp >&5
-configure:19406: $? = 0
-configure:19418: result: yes
-configure:19347: checking whether SSE3 is supported by the processor
-configure:19362: result: yes
-configure:19366: checking whether SSE3 is supported by the processor and OS
-configure:19381: result: yes
-configure:19386: checking whether C++ compiler accepts -msse3
-configure:19406: g++ -std=c++11 -c -Ofast -ftree-vectorize -funroll-loops -Wall -Wextra  -msse3  conftest.cpp >&5
-configure:19406: $? = 0
-configure:19418: result: yes
-configure:19347: checking whether SSSE3 is supported by the processor
-configure:19362: result: yes
-configure:19366: checking whether SSSE3 is supported by the processor and OS
-configure:19381: result: yes
-configure:19386: checking whether C++ compiler accepts -mssse3
-configure:19406: g++ -std=c++11 -c -Ofast -ftree-vectorize -funroll-loops -Wall -Wextra  -mssse3  conftest.cpp >&5
-configure:19406: $? = 0
-configure:19418: result: yes
-configure:19347: checking whether SSE4.1 is supported by the processor
-configure:19362: result: yes
-configure:19366: checking whether SSE4.1 is supported by the processor and OS
-configure:19381: result: yes
-configure:19386: checking whether C++ compiler accepts -msse4.1
-configure:19406: g++ -std=c++11 -c -Ofast -ftree-vectorize -funroll-loops -Wall -Wextra  -msse4.1  conftest.cpp >&5
-configure:19406: $? = 0
-configure:19418: result: yes
-configure:19347: checking whether SSE4.2 is supported by the processor
-configure:19362: result: yes
-configure:19366: checking whether SSE4.2 is supported by the processor and OS
-configure:19381: result: yes
-configure:19386: checking whether C++ compiler accepts -msse4.2
-configure:19406: g++ -std=c++11 -c -Ofast -ftree-vectorize -funroll-loops -Wall -Wextra  -msse4.2  conftest.cpp >&5
-configure:19406: $? = 0
-configure:19418: result: yes
-configure:19347: checking whether SSE4a is supported by the processor
-configure:19362: result: no
-configure:19347: checking whether SHA is supported by the processor
-configure:19362: result: no
-configure:19347: checking whether AES is supported by the processor
-configure:19362: result: yes
-configure:19366: checking whether AES is supported by the processor and OS
-configure:19381: result: yes
-configure:19386: checking whether C++ compiler accepts -maes
-configure:19406: g++ -std=c++11 -c -Ofast -ftree-vectorize -funroll-loops -Wall -Wextra  -maes  conftest.cpp >&5
-configure:19406: $? = 0
-configure:19418: result: yes
-configure:19347: checking whether AVX is supported by the processor
-configure:19362: result: yes
-configure:19366: checking whether AVX is supported by the processor and OS
-configure:19381: result: yes
-configure:19386: checking whether C++ compiler accepts -mavx
-configure:19406: g++ -std=c++11 -c -Ofast -ftree-vectorize -funroll-loops -Wall -Wextra  -mavx  conftest.cpp >&5
-configure:19406: $? = 0
-configure:19418: result: yes
-configure:19347: checking whether FMA3 is supported by the processor
-configure:19362: result: yes
-configure:19366: checking whether FMA3 is supported by the processor and OS
-configure:19381: result: yes
-configure:19386: checking whether C++ compiler accepts -mfma
-configure:19406: g++ -std=c++11 -c -Ofast -ftree-vectorize -funroll-loops -Wall -Wextra  -mfma  conftest.cpp >&5
-configure:19406: $? = 0
-configure:19418: result: yes
-configure:19347: checking whether FMA4 is supported by the processor
-configure:19362: result: no
-configure:19347: checking whether XOP is supported by the processor
-configure:19362: result: no
-configure:19347: checking whether AVX2 is supported by the processor
-configure:19362: result: yes
-configure:19366: checking whether AVX2 is supported by the processor and OS
-configure:19381: result: yes
-configure:19386: checking whether C++ compiler accepts -mavx2
-configure:19406: g++ -std=c++11 -c -Ofast -ftree-vectorize -funroll-loops -Wall -Wextra  -mavx2  conftest.cpp >&5
-configure:19406: $? = 0
-configure:19418: result: yes
-configure:19347: checking whether AVX512-F is supported by the processor
-configure:19362: result: yes
-configure:19366: checking whether AVX512-F is supported by the processor and OS
-configure:19381: result: yes
-configure:19386: checking whether C++ compiler accepts -mavx512f
-configure:19406: g++ -std=c++11 -c -Ofast -ftree-vectorize -funroll-loops -Wall -Wextra  -mavx512f  conftest.cpp >&5
-configure:19406: $? = 0
-configure:19418: result: yes
-configure:19347: checking whether AVX512-CD is supported by the processor
-configure:19362: result: yes
-configure:19366: checking whether AVX512-CD is supported by the processor and OS
-configure:19381: result: yes
-configure:19386: checking whether C++ compiler accepts -mavx512cd
-configure:19406: g++ -std=c++11 -c -Ofast -ftree-vectorize -funroll-loops -Wall -Wextra  -mavx512cd  conftest.cpp >&5
-configure:19406: $? = 0
-configure:19418: result: yes
-configure:19347: checking whether AVX512-PF is supported by the processor
-configure:19362: result: no
-configure:19347: checking whether AVX512-ER is supported by the processor
-configure:19362: result: no
-configure:19347: checking whether AVX512-VL is supported by the processor
-configure:19362: result: yes
-configure:19366: checking whether AVX512-VL is supported by the processor and OS
-configure:19381: result: yes
-configure:19386: checking whether C++ compiler accepts -mavx512vl
-configure:19406: g++ -std=c++11 -c -Ofast -ftree-vectorize -funroll-loops -Wall -Wextra  -mavx512vl  conftest.cpp >&5
-configure:19406: $? = 0
-configure:19418: result: yes
-configure:19347: checking whether AVX512-BW is supported by the processor
-configure:19362: result: yes
-configure:19366: checking whether AVX512-BW is supported by the processor and OS
-configure:19381: result: yes
-configure:19386: checking whether C++ compiler accepts -mavx512bw
-configure:19406: g++ -std=c++11 -c -Ofast -ftree-vectorize -funroll-loops -Wall -Wextra  -mavx512bw  conftest.cpp >&5
-configure:19406: $? = 0
-configure:19418: result: yes
-configure:19347: checking whether AVX512-DQ is supported by the processor
-configure:19362: result: yes
-configure:19366: checking whether AVX512-DQ is supported by the processor and OS
-configure:19381: result: yes
-configure:19386: checking whether C++ compiler accepts -mavx512dq
-configure:19406: g++ -std=c++11 -c -Ofast -ftree-vectorize -funroll-loops -Wall -Wextra  -mavx512dq  conftest.cpp >&5
-configure:19406: $? = 0
-configure:19418: result: yes
-configure:19347: checking whether AVX512-IFMA is supported by the processor
-configure:19362: result: no
-configure:19347: checking whether AVX512-VBMI is supported by the processor
-configure:19362: result: no
-configure:19744: checking that generated files are newer than configure
-configure:19750: result: done
-configure:19777: creating ./config.status
+configure:12636: result: unknown
+configure:12836: checking for x86 cpuid 0x00000000 output
+configure:12868: gcc -o conftest -g -O2   conftest.c  >&5
+configure:12868: $? = 0
+configure:12868: ./conftest
+configure:12868: $? = 0
+configure:12878: result: 16:756e6547:6c65746e:49656e69
+configure:12901: checking for x86 cpuid 0x80000000 output
+configure:12933: gcc -o conftest -g -O2   conftest.c  >&5
+configure:12933: $? = 0
+configure:12933: ./conftest
+configure:12933: $? = 0
+configure:12943: result: 80000008:0:0:0
+configure:12968: checking for x86 cpuid 0x00000001 output
+configure:13000: gcc -o conftest -g -O2   conftest.c  >&5
+configure:13000: $? = 0
+configure:13000: ./conftest
+configure:13000: $? = 0
+configure:13010: result: 50657:2d200800:7ffefbff:bfebfbff
+configure:13037: checking for x86 cpuid 0x00000007 output
+configure:13069: gcc -o conftest -g -O2   conftest.c  >&5
+configure:13069: $? = 0
+configure:13069: ./conftest
+configure:13069: $? = 0
+configure:13079: result: 0:d39ff7eb:818:bc000400
+configure:13105: checking for x86 cpuid 0x80000001 output
+configure:13137: gcc -o conftest -g -O2   conftest.c  >&5
+configure:13137: $? = 0
+configure:13137: ./conftest
+configure:13137: $? = 0
+configure:13147: result: 0:0:121:2c100800
+configure:13206: gcc -o conftest -g -O2   conftest.c  >&5
+configure:13206: $? = 0
+configure:13206: ./conftest
+configure:13206: $? = 0
+configure:13235: checking for x86-AVX xgetbv 0x00000000 output
+configure:13265: gcc -o conftest -g -O2   conftest.c  >&5
+configure:13265: $? = 0
+configure:13265: ./conftest
+configure:13265: $? = 0
+configure:13275: result: 2ff:0
+configure:13329: checking whether RDRND is supported by the processor
+configure:13342: result: yes
+configure:13346: checking whether RDRND is supported by the processor and OS
+configure:13359: result: yes
+configure:13364: checking whether C++ compiler accepts -mrdrnd
+configure:13383: g++ -std=c++11 -c -Ofast -ftree-vectorize -funroll-loops -Wall -Wextra  -mrdrnd  conftest.cpp >&5
+configure:13383: $? = 0
+configure:13392: result: yes
+configure:13329: checking whether BMI1 is supported by the processor
+configure:13342: result: yes
+configure:13346: checking whether BMI1 is supported by the processor and OS
+configure:13359: result: yes
+configure:13364: checking whether C++ compiler accepts -mbmi
+configure:13383: g++ -std=c++11 -c -Ofast -ftree-vectorize -funroll-loops -Wall -Wextra  -mbmi  conftest.cpp >&5
+configure:13383: $? = 0
+configure:13392: result: yes
+configure:13329: checking whether BMI2 is supported by the processor
+configure:13342: result: yes
+configure:13346: checking whether BMI2 is supported by the processor and OS
+configure:13359: result: yes
+configure:13364: checking whether C++ compiler accepts -mbmi2
+configure:13383: g++ -std=c++11 -c -Ofast -ftree-vectorize -funroll-loops -Wall -Wextra  -mbmi2  conftest.cpp >&5
+configure:13383: $? = 0
+configure:13392: result: yes
+configure:13329: checking whether ADX is supported by the processor
+configure:13342: result: yes
+configure:13346: checking whether ADX is supported by the processor and OS
+configure:13359: result: yes
+configure:13364: checking whether C++ compiler accepts -madx
+configure:13383: g++ -std=c++11 -c -Ofast -ftree-vectorize -funroll-loops -Wall -Wextra  -madx  conftest.cpp >&5
+configure:13383: $? = 0
+configure:13392: result: yes
+configure:13329: checking whether MPX is supported by the processor
+configure:13342: result: yes
+configure:13346: checking whether MPX is supported by the processor and OS
+configure:13359: result: yes
+configure:13364: checking whether C++ compiler accepts -mmpx
+configure:13383: g++ -std=c++11 -c -Ofast -ftree-vectorize -funroll-loops -Wall -Wextra  -mmpx  conftest.cpp >&5
+configure:13383: $? = 0
+configure:13392: result: yes
+configure:13329: checking whether PREFETCHWT1 is supported by the processor
+configure:13342: result: no
+configure:13329: checking whether ABM is supported by the processor
+configure:13342: result: yes
+configure:13346: checking whether ABM is supported by the processor and OS
+configure:13359: result: yes
+configure:13364: checking whether C++ compiler accepts -mabm
+configure:13383: g++ -std=c++11 -c -Ofast -ftree-vectorize -funroll-loops -Wall -Wextra  -mabm  conftest.cpp >&5
+configure:13383: $? = 0
+configure:13392: result: yes
+configure:13329: checking whether MMX is supported by the processor
+configure:13342: result: yes
+configure:13346: checking whether MMX is supported by the processor and OS
+configure:13359: result: yes
+configure:13364: checking whether C++ compiler accepts -mmmx
+configure:13383: g++ -std=c++11 -c -Ofast -ftree-vectorize -funroll-loops -Wall -Wextra  -mmmx  conftest.cpp >&5
+configure:13383: $? = 0
+configure:13392: result: yes
+configure:13329: checking whether SSE is supported by the processor
+configure:13342: result: yes
+configure:13346: checking whether SSE is supported by the processor and OS
+configure:13359: result: yes
+configure:13364: checking whether C++ compiler accepts -msse
+configure:13383: g++ -std=c++11 -c -Ofast -ftree-vectorize -funroll-loops -Wall -Wextra  -msse  conftest.cpp >&5
+configure:13383: $? = 0
+configure:13392: result: yes
+configure:13329: checking whether SSE2 is supported by the processor
+configure:13342: result: yes
+configure:13346: checking whether SSE2 is supported by the processor and OS
+configure:13359: result: yes
+configure:13364: checking whether C++ compiler accepts -msse2
+configure:13383: g++ -std=c++11 -c -Ofast -ftree-vectorize -funroll-loops -Wall -Wextra  -msse2  conftest.cpp >&5
+configure:13383: $? = 0
+configure:13392: result: yes
+configure:13329: checking whether SSE3 is supported by the processor
+configure:13342: result: yes
+configure:13346: checking whether SSE3 is supported by the processor and OS
+configure:13359: result: yes
+configure:13364: checking whether C++ compiler accepts -msse3
+configure:13383: g++ -std=c++11 -c -Ofast -ftree-vectorize -funroll-loops -Wall -Wextra  -msse3  conftest.cpp >&5
+configure:13383: $? = 0
+configure:13392: result: yes
+configure:13329: checking whether SSSE3 is supported by the processor
+configure:13342: result: yes
+configure:13346: checking whether SSSE3 is supported by the processor and OS
+configure:13359: result: yes
+configure:13364: checking whether C++ compiler accepts -mssse3
+configure:13383: g++ -std=c++11 -c -Ofast -ftree-vectorize -funroll-loops -Wall -Wextra  -mssse3  conftest.cpp >&5
+configure:13383: $? = 0
+configure:13392: result: yes
+configure:13329: checking whether SSE4.1 is supported by the processor
+configure:13342: result: yes
+configure:13346: checking whether SSE4.1 is supported by the processor and OS
+configure:13359: result: yes
+configure:13364: checking whether C++ compiler accepts -msse4.1
+configure:13383: g++ -std=c++11 -c -Ofast -ftree-vectorize -funroll-loops -Wall -Wextra  -msse4.1  conftest.cpp >&5
+configure:13383: $? = 0
+configure:13392: result: yes
+configure:13329: checking whether SSE4.2 is supported by the processor
+configure:13342: result: yes
+configure:13346: checking whether SSE4.2 is supported by the processor and OS
+configure:13359: result: yes
+configure:13364: checking whether C++ compiler accepts -msse4.2
+configure:13383: g++ -std=c++11 -c -Ofast -ftree-vectorize -funroll-loops -Wall -Wextra  -msse4.2  conftest.cpp >&5
+configure:13383: $? = 0
+configure:13392: result: yes
+configure:13329: checking whether SSE4a is supported by the processor
+configure:13342: result: no
+configure:13329: checking whether SHA is supported by the processor
+configure:13342: result: no
+configure:13329: checking whether AES is supported by the processor
+configure:13342: result: yes
+configure:13346: checking whether AES is supported by the processor and OS
+configure:13359: result: yes
+configure:13364: checking whether C++ compiler accepts -maes
+configure:13383: g++ -std=c++11 -c -Ofast -ftree-vectorize -funroll-loops -Wall -Wextra  -maes  conftest.cpp >&5
+configure:13383: $? = 0
+configure:13392: result: yes
+configure:13329: checking whether AVX is supported by the processor
+configure:13342: result: yes
+configure:13346: checking whether AVX is supported by the processor and OS
+configure:13359: result: yes
+configure:13364: checking whether C++ compiler accepts -mavx
+configure:13383: g++ -std=c++11 -c -Ofast -ftree-vectorize -funroll-loops -Wall -Wextra  -mavx  conftest.cpp >&5
+configure:13383: $? = 0
+configure:13392: result: yes
+configure:13329: checking whether FMA3 is supported by the processor
+configure:13342: result: yes
+configure:13346: checking whether FMA3 is supported by the processor and OS
+configure:13359: result: yes
+configure:13364: checking whether C++ compiler accepts -mfma
+configure:13383: g++ -std=c++11 -c -Ofast -ftree-vectorize -funroll-loops -Wall -Wextra  -mfma  conftest.cpp >&5
+configure:13383: $? = 0
+configure:13392: result: yes
+configure:13329: checking whether FMA4 is supported by the processor
+configure:13342: result: no
+configure:13329: checking whether XOP is supported by the processor
+configure:13342: result: no
+configure:13329: checking whether AVX2 is supported by the processor
+configure:13342: result: yes
+configure:13346: checking whether AVX2 is supported by the processor and OS
+configure:13359: result: yes
+configure:13364: checking whether C++ compiler accepts -mavx2
+configure:13383: g++ -std=c++11 -c -Ofast -ftree-vectorize -funroll-loops -Wall -Wextra  -mavx2  conftest.cpp >&5
+configure:13383: $? = 0
+configure:13392: result: yes
+configure:13329: checking whether AVX512-F is supported by the processor
+configure:13342: result: yes
+configure:13346: checking whether AVX512-F is supported by the processor and OS
+configure:13359: result: yes
+configure:13364: checking whether C++ compiler accepts -mavx512f
+configure:13383: g++ -std=c++11 -c -Ofast -ftree-vectorize -funroll-loops -Wall -Wextra  -mavx512f  conftest.cpp >&5
+configure:13383: $? = 0
+configure:13392: result: yes
+configure:13329: checking whether AVX512-CD is supported by the processor
+configure:13342: result: yes
+configure:13346: checking whether AVX512-CD is supported by the processor and OS
+configure:13359: result: yes
+configure:13364: checking whether C++ compiler accepts -mavx512cd
+configure:13383: g++ -std=c++11 -c -Ofast -ftree-vectorize -funroll-loops -Wall -Wextra  -mavx512cd  conftest.cpp >&5
+configure:13383: $? = 0
+configure:13392: result: yes
+configure:13329: checking whether AVX512-PF is supported by the processor
+configure:13342: result: no
+configure:13329: checking whether AVX512-ER is supported by the processor
+configure:13342: result: no
+configure:13329: checking whether AVX512-VL is supported by the processor
+configure:13342: result: yes
+configure:13346: checking whether AVX512-VL is supported by the processor and OS
+configure:13359: result: yes
+configure:13364: checking whether C++ compiler accepts -mavx512vl
+configure:13383: g++ -std=c++11 -c -Ofast -ftree-vectorize -funroll-loops -Wall -Wextra  -mavx512vl  conftest.cpp >&5
+configure:13383: $? = 0
+configure:13392: result: yes
+configure:13329: checking whether AVX512-BW is supported by the processor
+configure:13342: result: yes
+configure:13346: checking whether AVX512-BW is supported by the processor and OS
+configure:13359: result: yes
+configure:13364: checking whether C++ compiler accepts -mavx512bw
+configure:13383: g++ -std=c++11 -c -Ofast -ftree-vectorize -funroll-loops -Wall -Wextra  -mavx512bw  conftest.cpp >&5
+configure:13383: $? = 0
+configure:13392: result: yes
+configure:13329: checking whether AVX512-DQ is supported by the processor
+configure:13342: result: yes
+configure:13346: checking whether AVX512-DQ is supported by the processor and OS
+configure:13359: result: yes
+configure:13364: checking whether C++ compiler accepts -mavx512dq
+configure:13383: g++ -std=c++11 -c -Ofast -ftree-vectorize -funroll-loops -Wall -Wextra  -mavx512dq  conftest.cpp >&5
+configure:13383: $? = 0
+configure:13392: result: yes
+configure:13329: checking whether AVX512-IFMA is supported by the processor
+configure:13342: result: no
+configure:13329: checking whether AVX512-VBMI is supported by the processor
+configure:13342: result: no
+configure:13712: checking that generated files are newer than configure
+configure:13718: result: done
+configure:13745: creating ./config.status
 
 ## ---------------------- ##
 ## Running config.status. ##
@@ -984,14 +981,16 @@ generated by GNU Autoconf 2.72.  Invocation command line was
 
 on cryptothesis-HP-Z8-G4-Workstation
 
-config.status:1188: creating Makefile
-config.status:1188: creating kernel/Makefile
-config.status:1188: creating g6k.pc
-config.status:1188: creating kernel/g6k_config.h
-config.status:1417: executing depfiles commands
-config.status:1494: cd kernel       && sed -e '/# am--include-marker/d' Makefile         | make -f - am--depfiles
-config.status:1499: $? = 0
-config.status:1417: executing libtool commands
+config.status:1192: creating Makefile
+config.status:1192: creating kernel/Makefile
+config.status:1192: creating g6k.pc
+config.status:1192: creating kernel/g6k_config.h
+config.status:1373: kernel/g6k_config.h is unchanged
+config.status:1421: executing depfiles commands
+config.status:1498: cd kernel       && sed -e '/# am--include-marker/d' Makefile         | make -f - am--depfiles
+make: Nothing to be done for 'am--depfiles'.
+config.status:1503: $? = 0
+config.status:1421: executing libtool commands
 
 ## ---------------- ##
 ## Cache variables. ##
@@ -1100,7 +1099,7 @@ ax_cv_cxx_compile_cxx11__std_cpp11=yes
 ax_cv_gcc_x86_avx_xgetbv_0x00000000=2ff:0
 ax_cv_gcc_x86_avx_xgetbv_=unknown
 ax_cv_gcc_x86_cpuid_0x00000000=16:756e6547:6c65746e:49656e69
-ax_cv_gcc_x86_cpuid_0x00000001=50657:c200800:7ffefbff:bfebfbff
+ax_cv_gcc_x86_cpuid_0x00000001=50657:2d200800:7ffefbff:bfebfbff
 ax_cv_gcc_x86_cpuid_0x00000007=0:d39ff7eb:818:bc000400
 ax_cv_gcc_x86_cpuid_0x80000000=80000008:0:0:0
 ax_cv_gcc_x86_cpuid_0x80000001=0:0:121:2c100800

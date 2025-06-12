@@ -27,7 +27,7 @@ import time
 from math import log, ceil
 from g6k.siever import SaturationError
 import logging
-
+from math import exp
 
 
 # def initialize_target_vector(long* target_vector, fplll::MatGSO<SZT, SFT> M, vector<SFT> &yl){
@@ -103,7 +103,7 @@ def scoring_down(i, nlen, olen, aux):
 
 def pro_randslicer(g6k, c, tracer, dim4free,        # Main parameters
          goal_r0=None, start_up_n=30,        
-         verbose=False,       saturation_error = "ignore"                                                         
+         verbose=False,       saturation_error = "ignore" , len_bound = 1. , max_sample_times = 1000                                                 
          ):
     """
     Run the pro_randslicer algorithm.
@@ -160,12 +160,10 @@ def pro_randslicer(g6k, c, tracer, dim4free,        # Main parameters
                     break
                 db_size = max(db_size, g6k.db_size())
             T_pump = time.time()- T0_pump
-            # print(list(g6k.itervalues()))
-            max_sample_times = ceil((16/13.)**(pro_randslicer.g6k.M.B.ncols))
             
             
             T0 = time.time()
-            _,pro_randslicer.w,_,sample_times  = pro_randslicer.g6k.randslicer(max_sample_times = max_sample_times)
+            _,pro_randslicer.w,_,sample_times  = pro_randslicer.g6k.randslicer(max_sample_times = max_sample_times,len_bound = len_bound)
             
             
             pro_randslicer.ee = [pro_randslicer.c[i] - pro_randslicer.w[i] for i in range(pro_randslicer.g6k.M.B.ncols)]

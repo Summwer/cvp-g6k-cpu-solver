@@ -129,7 +129,7 @@ def lwe_kernel(arg0, params=None, seed=None):
 
     A, c, q = load_lwe_challenge(n=n, alpha=alpha)
     print("-------------------------")
-    print("Primal attack, LWE challenge n=%d, alpha=%.4f" % (n, alpha))
+    print("BDD attack using Nearest-Colattice, LWE challenge n=%d, alpha=%.4f" % (n, alpha))
 
     if m is None:
         try:
@@ -156,7 +156,7 @@ def lwe_kernel(arg0, params=None, seed=None):
     # else:
     #     blocksizes = list(range(10, 50)) + [b-20, b-17] + list(range(b - 14, b + 25, 2))
 
-    B = lattice_basis(A, c, q, m=m)
+    B = lattice_basis(A, q, m=m)
     c = c[:m]
     ee = None #the reduced vector ee = t - close_vector(t)
     
@@ -228,7 +228,7 @@ def lwe_kernel(arg0, params=None, seed=None):
         print("Starting colattice with blocksize strategy:", coblocksizes) # noqa
     
 
-    ee = colattice(g6k, c, coblocksizes, target_norm=target_norm)
+    ee, _ = colattice(g6k, c, coblocksizes)#, target_norm=target_norm)
     print(ee)
     
     norm_ee = sum([_**2 for _ in ee]) 
