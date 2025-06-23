@@ -1,7 +1,7 @@
 from g6k.utils.util import load_cvp_instance
 from fpylll import *
 from g6k.siever import Siever
-from g6k.algorithms.colattice import colattice
+from cvp_g6k_cpu_solver.g6k.algorithms.colattice_backup import colattice
 from math import sqrt
 
 

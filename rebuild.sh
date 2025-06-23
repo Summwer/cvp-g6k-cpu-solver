@@ -10,7 +10,7 @@ echo "=================" >> .last_build
 enable_cpucounters=0
 enable_stats=0
 enable_ndebug=0
-maxsievingdim=512
+maxsievingdim=200
 gpuvecnum=65536
 enable_ggdb=0
 enable_jobs=0
@@ -82,7 +82,7 @@ while [[ $# -gt 0 ]]; do
 	shift
 done
 
-EXTRAFLAGS=""
+EXTRAFLAGS="-fopenmp"
 if [ ${enable_yr} -eq 0 ]; then
     EXTRAFLAGS="$EXTRAFLAGS -DNOYR=1"
 fi

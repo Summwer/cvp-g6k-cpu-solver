@@ -1,8 +1,11 @@
-from .cvpump import cvpump
+from .cvpump_backup import cvpump
 from g6k.utils.stats import dummy_tracer
 from copy import deepcopy
 import numpy as np
 from fpylll import IntegerMatrix
+
+
+
 
 
 #We should find the close vector from pi_ln(L) to pi_l1(L) where l1<...<ln
@@ -14,7 +17,7 @@ def colattice(g6k, t, blocksizes, sieve_start_index = None, xs = None, yl = None
     
     Otherwise, sieve_start_index should be d.
     
-    t: target vector 
+    ts: a set of target vectors 
     
     
     Case: If we want to find the closest vector to a projected vector, the coefficients of [sieve_start_index, d] is fixed. Then we should set the following parameters: 
@@ -23,6 +26,8 @@ def colattice(g6k, t, blocksizes, sieve_start_index = None, xs = None, yl = None
     yl: the current coefficients w.r.t gso basis B*. 
     """
     # if(ee is None):
+    
+    
     
     
     d = g6k.full_n
@@ -104,7 +109,7 @@ def colattice(g6k, t, blocksizes, sieve_start_index = None, xs = None, yl = None
                 #     g6k.extend_left(1)
                 # g6k.initialize_local(0, llb, d)
                 # g6k.initialize_target_vector(t,ll = llb+1)
-                g6k.initialize_target_vector(t)#,ll = llb)
+                g6k.initialize_target_vector(t,0)#,ll = llb)
                 enter_babai = True
 
             
@@ -223,11 +228,11 @@ def colattice(g6k, t, blocksizes, sieve_start_index = None, xs = None, yl = None
             
         
             
-            # print("ee: ", ee)
+            print("ee: ", ee)
             xs =[xs[i] + x[i] for i in range(d)]
             enter_babai = False
             
-            
+            print("xs = ", xs)
             
             # pw, w, x = g6k.get_cv()
             

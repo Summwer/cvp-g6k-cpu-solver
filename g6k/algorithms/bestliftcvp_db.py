@@ -190,7 +190,7 @@ def bestliftcvp(g6k, g6k2, insert_left_bound, tracer, kappa, blocksize,  dim4fre
 
                 # print([round(_,2) for _ in g6k.M.from_canonical(tuple(t))])
                 
-                g6k.initialize_target_vector(t)
+                g6k.initialize_target_vector(t,0)
                 
                 # print(t)
                 # print(w)

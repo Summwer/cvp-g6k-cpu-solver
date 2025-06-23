@@ -175,6 +175,8 @@ cdef extern from "../kernel/siever.h" nogil:
         FT len
         #CompressedVector c
         #uint64_t uid
+    
+
 
     cdef struct CompressedEntry:
     # CompressedVector c
@@ -267,9 +269,13 @@ cdef extern from "../kernel/siever.h" nogil:
         void gso_update_postprocessing(const unsigned int l_, const unsigned int r_, long* M)
 
         LFT* yl
-        void initialize_projected_target_vector()
-        void randomized_iterative_slicer(double* y, long* x, FT len_bound, int max_sample_times, int* sample_times);
-        void get_cv(double* y, long* x);
+        LFT** yls
+        unsigned int batch_size
+
+        void initialize_projected_target_vector();
+        void cdb_bucket_process();
+        void randomized_iterative_slicer( FT len_bound, int max_sample_times, long* sample_times);
+        void get_cv(double* y, long* x, int k);
         #Entry randomized_iterative_slicer(Entry target_vector, FT len_bound, int max_sample_times)
 
 

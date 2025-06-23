@@ -55,17 +55,16 @@ void Siever::cvp_extend_left( unsigned int lp){
 
 //y: coefficients of projected close vector on projected gs 
 //x: coefficients of projected close vector on lattice basis
-void Siever::recover_vector_from_yr(double* y, long* x, Entry pe){
+void Siever::recover_vector_from_yr(Entry pe, unsigned int k){
   //Recover the closest vector to a full-dimensional form.
   // vector<SFT> y = vector<SFT>(full_n,0.), z = vector<SFT>(full_n,0.);
-  std::fill(y, &y[full_n], 0.);
-  std::fill(x, &x[full_n], 0); 
+  
   
   // cout<<"cv.yr:";
   // cout<<"pcv.x: [";
   for(unsigned int i = 0; i < n; i++){
-    cv.yr[i] = pt.yr[i] - pe.yr[i];
-    cv.x[i] = pe.x[i];
+    cvs[k].yr[i] = pts[k].yr[i] - pe.yr[i];
+    cvs[k].x[i] = pe.x[i];
     // cout<<cv.x[i]<<", ";
     // cout<<cv.yr[i]<<" ";
     // cout<<pe.yr[i]<<" ";
@@ -82,7 +81,9 @@ void Siever::recover_vector_from_yr(double* y, long* x, Entry pe){
   
   //Recover cv from coordinates on gso/gh.
   for(unsigned int i = 0; i < n; i++){
-    y[i+ll] = cv.yr[i] / sqrt_rr[i]; 
+    ys[k][i+ll] = cvs[k].yr[i] / sqrt_rr[i]; 
+    // if(k == 0)
+    //   printf("ys[k][i+ll]: %f ", ys[k][i+ll]);
   }
 
   // cout<<"y:";
@@ -91,7 +92,9 @@ void Siever::recover_vector_from_yr(double* y, long* x, Entry pe){
   // cout<<endl;
 
   for(unsigned int i = 0; i < n; i++){
-    x[i+ll] = (int) cv.x[i];//sqrt_rr[i]; 
+    xs[k][i+ll] = (int) cvs[k].x[i];//sqrt_rr[i]; 
+    // if(k == 0)
+    //   printf("xs[i+ll] = %d " , xs[i+ll]);
   }
 
   // cout<<"x:";
@@ -124,18 +127,21 @@ void Siever::recover_vector_from_yr(double* y, long* x, Entry pe){
 //yl: coeeficients of target vector wrt MatGSO basis
 //pt: projected target vector
 void Siever::initialize_projected_target_vector(){ 
-  // Entry pt; 
   // for(unsigned int i = 0; i < n; i++){
-    // pt.x[i] = 0;
-    // pt.yr[i] = yl[i+full_n-n] * sqrt_rr[i];
+  //   pt.x[i] = 0;
+  //   pt.yr[i] = yl[i+l] * sqrt_rr[i];  
   // }
- 
-  for(unsigned int i = 0; i < n; i++){
-    pt.x[i] = 0;
-    pt.yr[i] = yl[i+l] * sqrt_rr[i];  
-    //cout<<l<<","<<pt.yr[i] <<"," <<yl[i+l] <<","<< sqrt_rr[i]<<endl;
+  // update_entry(pt);
+  pts.resize(batch_size);
+
+  #pragma omp parallel for num_threads(params.threads)
+  for(unsigned int k = 0; k < batch_size; k++){
+    for(unsigned int i = 0; i < n; i++){
+      pts[k].x[i] = 0;
+      pts[k].yr[i] = yls[k][i+l] * sqrt_rr[i];  
+    }
+    update_entry(pts[k]);
   }
-  update_entry(pt);
 }
 
 
@@ -229,15 +235,19 @@ void Siever::initialize_projected_target_vector(){
 
 
 
-void Siever::get_cv(double* y, long* x){
+void Siever::get_cv(double* y, long* x, int k){
   std::fill(y, &y[full_n], 0.);
   std::fill(x, &x[full_n], 0); 
    //Recover cv from coordinates on gso/gh.
   for(unsigned int i = 0; i < n; i++){
-    y[i+ll] = cv.yr[i] / sqrt_rr[i]; 
+    y[i+ll] = ys[k][i+ll];//cv.yr[i] / sqrt_rr[i]; 
+    // if(k == 0)
+    //   printf("y[i+ll] = %f ", y[i+ll]);
   }
 
   for(unsigned int i = 0; i < n; i++){
-    x[i+ll] = (int) cv.x[i];//sqrt_rr[i]; 
+    x[i+ll] = (int) xs[k][i+ll]; //(int) cv.x[i];//sqrt_rr[i]; 
+    // if(k == 0)
+    //   printf("xs[0][i+ll] = %d " , xs[k][i+ll]);
   }
 }

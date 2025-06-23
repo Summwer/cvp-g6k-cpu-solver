@@ -32,6 +32,7 @@ from siever_params import temp_params
 
 from libc.math cimport NAN
 
+from multiprocessing import Pool
 
 class SaturationError(RuntimeError):
     pass
@@ -111,6 +112,8 @@ cdef class Siever(object):
         self.lll(0, M.d)
         self.initialized = False
         self.t_initialized = False
+        self.bucketed = False
+        self.batch_size = 0
 
     @classmethod
     def MatGSO(cls, A, float_type="d"):
@@ -1809,14 +1812,15 @@ cdef class Siever(object):
 
 
     #initialized target_vector for cvp solver.
-    def initialize_target_vector(self,target_vector):
+    def initialize_target_vector(self,target_vector, k):
         """input target vector for cvp solver
              - target_vector in tuple type.
         """
         assert(self.initialized)
+        #self.batch_size = max(self.batch_size, k+1)
         yl = self.M.from_canonical(target_vector)
         for i in range(self._core.full_n):
-            self._core.yl[i] = yl[i]
+            self._core.yls[k][i] = yl[i]
 
         pt_yl = [0]*self._core.full_n
         for i in range(self._core.ll, self._core.r):
@@ -1825,6 +1829,40 @@ cdef class Siever(object):
         self.t_initialized = True
 
         return pt
+
+
+    
+    #initialized target_vector for cvp solver.
+    def initialize_target_vectors(self, target_vectors):
+        """input target vector for batch cvp solver
+             - target_vectors in [tuple type].
+        """
+        assert(self.initialized)
+
+
+        self.batch_size = len(target_vectors)
+        self._core.batch_size = self.batch_size 
+        
+        pts = []
+        for k in range(len(target_vectors)):
+            target_vector = target_vectors[k]
+            yl = self.M.from_canonical(target_vector)
+        
+            for i in range(self._core.full_n):
+                self._core.yls[k][i] = yl[i]
+
+            pt_yl = [0]*self._core.full_n
+            for i in range(self._core.ll, self._core.r):
+                pt_yl[i] = yl[i]
+            pt = self.M.to_canonical(tuple(pt_yl))
+            pts.append(pt)
+        
+
+
+        self.t_initialized = True
+
+        return pts
+    
 
 
     def cvp_extend_left(self, offset=1):
@@ -1858,23 +1896,37 @@ cdef class Siever(object):
         #obtain the close vector to t.
         cdef np.ndarray cv = zeros((self.full_n), dtype=float64); #approx closest vector to projected t.
         cdef np.ndarray x = zeros((self.full_n), dtype=int64);
+  
+        
+        #print(x)
 
-        self._core.get_cv(<double*>cv.data,<long*>x.data)
-        print(x)
+        ws = []
+        pws = []
+        xs = []
         mat_x = IntegerMatrix(1,self.full_n)
-        for i in range(self.full_n):
-            mat_x[0,i] = int(x[i])
+        for k in range(self.batch_size):
+            
+            self._core.get_cv(<double*>cv.data, <long*>x.data, k)
+            for i in range(self.full_n):
+                mat_x[0,i] = int(x[i])
+            #print(self.batch_size, k)
 
-        res =  mat_x * self.M.B
+            res =  mat_x * self.M.B
+            #print("ws:", list(res[0]))
+            #print("x: ", x)
+            pws.append([_ for _ in self.M.to_canonical(cv)])
+            ws.append(tuple(list(res[0])))
+            xs.append([int(_) for _ in x])
 
-        #print("B[0]:")
-        #print(self.M.B[0])
-      
-        w = []
-        for i in range(self.full_n):
-            w.append(int(res[0,i]))
-        print(w)
-        return [_ for _ in self.M.to_canonical(cv)],  w, [int(x[i]) for i in range(self.full_n)]
+        #print(w)
+        return pws, ws, xs #[_ for _ in self.M.to_canonical(cv[k*self.batch_size:k*self.batch_size+self.full_n]) for k in range(self.batch_size)],  ws, [[int(x[i]) for i in range(k*self.batch_size, k*self.batch_size+self.full_n)] for k in range(self.batch_size)]
+
+
+    def cdb_bucket_process(self):
+        sig_on()
+        self._core.cdb_bucket_process()
+        sig_off()
+        self.bucketed = True
 
     #function about randomized iterative slicer
     def randslicer(self, len_bound = 1, max_sample_times = 1000):
@@ -1902,13 +1954,14 @@ cdef class Siever(object):
         """
         assert(self.initialized)
         assert(self.t_initialized)
-        cdef np.ndarray cv = zeros((self.full_n), dtype=float64); #approx closest vector to projected t.
-        cdef np.ndarray x = zeros((self.full_n), dtype=int64);
-        cdef np.ndarray sample_times = zeros(1, dtype=int64);
+        assert(self.bucketed)
+        #cdef np.ndarray cv = zeros((self.full_n*self.batch_size), dtype=float64); #approx closest vector to projected t.
+        #cdef np.ndarray x = zeros((self.full_n*self.batch_size), dtype=int64);
+        cdef np.ndarray sample_times = zeros(self.batch_size, dtype=int64);
         
         sig_on()
         self._core.initialize_projected_target_vector()
-        self._core.randomized_iterative_slicer(<double*>cv.data, <long*>x.data, len_bound, max_sample_times, <int*> sample_times.data)
+        self._core.randomized_iterative_slicer( len_bound, max_sample_times, <long*> sample_times.data)
         sig_off()
         #print(reduced_t)
 
@@ -1919,26 +1972,29 @@ cdef class Siever(object):
         #print(x)
 
         #compute the approximate vector on full-dim with coefficients x on lattice basis.
-        mat_x = IntegerMatrix(1,self.full_n)
-        for i in range(self.full_n):
-            mat_x[0,i] = int(x[i])
+        '''
+        ws =[]
+        for k in range(self.batch_size):
+            mat_x = IntegerMatrix(1,self.full_n)
+            for i in range(self.full_n):
+                mat_x[0,i] = int(x[k* self.full_n + i])
 
 
-        res =  mat_x * self.M.B
+            res =  mat_x * self.M.B
 
-        #print("B[0]:")
-        #print(self.M.B[0])
-      
-        w = [int(res[0,i]) for i in range(res.ncols)]
-   
+            #print("B[0]:")
+            #print(self.M.B[0])
+            ws.append(tuple(list(res[0])))
+        '''
 
+        #pws, ws, xs = self.get_cv()
         #x_w = [_ for _ in list(npp.linalg.solve((npp.array(list(self.M.B))).T,npp.array(w)))] 
 
         #print("x_w:", x_w)
 
         #assert(x_w == x)
 
-        return [_ for _ in self.M.to_canonical(cv)],  w, [int(x[i]) for i in range(self.full_n)], sample_times[0]
+        return self.get_cv(), [int(_) for _ in sample_times] #[_ for _ in self.M.to_canonical(cv[k*self.batch_size:k*self.batch_size+self.full_n]) for k in range(self.batch_size)],  ws, [[int(x[i]) for i in range(k*self.batch_size, k*self.batch_size+self.full_n)] for k in range(self.batch_size)], sample_times
         #return [round(_) for _ in self.M.to_canonical(reduced_t)]
 
 # For backward compatibility with old pickles

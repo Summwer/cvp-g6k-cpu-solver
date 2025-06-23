@@ -404,45 +404,66 @@ def random_on_sphere(d,r):
     d=np.sum(u**2) **(0.5)
     return r*u/d
 
-def load_cvp_instance(n, betamax=55, approx_factor = 1.):
-    '''
-    Use the same cvp instance generation method as https://github.com/RandomizedSlicer/RandomizedSlicerG6K
-    '''
-    #A, _ = load_svpchallenge_and_randomize(n)
+
+def load_cvp_instance(n, batch_size = 1, betamax=55, approx_factor = 0.99):
     
+    # Check for existing matrix file
+    if not os.path.isdir("cvp_lattice_matrix"):
+        os.mkdir("cvp_lattice_matrix")
     
-    A = IntegerMatrix(n,n)
-    A.randomize("qary", k=n//2, bits=11.705)
+    filename = "cvp_lattice_matrix/cvp_matrix_n%d_b%d.txt" % (n, betamax)
+    if os.path.isfile(filename):
+        # Create temp file with proper format
+        import tempfile
+        with open(filename, "r") as f:
+            matrix_str = f.read()
+        with tempfile.NamedTemporaryFile(mode='w', delete=False) as tmp:
+            tmp.write(matrix_str)
+            tmp_path = tmp.name
+        try:
+            A = IntegerMatrix.from_file(tmp_path)
+        finally:
+            os.unlink(tmp_path)
+    else:
+        A = IntegerMatrix(n,n)
+        A.randomize("qary", k=n//2, bits=11.705)
+        
+        M = GSO.Mat(A, float_type='ld')
+        M.update_gso()
+        lll = LLL.Reduction(M)
+        lll()
+
+        bkz = BKZReduction(M)
+        for beta in range(5,betamax+1):
+            par = fplll_bkz.Param(beta, strategies=fplll_bkz.DEFAULT_STRATEGY,
+                                          max_loops=1)
+            bkz(par)
+        
+        M.update_gso()
+        lll = LLL.Reduction( M )
+        lll()
+        
+        # Save newly generated matrix
+        with open(filename, "w") as f:
+            f.write(str(A))
     
+       
     M = GSO.Mat(A, float_type='ld')
     M.update_gso()
-    lll = LLL.Reduction(M)
-    lll()
-
-    bkz = BKZReduction(M)
-    for beta in range(5,betamax+1):
-        par = fplll_bkz.Param(beta,
-                                      strategies=fplll_bkz.DEFAULT_STRATEGY,
-                                      max_loops=1)
-        bkz(par)
-    
-    M.update_gso()
-    lll = LLL.Reduction( M )
-    lll()
-    
-    
-    
     gh = min( [M.r()[0], gaussian_heuristic(M.r())] )
+    ts = []
     
-    while(True):
-        e = np.array( random_on_sphere(n,approx_factor*gh**0.5) )
-        e = np.round(e)
-        if((e@e) <= min(gh, M.get_r(0,0))):
-            break
-    c = [randint(-33,34) for _ in range(n)]
-    b = M.B.multiply_left( c )
-    #b_ = np.array(b)
-    t_ = [e[i]+b[i] for i in range(n)]
-    t = [ int(tt) for tt in t_ ]
+    for _ in range(batch_size):
+        while(True):
+            e = np.array( random_on_sphere(n,approx_factor*gh**0.5) )
+            e = np.round(e)
+            if((e@e) <= (approx_factor**2) * min(gh, M.get_r(0,0))):
+                break
+        c = [randint(-33,34) for _ in range(n)]
+        b = M.B.multiply_left( c )
+        #b_ = np.array(b)
+        t_ = [e[i]+b[i] for i in range(n)]
+        t = [ int(tt) for tt in t_ ]
+        ts.append(t)
         
-    return M.B, t, 1.01*(e@e/gh)
+    return M.B, ts

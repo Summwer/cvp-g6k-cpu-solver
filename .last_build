@@ -1,15 +1,33 @@
 Git status: 
-commit 442ae4030ce827c30a8f8da1f5284122787abca0
+commit 7acda4839edfeb695636fbbf963ee1d9f991dccf
+Merge: 7eb914e ae3ff1e
 Author: summwer <15091002@buaa.edu.cn>
 
-    update the latest version
-
+    update-test-on-bdgl2
 	modified:   .last_build
-	modified:   slicer-test-pre-bkz.log
-	modified:   slicer-test-st=0.75.log
-	modified:   slicer-test-st=1-LLL.log
-	modified:   slicer-test-st=1.log
-	modified:   slicer-test.log
+	modified:   Makefile.local
+	modified:   README.md
+	modified:   acvp_colattice_test.py
+	modified:   config.log
+	modified:   g6k/algorithms/bestliftcvp.py
+	modified:   g6k/algorithms/bestliftcvp_db.py
+	modified:   g6k/algorithms/cvpump.py
+	modified:   g6k/algorithms/pro_randslicer.py
+	modified:   g6k/decl.pxd
+	modified:   g6k/siever.pxd
+	modified:   g6k/siever.pyx
+	modified:   g6k/utils/util.py
+	modified:   kernel/Makefile.am
+	modified:   kernel/progressive_slicer_with_d4f.cpp
+	modified:   kernel/randomized_iterative_slicer.cpp
+	modified:   kernel/siever.h
+	modified:   lwechal_colattice_test.py
+	modified:   lwechal_cvpump_test.py
+	modified:   rebuild.sh
+	modified:   slicer_test.py
+	modified:   svpchal_cvpump_test.py
+	modified:   svpchal_preBKZ.py
+	modified:   test
 =================
-rebuild.sh 
+rebuild.sh -j 20
 =================

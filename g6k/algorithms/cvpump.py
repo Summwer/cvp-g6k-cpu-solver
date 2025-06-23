@@ -84,16 +84,16 @@ def wrapped_sieve(cvpump):
     return cont
 
 
-def scoring_goal_r0(i, nlen, olen, aux):
-    return i == 0 and nlen < aux.goal_r0
+# def scoring_goal_r0(i, nlen, olen, aux):
+#     return i == 0 and nlen < aux.goal_r0
 
-def scoring_down(i, nlen, olen, aux):
-    if i < aux.insert_left_bound or nlen >= olen:
-        return False
-    return log(olen / nlen) - i * log(aux.prefer_left_insert)
+# def scoring_down(i, nlen, olen, aux):
+#     if i < aux.insert_left_bound or nlen >= olen:
+#         return False
+#     return log(olen / nlen) - i * log(aux.prefer_left_insert)
 
 
-def cvpump(g6k, c, tracer, kappa, blocksize,  dim4free,      # Main parameters
+def cvpump(g6k, tracer, kappa, blocksize,  dim4free,      # Main parameters
          goal_r0=None, start_up_n=50,        
          verbose=False, len_bound = 1 ,saturation_error="weaken"                                                        
          ):
@@ -117,7 +117,7 @@ def cvpump(g6k, c, tracer, kappa, blocksize,  dim4free,      # Main parameters
     """
     cvpump.l = kappa+dim4free  # noqa
     cvpump.r = kappa+blocksize
-    cvpump.c = c
+    
     g6k.shrink_db(0)
     g6k.lll(0, cvpump.r)
     # g6k.initialize_local(0, max(g6k.r-start_up_n, cvpump.l+1), l+blocksize)
@@ -149,22 +149,4 @@ def cvpump(g6k, c, tracer, kappa, blocksize,  dim4free,      # Main parameters
                     print_pro_randslicer_state(cvpump)
                 if not wrapped_sieve(cvpump):
                     break
-            # print(list(g6k.itervalues()))
-            
-            cvpump.pt = g6k.initialize_target_vector(c)
-            cvpump.pw, cvpump.w, cvpump.x, _ = cvpump.g6k.randslicer(len_bound = len_bound) 
-            
-            
-            
-            #pw: projected approximate closest vector; w: approiximate closest vector on full-dim
-            # print(cvpump.w)
-            # cvpump.ee = [cvpump.c[i] - cvpump.w[i] for i in range(g6k.full_n)]
-            # cvpump.norm_ee = norm(cvpump.ee)
-            # print(cvpump.ee)
-
-            # if goal_r0 is not None and cvpump.norm_ee <= goal_r0:
-            #     return cvpump.w #, cvpump.ee
-            
-    # return cvpump.pt, cvpump.pw, cvpump.w, cvpump.x #, cvpump.ee
-    
-    return cvpump.pt, cvpump.pw, cvpump.w, cvpump.x #, cvpump.ee
+   

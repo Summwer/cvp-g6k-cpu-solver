@@ -5,7 +5,7 @@
 #include <time.h>
 #include "/usr/include/libalglib/stdafx.h"
 #include "/usr/include/libalglib/specialfunctions.h"
-
+#include "slicer_sample_estimation.h"
 using namespace alglib;
 
 
@@ -284,46 +284,24 @@ Entry Siever::sample_t_(Entry pt){ // int q,s
 // }
 
 
-void Siever::randomized_iterative_slicer(double* y, long* x, FT len_bound, int max_sample_times, int* sample_times){ 
-  update_entry(pt);
-  
-  if(max_sample_times == 0)
-    max_sample_times = 100;
-  Entry t_new1, t_new2, t_ = pt, mint_ = pt;
 
 
-  // //Compute  GH
-  // vector<double> gs = vector<double>(n,0.);
-  // FP_NR<mpfr_t> tmp;
-  // for(unsigned int i = 0; i < n; i++){
-  //   M.get_r(tmp,i,i);
-  //   gs[i] = tmp.get_d();
-  // }
-  // gh = gaussian_heuristic(gs);
-  // cout<<"gh = "<<gh<<endl;
+
+void Siever::cdb_bucket_process(){
+
+}
 
 
-  // cout<<"initial(mint_.yr) =";
-  // for(int i = 0; i< n; i++)
-  //   cout<<mint_.yr[i]<<" ";
-  // cout<<endl;
+Entry Siever::iterative_slicer(FT len_bound, unsigned int k){
+  Entry t_new1, t_new2;
 
-  // int sample_times = 1;
-  sample_times[0] = 1;
-start_sample_t_:
-  //3. sample  a vector t' in L(A+t), just sample a vector in L(A), and plus it to t. 
-  if(max_sample_times > 0)
-    t_ = sample_t_(pt);
-  //4. sort db in order from nearby with pt to farway with pt. 
-  //reduce the sample_vector by slicer algorithm, and get a short enough vector.
+  Entry t_ = sample_t_(pts[k]);
 start_over:
-  // std::cout<<t_.len<<std::endl;
   for(unsigned int i = 0; i < db.size(); i++){
     if( t_.len <= len_bound){
         break;
     }
     if(UNLIKELY(is_reducible_maybe<XPC_THRESHOLD>(t_.c,db[i].c))){
-      // cout<<"reducible maybe"<<endl;
       for(unsigned int j = 0; j < n; j++){
         t_new1.yr[j] = t_.yr[j] + db[i].yr[j];
         t_new1.x[j] = t_.x[j] - db[i].x[j];
@@ -335,15 +313,6 @@ start_over:
       }
       update_entry(t_new2);
 
-
-      // cout<<"t_.x:";
-      // for(unsigned int j = 0; j < n; j++)
-      //   cout<<t_.x[j]<<" ";
-      // cout<<endl;
-
-      // cout<<"t_new1.len:"<< (t_new1.len < t_.len) << "t_new2.len_prec:"<<(t_new2.len < t_.len) <<", t_.len:" << t_.len<<endl; 
-      // cout<<"t_new1.len_prec:"<< (t_new1.len_prec < t_.len_prec) << "t_new2.len_prec:"<<(t_new2.len_prec < t_.len_prec) <<", t_.len_prec:" << t_.len_prec<<endl; 
-      // cout<<t_new1.len - t_.len<<endl;
       if(t_new1.len < t_.len){
         t_ = t_new1;
         goto start_over;
@@ -354,37 +323,119 @@ start_over:
       }    
     }
   }
-
-  if ( t_.len < mint_.len)
-    mint_ = t_;
-
+  return t_;
+}
 
 
-  if( t_.len > len_bound and *sample_times < max_sample_times){
-    *sample_times += 1;
-    goto start_sample_t_;
-  }
-
+Entry Siever::randomized_iterative_slicer_loop( FT len_bound, int max_sample_times, int* sample_time, unsigned int k, int inner_loop_threads){ 
 
 
   
-  if( mint_.len > pt.len and *sample_times >= max_sample_times){
-    mint_ = pt;
+
+  update_entry(pts[k]);
+    
+  if(max_sample_times == 0)
+    max_sample_times = 100;
+
+  if(inner_loop_threads < 1)
+    inner_loop_threads = 1;
+
+  Entry t_new1, t_new2, t_ = pts[k], mint_ = pts[k];
+  vector<Entry> t_s(inner_loop_threads);
+
+
+  *sample_time = inner_loop_threads;
+start_sample_t_:
+  //3. sample  a vector t' in L(A+t), just sample a vector in L(A), and plus it to t. 
+  if(inner_loop_threads == 1 or max_sample_times <= 1){
+    t_s[0] = iterative_slicer(len_bound, k);
+  }
+  else{
+    for (size_t t_id = 0; t_id < inner_loop_threads; ++t_id)
+    { 
+      threadpool.push([this, t_id,k, &t_s, &len_bound](){
+        t_s[t_id] = iterative_slicer(len_bound, k);
+      });
+    }
+    threadpool.wait_work(); 
   }
 
-  // if(sample_times > 1 and sample_times < max_sample_times)
-    // std::cout<<"\n Sample Times = "<<sample_times<<std::endl;
-  // cout<<"mint_.yr =";
-  // for(int i = 0; i< n; i++)
-  //   cout<<mint_.yr[i]<<" ";
-  // cout<<endl;
-  recover_vector_from_yr(y, x, mint_);
-  // cout<<"y = ";
-  // for(int i = 0; i< full_n; i++)
-  //   cout<<y[i]<<", ";
-  // cout<<endl;
+    //4. sort db in order from nearby with pt to farway with pt. 
+    //reduce the sample_vector by slicer algorithm, and get a short enough vector.
+  for (size_t t_id = 0; t_id < inner_loop_threads; ++t_id)
+  { 
+    if ( t_s[t_id].len < mint_.len)
+      mint_ = t_s[t_id];
+  }
+
+  if( mint_.len > len_bound and *sample_time < max_sample_times){
+      *sample_time += inner_loop_threads;
+      goto start_sample_t_;
+  }
+
+  if( mint_.len > pts[k].len and *sample_time >= max_sample_times){
+    mint_ = pts[k];
+  }
+  return mint_;
 }
 
+
+
+
+void Siever::randomized_iterative_slicer( FT len_bound, int max_sample_times, long* sample_times){ 
+  cvs.resize(batch_size);
+  ys.resize(batch_size);
+  xs.resize(batch_size);
+  std::fill(sample_times, &sample_times[batch_size], 0); 
+  // std::fill(y, &y[full_n*batch_size], 0.);
+  // std::fill(x, &x[full_n*batch_size], 0); 
+  
+  double a = pow(.5 * params.saturation_ratio * pow(params.db_size_base, n), 1./n);
+  int expected_sample_times = min(max_sample_times, predict_slicer_max_sample_amount(a, len_bound, n));
+  
+  int out_loop_threads, inner_loop_threads; 
+  if(expected_sample_times < params.threads){
+    inner_loop_threads = 1;//max(1,expected_sample_times);
+    out_loop_threads = params.threads; //max(1, (int) ((params.threads)/(double) inner_loop_threads));
+  }
+  else{
+    inner_loop_threads = params.threads;
+    out_loop_threads = 1;
+  }
+  // if(batch_size > params.threads){
+  //   inner_loop_threads = 1;
+  //   out_loop_threads = params.threads;
+  // }else{
+  //   out_loop_threads = batch_size;
+  //   inner_loop_threads = max(1,(int) ceil(params.threads/batch_size));
+  // }
+
+  for(unsigned int k = 0; k < max( (int) (batch_size/(double) out_loop_threads),1); k++){
+    // Entry mint_ = randomized_iterative_slicer_loop( len_bound, max_sample_times,sample_times,k, inner_loop_threads);
+    vector<Entry> mint_s(out_loop_threads);
+    vector<int> per_thread_sample_times(out_loop_threads);
+    if(out_loop_threads == 1){
+      mint_s[0] = randomized_iterative_slicer_loop( len_bound, max_sample_times,&per_thread_sample_times[0],k, inner_loop_threads);
+    }
+    else{
+      for (size_t t_id = 0, kk=k*out_loop_threads; t_id < out_loop_threads && kk<batch_size; ++t_id , kk++)
+      { 
+        threadpool.push([this, &mint_s, &sample_times, &per_thread_sample_times, t_id, kk, inner_loop_threads, len_bound, max_sample_times](){
+          int current_sample_time = 0; 
+          mint_s[t_id] = randomized_iterative_slicer_loop( len_bound, max_sample_times,&per_thread_sample_times[t_id],kk, inner_loop_threads);
+          per_thread_sample_times[t_id] = (int) current_sample_time; 
+        });
+      }
+      threadpool.wait_work(); 
+    }
+    for (size_t t_id = 0, kk=k*out_loop_threads; t_id < out_loop_threads && kk<batch_size; ++t_id , kk++)
+    {
+      recover_vector_from_yr( mint_s[t_id], kk );
+      sample_times[kk] = (int) per_thread_sample_times[t_id]; 
+    }
+
+  }
+}
 
 
 

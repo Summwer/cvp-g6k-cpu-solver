@@ -82,8 +82,14 @@ void show_cpu_stats();
 
 // Maximum dimension of the local blocks we sieve in.
 #ifndef MAX_SIEVING_DIM
-#define MAX_SIEVING_DIM 512
+#define MAX_SIEVING_DIM 200
 #endif
+
+//Maiximal batch size for batch-cvp
+#ifndef MAX_BATCH_SIZE
+#define MAX_BATCH_SIZE 200
+#endif
+
 
 #ifndef VEC_ZT
 #define VEC_ZT  int  //vecs's precision. can change to mpz_t,int, int64_t and so on. 
@@ -1182,11 +1188,25 @@ public:
     // };
     // std::vector<Vec<LFT>> vecs; 
     Entry pt; //projected target_vector
+    vector<Entry> pts;//projected target_vector
+
+
+    vector<std::array<double, MAX_SIEVING_DIM>> ys;
+    vector<std::array<long, MAX_SIEVING_DIM>> xs;
+
     //cv: the full-dimensional closest vector in lattice to t.
     Entry cv;
+    
     std::array<LFT,MAX_SIEVING_DIM> yl;
 
+    std::array<std::array<LFT, MAX_SIEVING_DIM>, MAX_BATCH_SIZE> yls;
+    vector<Entry> cvs;
+
+
     LFT gamma;
+    unsigned int batch_size;
+
+
     bool terminal_condition = false;//whether find the short enough vector in gauss sieve
     // Siever::Vec<LFT> recover_vector(Entry e, fplll::MatGSO<SZT, SFT> M, unsigned int l); //int q,
     // Vec<LFT> recover_vector(std::array<ZT,MAX_SIEVING_DIM> x, fplll::MatGSO<SZT, SFT> M, unsigned int l);
@@ -1198,21 +1218,23 @@ public:
     // void initialize_target_vector(long* vec);
     void update_entry(Entry &e);
     // Vec<LFT> sample_t_(Vec<LFT> target_vector, fplll::MatGSO<SZT, SFT> M, unsigned int l);// int q, 
-
+    void cdb_bucket_process();
     Entry sample_t_(Entry target_vector);
-    
+
     // void progressive_sieve(fplll::MatGSO<SZT, SFT> M, unsigned int l = 0);
     void cvp_extend_left(unsigned int lp = 0);
     // void extend_left(Entry &e, unsigned int lp);
     // void compute_projected_vector(Siever::Vec<LFT> pt,  fplll::MatGSO<SZT, SFT> M, unsigned int l);
     void initialize_projected_target_vector();
 
-    void get_cv(double* y, long* x);
+    void get_cv(double* y, long* x, int k);
 
     // Vec<LFT> randomized_iterative_slicer( Vec<LFT> target_vector, fplll::MatGSO<SZT, SFT> M, FT norm_bound, int max_sample_times, unsigned int l = 0, bool verbose = true); //unsigned int q, 
 
     // void initialize_local(fplll::MatGSO<SZT, SFT> M); //Initialize parameter for class siever.
-    void randomized_iterative_slicer(double* y, long* x, FT len_bound, int max_sample_times,int* sample_times); //len_bound: norm_bound/gh(L[l:])
+    Entry iterative_slicer( FT len_bound, unsigned int k);
+    void randomized_iterative_slicer( FT len_bound, int max_sample_times,long* sample_times); //len_bound: norm_bound/gh(L[l:])
+    Entry randomized_iterative_slicer_loop( FT len_bound, int max_sample_times,int* sample_times, unsigned int k, int inner_loop_threads);
     // Entry randomized_iterative_slicer( Entry target_vector, FT len_bound, int max_sample_times); 
     void run_randslicer(long* target_vector, FT len_bound, int max_sample_times,  long* &w, long* &ee);
 
@@ -1220,8 +1242,11 @@ public:
     void construct_projected_entry(vector<SFT> yl, Entry &pt);
     // void recover_vector_from_yr(vector<VEC_ZT> &w, Entry pt, Entry pe, vector<SFT> yl);
 
-    void recover_vector_from_yr(double* y, long* x, Entry pe);
+    void recover_vector_from_yr(Entry pe, unsigned int k);
     // void left_recompute_yr(Entry &e, unsigned int lp);
+
+
+    
 
     // void progressive_slicer_with_d4f(vector<VEC_ZT> target_vector, FT len_bound, int max_sample_times, unsigned int f, vector<VEC_ZT> &w, vector<VEC_ZT> &ee);
 

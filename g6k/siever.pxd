@@ -11,3 +11,5 @@ cdef class Siever(object):
     cdef SieverParams _params
     cdef object initialized
     cdef object t_initialized
+    cdef object bucketed
+    cdef object batch_size

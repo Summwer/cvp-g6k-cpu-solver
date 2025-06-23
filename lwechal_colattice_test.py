@@ -40,7 +40,8 @@ from fpylll.tools.quality import basis_quality
 from fpylll.util import gaussian_heuristic
 
 from g6k.algorithms.bkz import pump_n_jump_bkz_tour
-from g6k.algorithms.colattice import colattice
+# from g6k.algorithms.colattice_backup import colattice
+from colattice import colattice
 from g6k.siever import Siever
 from g6k.utils.cli import parse_args, run_all, pop_prefixed_params
 from g6k.utils.stats import SieveTreeTracer, dummy_tracer
@@ -228,7 +229,11 @@ def lwe_kernel(arg0, params=None, seed=None):
         print("Starting colattice with blocksize strategy:", coblocksizes) # noqa
     
 
-    ee, _ = colattice(g6k, c, coblocksizes)#, target_norm=target_norm)
+    # ee, _ = colattice(g6k, c, coblocksizes)#, target_norm=target_norm)
+    
+    
+    _ , ee, _ , _, _, _= colattice(g6k.M.B, [c], 1., params, blocksizes = coblocksizes, len_bound = 1.)#, target_norm=target_norm)
+    ee = ee [0]
     print(ee)
     
     norm_ee = sum([_**2 for _ in ee]) 

@@ -1,0 +1,442 @@
+GNU gdb (Ubuntu 10.2-0ubuntu1~20.04~1) 10.2
+Copyright (C) 2021 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+Type "show copying" and "show warranty" for details.
+This GDB was configured as "x86_64-linux-gnu".
+Type "show configuration" for configuration details.
+For bug reporting instructions, please see:
+<https://www.gnu.org/software/gdb/bugs/>.
+Find the GDB manual and other documentation resources online at:
+    <http://www.gnu.org/software/gdb/documentation/>.
+
+For help, type "help".
+Type "apropos word" to search for commands related to "word".
+(No debugging symbols found in /usr/bin/python3.8)
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+(No debugging symbols found in /lib/x86_64-linux-gnu/libexpat.so.1)
+(No debugging symbols found in /usr/local/lib/libz.so.1)
+(No debugging symbols found in /lib/x86_64-linux-gnu/libstdc++.so.6)
+(No debugging symbols found in /lib/x86_64-linux-gnu/libgcc_s.so.1)
+(No debugging symbols found in /usr/lib/python3.8/lib-dynload/_bz2.cpython-38-x86_64-linux-gnu.so)
+(No debugging symbols found in /lib/x86_64-linux-gnu/libbz2.so.1.0)
+(No debugging symbols found in /usr/lib/python3.8/lib-dynload/_lzma.cpython-38-x86_64-linux-gnu.so)
+(No debugging symbols found in /lib/x86_64-linux-gnu/liblzma.so.5)
+(No debugging symbols found in /usr/lib/python3.8/lib-dynload/_opcode.cpython-38-x86_64-linux-gnu.so)
+(No debugging symbols found in /usr/lib/python3.8/lib-dynload/_json.cpython-38-x86_64-linux-gnu.so)
+(No debugging symbols found in /home/cryptothesis/.local/lib/python3.8/site-packages/numpy/core/_multiarray_umath.cpython-38-x86_64-linux-gnu.so)
+(No debugging symbols found in /home/cryptothesis/.local/lib/python3.8/site-packages/numpy/core/../../numpy.libs/libopenblas64_p-r0-2f7c42d4.3.18.so)
+(No debugging symbols found in .gnu_debugdata for /home/cryptothesis/.local/lib/python3.8/site-packages/numpy/core/../../numpy.libs/libgfortran-040039e1.so.5.0.0)
+(No debugging symbols found in /home/cryptothesis/.local/lib/python3.8/site-packages/numpy/core/../../numpy.libs/libquadmath-96973f99.so.0.0.0)
+(No debugging symbols found in /home/cryptothesis/.local/lib/python3.8/site-packages/numpy/core/_multiarray_tests.cpython-38-x86_64-linux-gnu.so)
+(No debugging symbols found in /usr/lib/python3.8/lib-dynload/_ctypes.cpython-38-x86_64-linux-gnu.so)
+(No debugging symbols found in /lib/x86_64-linux-gnu/libffi.so.7)
+(No debugging symbols found in /home/cryptothesis/.local/lib/python3.8/site-packages/numpy/linalg/_umath_linalg.cpython-38-x86_64-linux-gnu.so)
+(No debugging symbols found in /home/cryptothesis/.local/lib/python3.8/site-packages/numpy/fft/_pocketfft_internal.cpython-38-x86_64-linux-gnu.so)
+(No debugging symbols found in /home/cryptothesis/.local/lib/python3.8/site-packages/numpy/random/mtrand.cpython-38-x86_64-linux-gnu.so)
+(No debugging symbols found in /home/cryptothesis/.local/lib/python3.8/site-packages/numpy/random/bit_generator.cpython-38-x86_64-linux-gnu.so)
+(No debugging symbols found in /home/cryptothesis/.local/lib/python3.8/site-packages/numpy/random/_common.cpython-38-x86_64-linux-gnu.so)
+(No debugging symbols found in /usr/lib/python3.8/lib-dynload/_hashlib.cpython-38-x86_64-linux-gnu.so)
+(No debugging symbols found in /lib/x86_64-linux-gnu/libcrypto.so.1.1)
+(No debugging symbols found in /home/cryptothesis/.local/lib/python3.8/site-packages/numpy/random/_bounded_integers.cpython-38-x86_64-linux-gnu.so)
+(No debugging symbols found in /home/cryptothesis/.local/lib/python3.8/site-packages/numpy/random/_mt19937.cpython-38-x86_64-linux-gnu.so)
+(No debugging symbols found in /home/cryptothesis/.local/lib/python3.8/site-packages/numpy/random/_philox.cpython-38-x86_64-linux-gnu.so)
+(No debugging symbols found in /home/cryptothesis/.local/lib/python3.8/site-packages/numpy/random/_pcg64.cpython-38-x86_64-linux-gnu.so)
+(No debugging symbols found in /home/cryptothesis/.local/lib/python3.8/site-packages/numpy/random/_sfc64.cpython-38-x86_64-linux-gnu.so)
+(No debugging symbols found in /home/cryptothesis/.local/lib/python3.8/site-packages/numpy/random/_generator.cpython-38-x86_64-linux-gnu.so)
+(No debugging symbols found in /usr/local/lib/libgmp.so.10)
+(No debugging symbols found in /usr/local/lib/libfplll.so.8)
+(No debugging symbols found in /lib/x86_64-linux-gnu/libqd.so.0)
+(No debugging symbols found in /lib/x86_64-linux-gnu/libmpfr.so.6)
+(No debugging symbols found in /home/cryptothesis/.local/lib/python3.8/site-packages/scipy/_lib/_ccallback_c.cpython-38-x86_64-linux-gnu.so)
+(No debugging symbols found in /home/cryptothesis/.local/lib/python3.8/site-packages/scipy/special/_ufuncs.cpython-38-x86_64-linux-gnu.so)
+(No debugging symbols found in /home/cryptothesis/.local/lib/python3.8/site-packages/scipy/special/../../scipy.libs/libopenblasp-r0-085ca80a.3.9.so)
+(No debugging symbols found in /home/cryptothesis/.local/lib/python3.8/site-packages/scipy/special/../../scipy.libs/libgfortran-ed201abd.so.3.0.0)
+(No debugging symbols found in /home/cryptothesis/.local/lib/python3.8/site-packages/scipy/special/_ufuncs_cxx.cpython-38-x86_64-linux-gnu.so)
+(No debugging symbols found in /home/cryptothesis/.local/lib/python3.8/site-packages/scipy/special/specfun.cpython-38-x86_64-linux-gnu.so)
+(No debugging symbols found in /home/cryptothesis/.local/lib/python3.8/site-packages/scipy/linalg/_fblas.cpython-38-x86_64-linux-gnu.so)
+(No debugging symbols found in /home/cryptothesis/.local/lib/python3.8/site-packages/scipy/linalg/_flapack.cpython-38-x86_64-linux-gnu.so)
+(No debugging symbols found in /home/cryptothesis/.local/lib/python3.8/site-packages/scipy/linalg/_flinalg.cpython-38-x86_64-linux-gnu.so)
+(No debugging symbols found in /home/cryptothesis/.local/lib/python3.8/site-packages/scipy/linalg/_solve_toeplitz.cpython-38-x86_64-linux-gnu.so)
+(No debugging symbols found in /home/cryptothesis/.local/lib/python3.8/site-packages/scipy/linalg/_matfuncs_sqrtm_triu.cpython-38-x86_64-linux-gnu.so)
+(No debugging symbols found in /home/cryptothesis/.local/lib/python3.8/site-packages/scipy/linalg/_decomp_update.cpython-38-x86_64-linux-gnu.so)
+(No debugging symbols found in /home/cryptothesis/.local/lib/python3.8/site-packages/scipy/linalg/cython_blas.cpython-38-x86_64-linux-gnu.so)
+(No debugging symbols found in /home/cryptothesis/.local/lib/python3.8/site-packages/scipy/linalg/cython_lapack.cpython-38-x86_64-linux-gnu.so)
+(No debugging symbols found in /home/cryptothesis/.local/lib/python3.8/site-packages/scipy/sparse/_sparsetools.cpython-38-x86_64-linux-gnu.so)
+(No debugging symbols found in /home/cryptothesis/.local/lib/python3.8/site-packages/scipy/sparse/_csparsetools.cpython-38-x86_64-linux-gnu.so)
+(No debugging symbols found in /home/cryptothesis/.local/lib/python3.8/site-packages/scipy/sparse/csgraph/_shortest_path.cpython-38-x86_64-linux-gnu.so)
+(No debugging symbols found in /home/cryptothesis/.local/lib/python3.8/site-packages/scipy/sparse/csgraph/_tools.cpython-38-x86_64-linux-gnu.so)
+(No debugging symbols found in /home/cryptothesis/.local/lib/python3.8/site-packages/scipy/sparse/csgraph/_traversal.cpython-38-x86_64-linux-gnu.so)
+(No debugging symbols found in /home/cryptothesis/.local/lib/python3.8/site-packages/scipy/sparse/csgraph/_min_spanning_tree.cpython-38-x86_64-linux-gnu.so)
+(No debugging symbols found in /home/cryptothesis/.local/lib/python3.8/site-packages/scipy/sparse/csgraph/_flow.cpython-38-x86_64-linux-gnu.so)
+(No debugging symbols found in /home/cryptothesis/.local/lib/python3.8/site-packages/scipy/sparse/csgraph/_matching.cpython-38-x86_64-linux-gnu.so)
+(No debugging symbols found in /home/cryptothesis/.local/lib/python3.8/site-packages/scipy/sparse/csgraph/_reordering.cpython-38-x86_64-linux-gnu.so)
+(No debugging symbols found in /home/cryptothesis/.local/lib/python3.8/site-packages/scipy/special/_comb.cpython-38-x86_64-linux-gnu.so)
+(No debugging symbols found in /home/cryptothesis/.local/lib/python3.8/site-packages/scipy/special/_ellip_harm_2.cpython-38-x86_64-linux-gnu.so)
+(No debugging symbols found in /usr/lib/python3.8/lib-dynload/_ssl.cpython-38-x86_64-linux-gnu.so)
+(No debugging symbols found in /lib/x86_64-linux-gnu/libssl.so.1.1)
+(No debugging symbols found in /usr/lib/python3.8/lib-dynload/_queue.cpython-38-x86_64-linux-gnu.so)
+(No debugging symbols found in /usr/lib/python3.8/lib-dynload/_decimal.cpython-38-x86_64-linux-gnu.so)
+(No debugging symbols found in /lib/x86_64-linux-gnu/libmpdec.so.2)
+(No debugging symbols found in /usr/lib/python3/dist-packages/simplejson/_speedups.cpython-38-x86_64-linux-gnu.so)
+(No debugging symbols found in /usr/local/lib/python3.8/dist-packages/gmpy2/../gmpy2.libs/libmpfr-48becd64.so.6.1.0)
+(No debugging symbols found in /usr/local/lib/python3.8/dist-packages/gmpy2/../gmpy2.libs/libgmp-7a47c32b.so.10.4.1)
+0x00007f8c9391ac7f in __GI___wait4 (pid=3698594, stat_loc=stat_loc@entry=0x0, 
+    options=options@entry=0, usage=usage@entry=0x0)
+    at ../sysdeps/unix/sysv/linux/wait4.c:27
+
+Stack backtrace
+---------------
+    stat_loc=stat_loc@entry=0x0, options=options@entry=0, 
+    usage=usage@entry=0x0) at ../sysdeps/unix/sysv/linux/wait4.c:27
+        resultvar = 18446744073709551104
+        sc_cancel_oldtype = 0
+        sc_ret = <optimized out>
+#1  0x00007f8c9391abfb in __GI___waitpid (pid=<optimized out>, 
+    stat_loc=stat_loc@entry=0x0, options=options@entry=0) at waitpid.c:38
+No locals.
+#2  0x00007f8c8ee10e74 in print_enhanced_backtrace ()
+    at build/src/cysignals/implementation.c:579
+        parent_pid = 3691061
+        pid = <optimized out>
+#3  0x00007f8c8ee10fb6 in sigdie (sig=sig@entry=6, 
+    s=s@entry=0x7f8c8ee1aab8 "Unhandled SIGABRT: An abort() occurred.")
+    at build/src/cysignals/implementation.c:605
+No locals.
+#4  0x00007f8c8ee13655 in sigdie_for_sig (inside=0, sig=6)
+    at build/src/cysignals/implementation.c:175
+No locals.
+#5  cysigs_signal_handler (sig=6) at build/src/cysignals/implementation.c:278
+        inside = <optimized out>
+#6  <signal handler called>
+No locals.
+#7  __GI_raise (sig=sig@entry=6) at ../sysdeps/unix/sysv/linux/raise.c:50
+        set = {__val = {0, 51539607553, 140731330485024, 3, 4294967296, 
+            140239272148992, 7233170478761014387, 109330211561823, 0, 0, 0, 0, 
+            140731330486456, 140731330486464, 0, 140731330491752}}
+        pid = <optimized out>
+        tid = <optimized out>
+        ret = <optimized out>
+#8  0x00007f8c9385a859 in __GI_abort () at abort.c:79
+        save_stage = 1
+        act = {__sigaction_handler = {
+            sa_handler = 0x7f8c93a255c0 <_IO_2_1_stderr_>, 
+            sa_sigaction = 0x7f8c93a255c0 <_IO_2_1_stderr_>}, sa_mask = {
+            __val = {140241749038528, 1, 140241749038659, 3432, 
+              140241747609937, 14, 10, 140241749038528, 140241745143616, 
+              140241733776416, 0, 100997771447664, 140241747611283, 10, 
+              140241749038528, 140241745143616}}, sa_flags = -1836064380, 
+          sa_restorer = 0x7f8c92a161a2}
+        sigs = {__val = {32, 0 <repeats 15 times>}}
+#9  0x00007f8c928ecee6 in ?? () from /lib/x86_64-linux-gnu/libstdc++.so.6
+No symbol table info available.
+#10 0x00007f8c928fef8c in ?? () from /lib/x86_64-linux-gnu/libstdc++.so.6
+No symbol table info available.
+#11 0x00007f8c928feff7 in std::terminate() ()
+   from /lib/x86_64-linux-gnu/libstdc++.so.6
+No symbol table info available.
+#12 0x00007f8c928ff258 in __cxa_throw ()
+   from /lib/x86_64-linux-gnu/libstdc++.so.6
+No symbol table info available.
+#13 0x00007f8c928ec9ba in ?? () from /lib/x86_64-linux-gnu/libstdc++.so.6
+No symbol table info available.
+#14 0x00007f8c921efc4a in Siever::reserve(unsigned long) ()
+   from /home/cryptothesis/summer/slicer-comparison/cvp_g6k_cpu_solver/g6k/siever.cpython-38-x86_64-linux-gnu.so
+No symbol table info available.
+#15 0x00007f8c9224691a in Siever::set_params(SieverParams const&) ()
+   from /home/cryptothesis/summer/slicer-comparison/cvp_g6k_cpu_solver/g6k/siever.cpython-38-x86_64-linux-gnu.so
+No symbol table info available.
+#16 0x00007f8c92189a61 in __pyx_pf_3g6k_6siever_6Siever_6params_2__set__ (
+    __pyx_v_self=0x7f8b670f0db0, __pyx_v_self=0x7f8b670f0db0, 
+    __pyx_v_params=0x7f8b6713a310) at g6k/siever.cpp:6180
+        __pyx_frame = 0x0
+        __pyx_t_4 = 0x0
+        __pyx_v_k = <optimized out>
+        __pyx_r = <optimized out>
+        __Pyx_use_tracing = <optimized out>
+        __pyx_t_1 = <optimized out>
+        __pyx_t_5 = 0x0
+        __pyx_lineno = 0
+        __pyx_L1_error = <optimized out>
+        __pyx_t_2 = 0x0
+        __pyx_t_6 = 0x0
+        __pyx_t_3 = <optimized out>
+        __pyx_t_7 = 0x0
+        __pyx_filename = 0x0
+        __pyx_clineno = 0
+        __pyx_L0 = <optimized out>
+        __pyx_L1_error = <optimized out>
+        __pyx_v_k = <optimized out>
+        __pyx_r = <optimized out>
+        __pyx_frame_code = 0x0
+        __pyx_frame = <optimized out>
+        __Pyx_use_tracing = <optimized out>
+        __pyx_t_1 = <optimized out>
+        __pyx_t_2 = <optimized out>
+        __pyx_t_3 = <optimized out>
+        __pyx_t_4 = <optimized out>
+        __pyx_t_5 = <optimized out>
+        __pyx_t_6 = <optimized out>
+        __pyx_t_7 = <optimized out>
+        __pyx_lineno = <optimized out>
+        __pyx_filename = <optimized out>
+        __pyx_clineno = <optimized out>
+        tstate = <optimized out>
+        state = <optimized out>
+        tstate = <optimized out>
+        exc_type = <optimized out>
+        tmp = <optimized out>
+        __pyx_dict_version = 0
+        __pyx_dict_cached_value = 0x0
+        function = <optimized out>
+        tmp = <optimized out>
+        function = <optimized out>
+        tmp = <optimized out>
+        tstate = <optimized out>
+        state = <optimized out>
+        tstate = <optimized out>
+#17 __pyx_pw_3g6k_6siever_6Siever_6params_3__set__ (
+    __pyx_v_params=0x7f8b6713a310, __pyx_v_self=0x7f8b670f0db0)
+    at g6k/siever.cpp:6032
+        __pyx_L0 = <optimized out>
+        __pyx_lineno = 0
+        __pyx_filename = 0x0
+        __pyx_clineno = 0
+        __pyx_r = <optimized out>
+        __pyx_L0 = <optimized out>
+        __pyx_L1_error = <optimized out>
+        __pyx_lineno = <optimized out>
+        __pyx_filename = <optimized out>
+        __pyx_clineno = <optimized out>
+        __pyx_r = <optimized out>
+#18 __pyx_setprop_3g6k_6siever_6Siever_params (o=0x7f8b670f0db0, 
+    v=0x7f8b6713a310, x=<optimized out>) at g6k/siever.cpp:47537
+No locals.
+#19 0x0000000000501f7b in ?? ()
+No symbol table info available.
+#20 0x00000000005bd7ee in _PyObject_GenericSetAttrWithDict ()
+No symbol table info available.
+#21 0x00007f8c92af6703 in __Pyx_PyObject_SetAttrStr (value=0x7f8b6713a310, 
+    attr_name=<optimized out>, obj=<optimized out>)
+    at g6k/siever_params.cpp:11003
+        tp = 0x7f8c9227f780 <__pyx_type_3g6k_6siever_Siever>
+        tp = <optimized out>
+#22 __pyx_gb_3g6k_13siever_params_2generator (__pyx_generator=0x7f8b67120ae0, 
+    __pyx_tstate=<optimized out>, __pyx_sent_value=<optimized out>)
+    at g6k/siever_params.cpp:2662
+        __pyx_L1_error = <optimized out>
+        __pyx_cur_scope = 0x7f8b670fd780
+        __pyx_r = 0x0
+        __pyx_frame_code = 0x7f8c92c52f50
+        __pyx_frame = 0x0
+        __Pyx_use_tracing = <optimized out>
+        __pyx_t_1 = 0x0
+        __pyx_t_2 = 0x0
+        __pyx_t_3 = 0x0
+        __pyx_lineno = 0
+        __pyx_filename = 0x0
+        __pyx_clineno = 0
+        tstate = <optimized out>
+        state = <optimized out>
+        tstate = <optimized out>
+        state = <optimized out>
+        tstate = <optimized out>
+        state = <optimized out>
+        tstate = <optimized out>
+        state = <optimized out>
+#23 0x00007f8c92aed6cb in __Pyx_Coroutine_SendEx (self=0x7f8b67120ae0, 
+    value=0x90ba10 <_Py_NoneStruct>, closing=<optimized out>)
+    at g6k/siever_params.cpp:14867
+        __pyx_tstate = 0x163ee6b0
+        tstate = 0x163ee6b0
+        exc_state = 0x7f8b67120b00
+        retval = <optimized out>
+#24 0x00000000004f5033 in ?? ()
+No symbol table info available.
+#25 0x00000000005c4220 in ?? ()
+No symbol table info available.
+#26 0x000000000056b175 in _PyEval_EvalFrameDefault ()
+No symbol table info available.
+#27 0x00000000005f5c76 in _PyFunction_Vectorcall ()
+No symbol table info available.
+#28 0x000000000050a99c in ?? ()
+No symbol table info available.
+#29 0x000000000056cc20 in _PyEval_EvalFrameDefault ()
+No symbol table info available.
+#30 0x000000000056946a in _PyEval_EvalCodeWithName ()
+No symbol table info available.
+#31 0x00000000005f5e53 in _PyFunction_Vectorcall ()
+No symbol table info available.
+#32 0x000000000056b175 in _PyEval_EvalFrameDefault ()
+No symbol table info available.
+#33 0x000000000056946a in _PyEval_EvalCodeWithName ()
+No symbol table info available.
+#34 0x00000000005f5e53 in _PyFunction_Vectorcall ()
+No symbol table info available.
+#35 0x000000000056c34b in _PyEval_EvalFrameDefault ()
+No symbol table info available.
+#36 0x000000000056946a in _PyEval_EvalCodeWithName ()
+No symbol table info available.
+#37 0x00000000005f5e53 in _PyFunction_Vectorcall ()
+No symbol table info available.
+#38 0x000000000056c34b in _PyEval_EvalFrameDefault ()
+No symbol table info available.
+#39 0x000000000056946a in _PyEval_EvalCodeWithName ()
+No symbol table info available.
+#40 0x00000000005f5e53 in _PyFunction_Vectorcall ()
+No symbol table info available.
+#41 0x000000000056c34b in _PyEval_EvalFrameDefault ()
+No symbol table info available.
+#42 0x000000000056946a in _PyEval_EvalCodeWithName ()
+No symbol table info available.
+#43 0x000000000068ce77 in PyEval_EvalCode ()
+No symbol table info available.
+#44 0x000000000067e211 in ?? ()
+No symbol table info available.
+#45 0x000000000067e28f in ?? ()
+No symbol table info available.
+#46 0x000000000067e331 in ?? ()
+No symbol table info available.
+#47 0x000000000067e6d7 in PyRun_SimpleFileExFlags ()
+No symbol table info available.
+#48 0x00000000006b6d42 in Py_RunMain ()
+No symbol table info available.
+#49 0x00000000006b70cd in Py_BytesMain ()
+No symbol table info available.
+#50 0x00007f8c9385c083 in __libc_start_main (main=0x4eead0 <main>, argc=11, 
+    argv=0x7ffe90f675b8, init=<optimized out>, fini=<optimized out>, 
+    rtld_fini=<optimized out>, stack_end=0x7ffe90f675a8)
+    at ../csu/libc-start.c:308
+        self = <optimized out>
+        result = <optimized out>
+        unwind_buf = {cancel_jmp_buf = {{jmp_buf = {7041248, 
+                3750965043449264066, 6269968, 140731330491824, 0, 0, 
+                -3750588946353784894, -3812510532030859326}, 
+              mask_was_saved = 0}}, priv = {pad = {0x0, 0x0, 0xb, 
+              0x7ffe90f675b8}, data = {prev = 0x0, cleanup = 0x0, 
+              canceltype = 11}}}
+        not_first_call = <optimized out>
+#51 0x00000000005fac3e in _start ()
+No symbol table info available.
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+Cython backtrace
+----------------
+#0  0x00007f8c9391ac20 in __GI___wait4 () at /build/glibc-B3wQXB/glibc-2.31/posix/../sysdeps/unix/sysv/linux/wait4.c:27
+#1  0x00007f8c9391abf0 in __GI___waitpid () at /build/glibc-B3wQXB/glibc-2.31/posix/waitpid.c:38
+#2  0x00007f8c8ee10e00 in print_enhanced_backtrace () at /tmp/pip-install-ig8fe3u2/cysignals/build/src/cysignals/implementation.c:579
+#3  0x00007f8c8ee10f40 in sigdie () at /tmp/pip-install-ig8fe3u2/cysignals/build/src/cysignals/implementation.c:605
+#4  0x00007f8c8ee13442 in sigdie_for_sig () at /tmp/pip-install-ig8fe3u2/cysignals/build/src/cysignals/implementation.c:175
+#5  0x00007f8c8ee13420 in cysigs_signal_handler () at /tmp/pip-install-ig8fe3u2/cysignals/build/src/cysignals/implementation.c:278
+#6  0x00007f8c93a6c3e0 in __restore_rt ()
+#7  0x00007f8c9387af40 in __GI_raise () at /build/glibc-B3wQXB/glibc-2.31/signal/../sysdeps/unix/sysv/linux/raise.c:50
+#8  0x00007f8c9385a72e in __GI_abort () at /build/glibc-B3wQXB/glibc-2.31/stdlib/abort.c:79
+#9  0x0000000000000000 in ?? ()
+#10 0x0000000000000000 in ?? ()
+#11 0x0000000000000000 in std::terminate() ()
+#12 0x00007f8c928ff210 in __cxa_throw ()
+#13 0x0000000000000000 in ?? ()
+#14 0x0000000000000000 in Siever::reserve(unsigned long) ()
+#15 0x0000000000000000 in Siever::set_params(SieverParams const&) ()
+#16 0x00007f8c92189750 in __pyx_pf_3g6k_6siever_6Siever_6params_2__set__ () at /home/cryptothesis/summer/slicer-comparison/cvp_g6k_cpu_solver/g6k/siever.cpp:6180
+  6175     *         self._core.set_params(self._params._core)             # <<<<<<<<<<<<<<
+  6176     *         self._params.set_read_only()
+  6177     *
+  6178     */
+  6179      __Pyx_TraceLine(165,0,__PYX_ERR(0, 165, __pyx_L1_error))
+> 6180      (void)(__pyx_v_self->_core->set_params(__pyx_v_self->_params->_core));
+  6181    
+  6182      /* "g6k/siever.pyx":166
+  6183     *         self._params = params
+  6184     *         self._core.set_params(self._params._core)
+#17 0x00007f8c92189730 in __pyx_pw_3g6k_6siever_6Siever_6params_3__set__ () at /home/cryptothesis/summer/slicer-comparison/cvp_g6k_cpu_solver/g6k/siever.cpp:6032
+  6027      int __pyx_clineno = 0;
+  6028      int __pyx_r;
+  6029      __Pyx_RefNannyDeclarations
+  6030      __Pyx_RefNannySetupContext("__set__ (wrapper)", 0);
+  6031      if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_params), __pyx_ptype_3g6k_13siever_params_SieverParams, 1, "params", 0))) __PYX_ERR(0, 161, __pyx_L1_error)
+> 6032      __pyx_r = __pyx_pf_3g6k_6siever_6Siever_6params_2__set__(((struct __pyx_obj_3g6k_6siever_Siever *)__pyx_v_self), ((struct __pyx_obj_3g6k_13siever_params_SieverParams *)__pyx_v_params));
+  6033    
+  6034      /* function exit code */
+  6035      goto __pyx_L0;
+  6036      __pyx_L1_error:;
+#18 0x00007f8c92189700 in __pyx_setprop_3g6k_6siever_6Siever_params () at /home/cryptothesis/summer/slicer-comparison/cvp_g6k_cpu_solver/g6k/siever.cpp:47537
+  47532      return __pyx_pw_3g6k_6siever_6Siever_6params_1__get__(o);
+  47533    }
+  47534    
+  47535    static int __pyx_setprop_3g6k_6siever_6Siever_params(PyObject *o, PyObject *v, CYTHON_UNUSED void *x) {
+  47536      if (v) {
+> 47537        return __pyx_pw_3g6k_6siever_6Siever_6params_3__set__(o, v);
+  47538      }
+  47539      else {
+  47540        PyErr_SetString(PyExc_NotImplementedError, "__del__");
+  47541        return -1;
+#19 0x0000000000000000 in ?? ()
+#20 0x00000000005bd160 in _PyObject_GenericSetAttrWithDict ()
+#21 0x00007f8c92af66e1 in __Pyx_PyObject_SetAttrStr () at /home/cryptothesis/summer/slicer-comparison/cvp_g6k_cpu_solver/g6k/siever_params.cpp:11003
+  10998    /* PyObjectSetAttrStr */
+  10999    #if CYTHON_USE_TYPE_SLOTS
+  11000    static CYTHON_INLINE int __Pyx_PyObject_SetAttrStr(PyObject* obj, PyObject* attr_name, PyObject* value) {
+  11001        PyTypeObject* tp = Py_TYPE(obj);
+  11002        if (likely(tp->tp_setattro))
+> 11003            return tp->tp_setattro(obj, attr_name, value);
+  11004    #if PY_MAJOR_VERSION < 3
+  11005        if (likely(tp->tp_setattr))
+  11006            return tp->tp_setattr(obj, PyString_AS_STRING(attr_name), value);
+  11007    #endif
+#22 0x00007f8c92af6470 in __pyx_gb_3g6k_13siever_params_2generator () at /home/cryptothesis/summer/slicer-comparison/cvp_g6k_cpu_solver/g6k/siever_params.cpp:2662
+  2657     *     self.params = new_params             # <<<<<<<<<<<<<<
+  2658     *     yield
+  2659     *     self.params = old_params
+  2660     */
+  2661      __Pyx_TraceLine(34,0,__PYX_ERR(0, 34, __pyx_L1_error))
+> 2662      if (__Pyx_PyObject_SetAttrStr(__pyx_cur_scope->__pyx_v_self, __pyx_n_s_params, __pyx_cur_scope->__pyx_v_new_params) < 0) __PYX_ERR(0, 34, __pyx_L1_error)
+  2663    
+  2664      /* "g6k/siever_params.pyx":35
+  2665     *     new_params = self.params.new(**kwds)
+  2666     *     self.params = new_params
+#23 0x00007f8c92aed650 in __Pyx_Coroutine_SendEx () at /home/cryptothesis/summer/slicer-comparison/cvp_g6k_cpu_solver/g6k/siever_params.cpp:14867
+  14862            __Pyx_Coroutine_ExceptionClear(exc_state);
+  14863            __Pyx_ExceptionSave(&exc_state->exc_type, &exc_state->exc_value, &exc_state->exc_traceback);
+  14864        }
+  14865    #endif
+  14866        self->is_running = 1;
+> 14867        retval = self->body((PyObject *) self, tstate, value);
+  14868        self->is_running = 0;
+  14869    #if CYTHON_USE_EXC_INFO_STACK
+  14870        exc_state = &self->gi_exc_state;
+  14871        tstate->exc_info = exc_state->previous_item;
+#24 0x0000000000000000 in ?? ()
+#25 0x0000000000000000 in ?? ()
+#26 0x000000000056aa50 in _PyEval_EvalFrameDefault ()
+#27 0x00000000005f5ac0 in _PyFunction_Vectorcall ()
+#28 0x0000000000000000 in ?? ()
+#29 0x000000000056aa50 in _PyEval_EvalFrameDefault ()
+#30 0x0000000000569200 in _PyEval_EvalCodeWithName ()
+#31 0x00000000005f5ac0 in _PyFunction_Vectorcall ()
+#32 0x000000000056aa50 in _PyEval_EvalFrameDefault ()
+#33 0x0000000000569200 in _PyEval_EvalCodeWithName ()
+#34 0x00000000005f5ac0 in _PyFunction_Vectorcall ()
+#35 0x000000000056aa50 in _PyEval_EvalFrameDefault ()
+#36 0x0000000000569200 in _PyEval_EvalCodeWithName ()
+#37 0x00000000005f5ac0 in _PyFunction_Vectorcall ()
+#38 0x000000000056aa50 in _PyEval_EvalFrameDefault ()
+#39 0x0000000000569200 in _PyEval_EvalCodeWithName ()
+#40 0x00000000005f5ac0 in _PyFunction_Vectorcall ()
+#41 0x000000000056aa50 in _PyEval_EvalFrameDefault ()
+#42 0x0000000000569200 in _PyEval_EvalCodeWithName ()
+#43 0x000000000068ce50 in PyEval_EvalCode ()
+#44 0x0000000000000000 in ?? ()
+#45 0x0000000000000000 in ?? ()
+#46 0x0000000000000000 in ?? ()
+#47 0x000000000067e540 in PyRun_SimpleFileExFlags ()
+#48 0x00000000006b6b30 in Py_RunMain ()
+#49 0x00000000006b70a0 in Py_BytesMain ()
+#50 0x00007f8c9385bf90 in __libc_start_main () at /build/glibc-B3wQXB/glibc-2.31/csu/../csu/libc-start.c:308
+#51 0x00000000005fac10 in _start ()
+
+[Inferior 1 (process 3691061) detached]
+27	../sysdeps/unix/sysv/linux/wait4.c: No such file or directory.
