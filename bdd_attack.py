@@ -2,68 +2,80 @@ from g6k.siever_params import SieverParams
 from g6k.siever import Siever
 from fpylll import IntegerMatrix, LLL
 from timu import timu
+from colattice import colattice
 
-# 构造反循环矩阵（negacyclic）
-def create_negacyclic_matrix(coeffs, n):
+def load_inv_mid_matrix(filename):
     """
-    构造一个 n×n 的 negacyclic matrix：模 x^n + 1 的卷积矩阵
-    """
-    F = IntegerMatrix(n, n)
-    for i in range(n):
-        for j in range(n):
-            idx = (i - j) % n
-            sign = -1 if (i - j) < 0 else 1
-            F[i, j] = sign * coeffs[idx]
-    return F
+    Load mimabisai RLWE challenge from file or website.
 
-
-
-
-def lattice_basis(A, q, m=None):
-    """
-    Construct primal lattice basis for LWE challenge
-    ``(A,c)`` defined modulo ``q``.
-
-    :param A: LWE matrix
-    :param c: LWE vector
-    :param q: integer modulus
-    :param m: number of samples to use (``None`` means all)
+    :param saitinumber: Number of saiti.
 
     """
-    if m is None:
-        m = A.nrows
-    elif m > A.nrows:
-        raise ValueError("Only m=%d samples available." % A.nrows)
-    n = A.ncols
-    B = IntegerMatrix(m+n, m+n)
-    for i in range(m):
-        for j in range(n):
-            B[j, i] = A[i, j]
-            B[j, j+n] = 1
-        B[i+n, i] = q
-        # B[-1, i] = c[i]
-    # B[-1, -1] = 1
+    try:
+        data = open(filename, "r").readlines()
+    except FileNotFoundError:
+        return None
+   
+    t =  tuple(eval(data[0].replace(" ", ", ")))
+    B = eval(",".join([s_.replace(" ", ", ") for s_ in data[1:]]))
+    B = IntegerMatrix.from_matrix(B)
     
-    B = LLL.reduction(B)
-    #assert(B[:n] == IntegerMatrix(n, m))
-    #B = B[n:]
-    print(B)
-    return B
+    return t, B
 
 
 
-def RMLWE_bdd_attack(saitinumber,  LWE_instance_type ="RLWE", params = None):
+
+
+
+
+def store_inv_mid_matrix(saitinumber, B, t_inv):
+    #write the mid result of basis       
+    filename = 'mimabisai/No-%d-inv-matrix-for-bdd.txt' % (saitinumber)
+    fn = open(filename, "w")
+    fn.write('[')
+    for i in range(B.ncols()):
+        if(i< B.ncols()/2):
+            fn.write(str(t_inv[i]))
+        else:
+            fn.write(str(0))
+        if i<B.ncols()-1:
+            fn.write(' ')
+    fn.write(']\n')
+    fn.write('[')
+    for i in range(B.nrows()):
+        fn.write('[')
+        for j in range(B.ncols()):
+            fn.write(str(B[i][j]))
+            if j<B.ncols()-1:
+                fn.write(' ')
+        if i < B.nrows()-1:
+            fn.write(']\n')
+    fn.write(']]')
+    fn.close()
+
+
+
+
+def RMLWE_bdd_attack(saitinumber, coblocksizes,verbose = False, inv = True):
     params = SieverParams(gpus=2, threads = 32)
+    
     
     print("第%d题" %saitinumber)
     
-    n, q, m, a, t, target_norm = timu(saitinumber)
-    A = create_negacyclic_matrix(a, n)
-    B = lattice_basis(A,q)
-    #print(B)
-    #c = t[:m]
-    #g6k = Siever(B, params)
+    if(inv):
+        t, B = load_inv_mid_matrix('mimabisai/No-%d-inv-matrix-for-bdd.txt' % (saitinumber))
+    else:
+        t, B = load_inv_mid_matrix('mimabisai/No-%d-matrix-for-bdd.txt' % (saitinumber))
+    #n, q, m, a, t, target_norm = timu(saitinumber)
+    print(t)
+    params = SieverParams(threads = 32)
+    g6k = Siever(B, params)
+    _ , ee, _ , _, _, _, _= colattice(g6k.M.B, [t], 1., params, blocksizes = coblocksizes, len_bound = 1.,verbose = True)#, target_norm=target_norm)
+    ee = ee[0]
+    print(ee)
     
 if __name__ == '__main__':
-    for saitinumber in [1]:
-        RMLWE_bdd_attack(saitinumber)
+    coblocksizes = {1: [32]*4, 5: [64]*4, 7: [64]*8}
+    inv = {1: True, 5: False, 7: True}
+    for saitinumber in [7]:
+        RMLWE_bdd_attack(saitinumber, coblocksizes = coblocksizes[saitinumber],verbose = True, inv= inv[saitinumber])

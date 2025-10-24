@@ -83,7 +83,7 @@ def scoring_goal_r0(i, nlen, olen, aux):
     return i == aux.kappa and nlen < aux.goal_r0
 
 
-def scoring_down(i, nlen, olen, aux):
+def  scoring_down(i, nlen, olen, aux):
     if i < aux.insert_left_bound or nlen >= olen:
         return False
     return log(olen / nlen) - i * log(aux.prefer_left_insert)

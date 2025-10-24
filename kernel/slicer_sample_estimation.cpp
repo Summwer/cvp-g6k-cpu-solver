@@ -167,6 +167,8 @@ int predict_slicer_max_sample_amount(double a, double len_bound, int n){
     double delta = sqrt(len_bound);
     auto G = make_graph_cvp( a, grid, delta );
     double plog = dijkstra(G, grid, 0);
+
     return (int) pow(1./pow(2.,-plog), n);
     
 }
+

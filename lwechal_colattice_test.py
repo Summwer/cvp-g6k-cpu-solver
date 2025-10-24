@@ -231,8 +231,11 @@ def lwe_kernel(arg0, params=None, seed=None):
 
     # ee, _ = colattice(g6k, c, coblocksizes)#, target_norm=target_norm)
     
+    coblocksizes = [g6k.full_n]
+    _ , ee, _ , _, _, _,_= colattice(g6k.M.B, [c], 1., params, blocksizes = coblocksizes, len_bound = 1., consider_d4f = True)#, target_norm=target_norm)
     
-    _ , ee, _ , _, _, _= colattice(g6k.M.B, [c], 1., params, blocksizes = coblocksizes, len_bound = 1.)#, target_norm=target_norm)
+    
+    
     ee = ee [0]
     print(ee)
     

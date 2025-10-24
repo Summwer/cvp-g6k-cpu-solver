@@ -9,6 +9,7 @@ from math import sqrt, log2, log
 from strategy_gen.NCSearch import NC_strategy
 from fpylll.util import gaussian_heuristic
 from time import time
+from strategy_gen.util import dims4free
 
 #We should find the close vector from pi_ln(L) to pi_l1(L) where l1<...<ln
 def colattice(A, ts, approx_factor, params, sieve_start_index = None, xss2 = None, yl = None, verbose = False, consider_d4f = False, blocksizes =None, optimize_strategy =False, max_sample_times = 1000, min_block = 30, len_bound = 1.):
@@ -49,9 +50,11 @@ def colattice(A, ts, approx_factor, params, sieve_start_index = None, xss2 = Non
         log_rr = [log(g6k.M.get_r(i, i))/2 for i in range(g6k.full_n)]
         blocksizes, _ = NC_strategy_class.nc_est(log_rr, dist_bound= log(approx_factor*gh))
         T_sgen = time() - T_sgen
+        #print(blocksizes)
         if(max(blocksizes)> 140):
             raise "The sieve dimension exceeds the maximal bound (=140 ), you should do more BKZ preprocess."
-    
+    else:
+        T_sgen = 0
     
     pts = [[0]*d]*len(ts)
     pws = [[0]*d]*len(ts)
@@ -66,12 +69,17 @@ def colattice(A, ts, approx_factor, params, sieve_start_index = None, xss2 = Non
     
     if(not consider_d4f):
         f = 0
+    
    
     T_sieve_for_NC = 0
     T_slicer_for_NC = 0
     for i in range(len(blocksizes)-1,-1,-1):
         blocksize = blocksizes[i]
         llb -= blocksize
+        if(consider_d4f):
+            f= dims4free(blocksize)
+            f = 25
+            print("f = ", f)
         if(verbose):
             print("Find close vector on [%d,%d]" %(llb, llb+blocksize))
         
@@ -82,7 +90,7 @@ def colattice(A, ts, approx_factor, params, sieve_start_index = None, xss2 = Non
         for k in range(len(ts)):
             ts[k] = tuple([ts[k][i] - pts[k][i] + pws[k][i] - ws[k][i] for i in range(d)])
          
-        pts, pws, ws, xss, _ , T_sieve , T_slicer, _, gh = randslicer_with_d4f(A,ts, params, kappa=max(llb,0), blocksize = blocksize, f=f, len_bound = len_bound, max_sample_times = max_sample_times)
+        pts, pws, ws, xss, _ , T_sieve , T_slicer, _, gh = randslicer_with_d4f(A,ts, params, kappa=max(llb,0), blocksize = blocksize, f=f, len_bound = len_bound, max_sample_times = max_sample_times, verbose=verbose)
             
         
         T_sieve_for_NC += T_sieve

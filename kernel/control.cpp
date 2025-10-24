@@ -266,6 +266,71 @@ void Siever::initialize_local(unsigned int ll_, unsigned int l_, unsigned int r_
     invalidate_sorting();
 }
 
+
+
+
+
+
+
+
+
+// initializes a local block from [l_,  r_) from the full GSO object.
+// This has to be called before we start sieving.
+void Siever::initialize_local_no_clear_hash_table(unsigned int ll_, unsigned int l_, unsigned int r_)
+{
+    CPUCOUNT(200);
+    
+    assert(l_ >= ll_);
+    assert(r_ >= l_);
+    assert(full_n >= r_);
+
+    l = l_;
+    r = r_;
+    n = r_ - l_;
+    ll = ll_;
+
+    //mu.resize(n);
+    muT.resize(n);
+    rr.resize(n);
+    sqrt_rr.resize(n);
+
+    for (unsigned int i = 0; i < n; ++i)
+    {
+        muT[i].resize(n);
+        for (unsigned int j = 0; j < n; ++j)
+        {
+            muT[i][j] = full_muT[i + l][j + l];
+        }
+        rr[i] = full_rr[i + l];
+        // Note: rr will get normalized by gh below
+        // sqrt_rr is set below after normalization
+    }
+
+    // Compute the Gaussian Heuristic of the current block
+    double const log_ball_square_vol = n * std::log(M_PI) - 2.0 * std::lgamma(n / 2.0 + 1);
+    double log_lattice_square_vol = 0;
+    for (unsigned int i = 0; i < n; ++i)
+    {
+        log_lattice_square_vol += std::log(rr[i]);
+    }
+    gh = std::exp((log_lattice_square_vol - log_ball_square_vol) / (1.0 * n));
+
+    // Renormalize local rr coefficients
+    for (unsigned int i = 0; i < n; ++i)
+    {
+        rr[i] /= gh;
+        sqrt_rr[i] = std::sqrt(rr[i]);
+    }
+}
+
+
+
+
+
+
+
+
+
 // This is run internally after a change of context / GSO.
 // It assumes that the uid_hash table is empty and re-inserts every (c)db element into it.
 // If collisions are found, they are replaced by fresh samples.

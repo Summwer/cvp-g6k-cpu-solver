@@ -330,7 +330,6 @@ start_over:
       }    
     }
   }
-
   return t_;
 }
 
@@ -364,24 +363,20 @@ start_sample_t_:
     threadpool.wait_work(); 
   }
 
-  FT mint_len = cvp_compute_lift_len( mint_.x,  mint_.len, k);
-
     //4. sort db in order from nearby with pt to farway with pt. 
     //reduce the sample_vector by slicer algorithm, and get a short enough vector.
   for (size_t t_id = 0; t_id < inner_loop_threads; ++t_id)
   { 
-    FT t_s_tid_len = cvp_compute_lift_len(t_s[t_id].x, t_s[t_id].len, k);
-    
-    if ( t_s_tid_len < mint_len)
+    if ( t_s[t_id].len < mint_.len)
       mint_ = t_s[t_id];
   }
 
-  if( mint_len> len_bound and *sample_time < max_sample_times){
+  if( mint_.len > len_bound and *sample_time < max_sample_times){
       *sample_time += inner_loop_threads;
       goto start_sample_t_;
   }
 
-  if( mint_len > pts[k].len and *sample_time >= max_sample_times){
+  if( mint_.len > pts[k].len and *sample_time >= max_sample_times){
     mint_ = pts[k];
   }
 

@@ -29,7 +29,7 @@ void Siever::cvp_extend_left( unsigned int lp){
       cvs[k].yr[i] = std::inner_product(cvs[k].x.cbegin()+i+1, cvs[k].x.cbegin()+n, muT[i].cbegin()+i+1, static_cast<FT>(0.));
      
       cvs[k].x[i] = - (ZT)std::round(cvs[k].yr[i] - yls[k][i+ll]); //* sqrt_rr[i+ll]);
-      // cvs[k].yr[i] += cvs[k].x[i];
+      cvs[k].yr[i] += cvs[k].x[i];
 
       
       // cv.yr[i] *= sqrt_rr[i];
@@ -43,68 +43,7 @@ void Siever::cvp_extend_left( unsigned int lp){
 
 
 
-FT Siever::cvp_compute_lift_len(std::array<ZT,MAX_SIEVING_DIM> x, FT len, unsigned int k){
-  // SFT mu,tmp;
-  // initialize_local(ll, l - lp, r);
-  CPUCOUNT(202);
 
-  if(ll ==l)
-    return len;
-
-  
- 
-  
-  ZT full_x[r];
-  len = len * gh;
-  std::fill (full_x,full_x+l,0);
-
-  int lift_n = r -ll;
-  
-  double const log_ball_square_vol = lift_n  * std::log(M_PI) - 2.0 * std::lgamma(lift_n / 2.0 + 1);
-  double log_lattice_square_vol = 0;
-  for (unsigned int i = 0; i < lift_n ; ++i)
-  {
-    log_lattice_square_vol += std::log(full_rr[i+ll]);
-  }
-  FT new_gh = std::exp((log_lattice_square_vol - log_ball_square_vol) / (1.0 * lift_n ));
-
-
-  for (unsigned int i = 0; i < n; ++i)
-  {
-    full_x[i + l] = x[i];
-  }
-
-  // i must be signed such that if ll == 0, we terminate properly.
-  int i = static_cast<signed int>(l) - 1;
-  const int llb = static_cast<signed int>(ll);  
-
-  for (; i >= llb; --i){
-    FT yi = std::inner_product(full_x+i+1, full_x+r, full_muT[i].cbegin()+i+1, static_cast<FT>(0.));
-    full_x[i] = - (ZT)std::round(yi - yls[k][i]); //* sqrt_rr[i+ll]);
-    yi += full_x[i] ;
-    len += (yi - yls[k][i])*(yi - yls[k][i])*full_rr[i];
-  }
-
-  return len/new_gh;
-}
-
-// //extend yr from projected lattice [l:r] to lattice [0:r], the coeffiencts on full GS-basis
-// void Siever::left_recompute_yr(Entry &e, unsigned int lp){
-//   CPUCOUNT(202);
-
-//   assert(lp == ll);
-//   if(lp==0) return;
-//   initialize_local(0, 0, r);
-//   std::copy_backward(e.x.begin(), e.x.begin()+n-lp, e.x.begin()+n);
-//   std::fill(e.x.begin(), e.x.begin()+lp, 0);
-//   std::fill(e.x.begin()+n,e.x.end(),0);
-//   cout<<"e.yr: ";
-//   for (unsigned int i = 0; i < n; ++i){
-//     e.yr[i] = std::inner_product(e.x.cbegin(), e.x.cbegin()+n, muT[i].cbegin(),  static_cast<FT>(0.)) ; //* sqrt_rr[i]
-//     cout<<"("<<e.yr[i]<<", "<<e.x[i]<<", ";
-//   }
-//   cout<<endl;
-// }
 
 //y: coefficients of projected close vector on projected gs 
 //x: coefficients of projected close vector on lattice basis

@@ -1,3 +1,0 @@
-DEBUG:urllib3.connectionpool:2023/08/10 20:43:04 CST: Starting new HTTPS connection (1): www.latticechallenge.org:443
-DEBUG:urllib3.connectionpool:2023/08/10 20:43:05 CST: https://www.latticechallenge.org:443 "GET /lwe_challenge/challenges/LWE_50_005.txt HTTP/1.1" 200 585676
-DEBUG:        root:2023/08/10 20:43:42 CST: None

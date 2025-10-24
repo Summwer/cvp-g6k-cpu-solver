@@ -20,6 +20,15 @@ python setup.py build_ext --inplace
 ```
 
 
+### Compute Expected Sample times for Randomized Slicer with d4f
+
+```
+cd kernel
+g++ -o cm compute_acvp_sample_estimation.cpp  slicer_sample_estimation.cpp
+./cm
+```
+
+
 
 ### Test for Slicer
 
@@ -50,6 +59,24 @@ Test time cost of one randomized iterative slicer tour to solve a batch-CVP prob
 ```
 python -u slicer_test.py --threads 20 --approx-factor 1.1 --batch-size 100 --max-dim 90  |& tee test_results/slicer_tests/random-slicer-prebkz-bdgl2-batch-cvpthreads=20.log  2>&1
 ```
+
+
+
+#### Test the d4f techinque for randomized slicer
+
+
+Test the correctness of the d4f funtion in [Leo18] in slicer. 
+```
+python -u slicer_test.py  --approx-factor 1.1547 --batch-size 1 --max-dim 90 --consider-d4f True --max-sample-times 1000 | tee test_results/slicer_tests/d4f-test/test-cvp-d4f-function.log 2>&1
+```
+
+
+Test the correctness of different d4f values in slicer. 
+./test-d4f.sh
+```
+
+
+
 
 
 

@@ -246,6 +246,60 @@ cdef class Siever(object):
         self._core.load_gso(self.M.d, <double*>_mu.data)
         sig_off()
 
+    def initialize_local_no_clear_hash_table(self, ll, l, r, update_gso=True):
+        """
+        Local set-up.
+
+        - update the local GSO
+        - recompute ``gaussian_heuristic`` for renormalization
+        - reset ``best_lift_so_far`` if r changed
+        - reset compression and uid functions
+
+
+        :param ll: lift context left index (inclusive)
+        :param l: sieve context left index (inclusive)
+        :param r: sieve context right index (exclusive)
+
+        EXAMPLE::
+
+            >>> from fpylll import IntegerMatrix
+            >>> from g6k import Siever
+            >>> A = IntegerMatrix.random(50, "qary", k=25, bits=10)
+            >>> siever = Siever(A, seed=0x1337)
+            >>> siever.initialize_local_no_clear_hash_table(0, 0, 50)
+            >>> siever.initialize_local_no_clear_hash_table(1, 1, 25)
+
+        TESTS::
+
+            >>> siever.initialize_local_no_clear_hash_table(5, 4, 25)
+            Traceback (most recent call last):
+            ...
+            ValueError: Parameters 5, 4, 25 do not satisfy constraint  0 <= ll <= l <= r <= self.M.d
+
+            >>> siever.initialize_local_no_clear_hash_table0, 0, 51)
+            Traceback (most recent call last):
+            ...
+            ValueError: Parameters 0, 0, 51 do not satisfy constraint  0 <= ll <= l <= r <= self.M.d
+
+            >>> siever.initialize_local_no_clear_hash_table(-1, 0, 50)
+            Traceback (most recent call last):
+            ...
+            ValueError: Parameters -1, 0, 50 do not satisfy constraint  0 <= ll <= l <= r <= self.M.d
+
+
+        """
+        if not (0 <= ll and ll <= l and l <= r and r <= self.M.d):
+            raise ValueError("Parameters %d, %d, %d do not satisfy constraint  0 <= ll <= l <= r <= self.M.d"%(ll, l, r))
+
+        if update_gso:
+            self.update_gso(ll, r)
+        sig_on()
+        self._core.initialize_local_no_clear_hash_table(ll, l, r)
+        sig_off()
+        self.initialized = True
+
+
+
     def initialize_local(self, ll, l, r, update_gso=True):
         """
         Local set-up.
@@ -297,6 +351,9 @@ cdef class Siever(object):
         self._core.initialize_local(ll, l, r)
         sig_off()
         self.initialized = True
+
+
+
 
     @property
     def max_sieving_dim(self):
@@ -1927,6 +1984,7 @@ cdef class Siever(object):
         self._core.cdb_bucket_process()
         sig_off()
         self.bucketed = True
+
 
     #function about randomized iterative slicer
     def randslicer(self, len_bound = 1, max_sample_times = 1000):

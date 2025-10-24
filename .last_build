@@ -1,33 +1,25 @@
 Git status: 
-commit 7acda4839edfeb695636fbbf963ee1d9f991dccf
-Merge: 7eb914e ae3ff1e
+commit 6be68a61f5fc73f46bd2751bdae5235773427581
 Author: summwer <15091002@buaa.edu.cn>
 
-    update-test-on-bdgl2
+    udpate-experiments-for-colattice-and-slicer
+
 	modified:   .last_build
-	modified:   Makefile.local
 	modified:   README.md
-	modified:   acvp_colattice_test.py
-	modified:   config.log
-	modified:   g6k/algorithms/bestliftcvp.py
-	modified:   g6k/algorithms/bestliftcvp_db.py
-	modified:   g6k/algorithms/cvpump.py
-	modified:   g6k/algorithms/pro_randslicer.py
+	modified:   bdd_attack.py
+	modified:   colattice.py
+	modified:   g6k/algorithms/progressive_sieve_preprocess.py
+	modified:   g6k/algorithms/pump.py
 	modified:   g6k/decl.pxd
-	modified:   g6k/siever.pxd
 	modified:   g6k/siever.pyx
-	modified:   g6k/utils/util.py
-	modified:   kernel/Makefile.am
+	modified:   kernel/control.cpp
 	modified:   kernel/progressive_slicer_with_d4f.cpp
 	modified:   kernel/randomized_iterative_slicer.cpp
 	modified:   kernel/siever.h
 	modified:   lwechal_colattice_test.py
-	modified:   lwechal_cvpump_test.py
-	modified:   rebuild.sh
+	modified:   randslicer_with_d4f.py
 	modified:   slicer_test.py
-	modified:   svpchal_cvpump_test.py
-	modified:   svpchal_preBKZ.py
-	modified:   test
+	modified:   test_results/slicer_tests/random-slicer-prebkz-bdgl2-threads=1.log
 =================
-rebuild.sh -j 20
+rebuild.sh 
 =================

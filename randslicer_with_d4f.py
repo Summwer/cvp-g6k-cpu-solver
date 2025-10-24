@@ -10,6 +10,11 @@ from g6k.utils.stats import dummy_tracer
 from multiprocessing import Pool
 from functools import partial
 from g6k.siever_params import SieverParams
+from copy import deepcopy
+from time import sleep
+
+
+
 
 def dot_product(a,b):
     return sum([a[i]*b[i] for i in range(len(a))])
@@ -53,7 +58,7 @@ def cvp_enum(A, kappa, blocksize, t):
     return pt,pw, w, x
 
 
-def randslicer_with_d4f(A,ts, params, kappa=0, blocksize = None, f=0, len_bound = 1., max_sample_times = 1000):
+def randslicer_with_d4f(A,ts, params, kappa=0, blocksize = None, f=0, len_bound = 1., max_sample_times = 1000, verbose = False):
     """
     Use randomized slicer to solve (approximate) CVP and bath-CVP problem.
     A: lattice basis.
@@ -69,10 +74,10 @@ def randslicer_with_d4f(A,ts, params, kappa=0, blocksize = None, f=0, len_bound 
     
     if(blocksize is None):
         blocksize = g6k.full_n
-    
+    params.otf_lift = False
     g6k = Siever(A,params)
     rr = [g6k.M.get_r(i, i) for i in range(g6k.full_n)]
-    gh = sqrt(gaussian_heuristic(rr))
+    gh = sqrt(gaussian_heuristic(rr[kappa:kappa+blocksize]))
     
     
     
@@ -106,7 +111,7 @@ def randslicer_with_d4f(A,ts, params, kappa=0, blocksize = None, f=0, len_bound 
     else:
     # if (True):
         T_sieve = time.time()
-        progressive_sieve(g6k, kappa, blocksize,  f)
+        progressive_sieve(g6k, kappa, blocksize,  f, verbose = verbose)
         #cvpump(g6k,dummy_tracer,max(kappa,0),blocksize, f,verbose=True)
         T_sieve = time.time() - T_sieve
        
@@ -117,12 +122,16 @@ def randslicer_with_d4f(A,ts, params, kappa=0, blocksize = None, f=0, len_bound 
         # print(g6k.db_size())
         
         
-        pts = g6k.initialize_target_vectors(ts)
+        
             
         
+       
         T_slicer = time.time()
-        (pws,ws,xs),sample_times  = g6k.randslicer(max_sample_times = max_sample_times,len_bound = len_bound)
+        pts = g6k.initialize_target_vectors(ts)
+        (pws,ws,xs),sample_times  = g6k.randslicer(max_sample_times = max_sample_times,len_bound = len_bound)    
         T_slicer = time.time()-T_slicer
+       
+                
         # print("pws = ", pws)
         # print("ws = ", ws)
         # print("xs = ", xs)
@@ -142,6 +151,5 @@ def randslicer_with_d4f(A,ts, params, kappa=0, blocksize = None, f=0, len_bound 
             # print("pt = ", pt)
         
         
-        if(f>0):
-            g6k.cvp_extend_left(f) #need to modify
+         #need to modify
     return pts, pws, ws,xs, sample_times, T_sieve,  T_slicer, g6k.db_size(), gh

@@ -503,6 +503,9 @@ public:
     // - reset compression and uid functions
     void initialize_local(unsigned int ll_, unsigned int l_, unsigned int r_); // implemented in control.cpp
 
+    void initialize_local_no_clear_hash_table(unsigned int ll_, unsigned int l_, unsigned int r_); 
+   
+
     // Extend the context to the left (threaded)
     // - change the context
     // - use babai lifting to add lp coordinates on the left. Recompute data to maintain invariants of entries.
@@ -1194,13 +1197,13 @@ public:
     vector<std::array<double, MAX_SIEVING_DIM>> ys;
     vector<std::array<long, MAX_SIEVING_DIM>> xs;
 
-    //cv: the full-dimensional closest vector in lattice to t.
-    Entry cv;
+    
     
     std::array<LFT,MAX_SIEVING_DIM> yl;
 
     std::array<std::array<LFT, MAX_SIEVING_DIM>, MAX_BATCH_SIZE> yls;
     vector<Entry> cvs;
+    
 
 
     LFT gamma;
@@ -1223,6 +1226,7 @@ public:
 
     // void progressive_sieve(fplll::MatGSO<SZT, SFT> M, unsigned int l = 0);
     void cvp_extend_left(unsigned int lp = 0);
+    FT cvp_compute_lift_len(std::array<ZT,MAX_SIEVING_DIM> x, FT len, unsigned int k);
     // void extend_left(Entry &e, unsigned int lp);
     // void compute_projected_vector(Siever::Vec<LFT> pt,  fplll::MatGSO<SZT, SFT> M, unsigned int l);
     void initialize_projected_target_vector();
